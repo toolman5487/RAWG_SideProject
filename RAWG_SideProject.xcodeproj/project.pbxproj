@@ -6,8 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		159F8E332E478D250021339B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E322E478D250021339B /* HomeViewController.swift */; };
+		159F8E362E478D990021339B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E352E478D990021339B /* MainTabBarController.swift */; };
+		159F8E392E47908C0021339B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E382E47908C0021339B /* SnapKit */; };
+		159F8E3C2E4790B60021339B /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E3B2E4790B60021339B /* SDWebImage */; };
+		159F8E3F2E4790D90021339B /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E3E2E4790D90021339B /* CombineCocoa */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		159F8E172E478ABC0021339B /* RAWG_SideProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAWG_SideProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		159F8E322E478D250021339B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		159F8E352E478D990021339B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +46,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159F8E3C2E4790B60021339B /* SDWebImage in Frameworks */,
+				159F8E3F2E4790D90021339B /* CombineCocoa in Frameworks */,
+				159F8E392E47908C0021339B /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +58,9 @@
 		159F8E0E2E478ABC0021339B = {
 			isa = PBXGroup;
 			children = (
+				159F8E342E478D680021339B /* TabBarController */,
 				159F8E192E478ABC0021339B /* RAWG_SideProject */,
+				159F8E302E478CFC0021339B /* HomeVC */,
 				159F8E182E478ABC0021339B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +71,30 @@
 				159F8E172E478ABC0021339B /* RAWG_SideProject.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		159F8E302E478CFC0021339B /* HomeVC */ = {
+			isa = PBXGroup;
+			children = (
+				159F8E312E478D0E0021339B /* View */,
+			);
+			path = HomeVC;
+			sourceTree = "<group>";
+		};
+		159F8E312E478D0E0021339B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				159F8E322E478D250021339B /* HomeViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		159F8E342E478D680021339B /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				159F8E352E478D990021339B /* MainTabBarController.swift */,
+			);
+			path = TabBarController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +117,9 @@
 			);
 			name = RAWG_SideProject;
 			packageProductDependencies = (
+				159F8E382E47908C0021339B /* SnapKit */,
+				159F8E3B2E4790B60021339B /* SDWebImage */,
+				159F8E3E2E4790D90021339B /* CombineCocoa */,
 			);
 			productName = RAWG_SideProject;
 			productReference = 159F8E172E478ABC0021339B /* RAWG_SideProject.app */;
@@ -107,6 +149,11 @@
 			);
 			mainGroup = 159F8E0E2E478ABC0021339B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				159F8E3A2E4790B60021339B /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				159F8E3D2E4790D90021339B /* XCRemoteSwiftPackageReference "CombineCocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 159F8E182E478ABC0021339B /* Products */;
 			projectDirPath = "";
@@ -132,6 +179,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
+				159F8E332E478D250021339B /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +199,6 @@
 				INFOPLIST_FILE = RAWG_SideProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -178,7 +226,6 @@
 				INFOPLIST_FILE = RAWG_SideProject/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -337,6 +384,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		159F8E3A2E4790B60021339B /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.1;
+			};
+		};
+		159F8E3D2E4790D90021339B /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		159F8E382E47908C0021339B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		159F8E3B2E4790B60021339B /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 159F8E3A2E4790B60021339B /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		159F8E3E2E4790D90021339B /* CombineCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 159F8E3D2E4790D90021339B /* XCRemoteSwiftPackageReference "CombineCocoa" */;
+			productName = CombineCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 159F8E0F2E478ABC0021339B /* Project object */;
 }
