@@ -24,7 +24,7 @@ class GameDetailViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "載入中..."
+        title = "Loading..."
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
     }
@@ -33,32 +33,18 @@ class GameDetailViewController: UIViewController {
         viewModel.$gameDetail
             .receive(on: DispatchQueue.main)
             .sink { [weak self] gameDetail in
-                if let gameDetail = gameDetail {
-                    self?.title = gameDetail.name ?? "未知遊戲"
-                }
+                self?.title = gameDetail?.name ?? "Unknown Game"
             }
             .store(in: &cancellables)
         
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
             .sink { [weak self] errorMessage in
-                if let errorMessage = errorMessage {
-                    self?.showErrorAlert(message: errorMessage)
-                }
+                guard let self = self else { return }
+                AlertHelper.showErrorAlert(from: self, message: errorMessage)
             }
             .store(in: &cancellables)
-    }
-    
-    private func showErrorAlert(message: String) {
-        let alert = UIAlertController(
-            title: "Erro",
-            message: message,
-            preferredStyle: .alert
-        )
-        
-        let okAction = UIAlertAction(title: "確定", style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
     }
     
     private func fetchGameDetail() {
