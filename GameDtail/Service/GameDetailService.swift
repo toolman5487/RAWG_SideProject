@@ -22,12 +22,9 @@ class GameDetailService: GameDetailServiceProtocol {
                 .eraseToAnyPublisher()
         }
         
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-            .decode(type: GameDetailModel.self, decoder: decoder)
+            .decode(type: GameDetailModel.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

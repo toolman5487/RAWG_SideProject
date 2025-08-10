@@ -12,41 +12,56 @@ import Combine
 
 class GameDetailViewController: UIViewController {
     
-    private let gameDetailService = GameDetailService()
+    private let viewModel = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupBindings()
         fetchGameDetail()
     }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
+        title = "載入中..."
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+    }
+    
+    private func setupBindings() {
+        viewModel.$gameDetail
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] gameDetail in
+                if let gameDetail = gameDetail {
+                    self?.title = gameDetail.name ?? "未知遊戲"
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] errorMessage in
+                if let errorMessage = errorMessage {
+                    self?.showErrorAlert(message: errorMessage)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Erro",
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        let okAction = UIAlertAction(title: "確定", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
     private func fetchGameDetail() {
-        gameDetailService.fetchGameDetail(gameId: 46889)
-            .sink(
-                receiveCompletion: { completion in
-                    switch completion {
-                    case .finished:
-                        print("API 請求完成")
-                    case .failure(let error):
-                        print("API 錯誤: \(error)")
-                        DispatchQueue.main.async {
-                            self.title = "錯誤: \(error.localizedDescription)"
-                        }
-                    }
-                },
-                receiveValue: { gameDetail in
-                    DispatchQueue.main.async {
-                        self.title = gameDetail.name ?? "未知遊戲"
-                        print("遊戲名稱: \(gameDetail.name ?? "未知")")
-                        print("遊戲 ID: \(gameDetail.id)")
-                    }
-                }
-            )
-            .store(in: &cancellables)
+        viewModel.fetchGameDetail(gameId: 46889)
     }
 }
