@@ -12,32 +12,32 @@ import Combine
 
 class GameDetailViewController: UIViewController {
     
-    private let viewModel = GameDetailViewModel()
+    private let gameDetailVM = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupBindings()
+        bindingVM()
         fetchGameDetail()
     }
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        title = "Loading..."
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
     }
     
-    private func setupBindings() {
-        viewModel.$gameDetail
+    private func bindingVM() {
+        gameDetailVM.$gameDetail
             .receive(on: DispatchQueue.main)
             .sink { [weak self] gameDetail in
-                self?.title = gameDetail?.name ?? "Unknown Game"
+                self?.title = gameDetail?.nameOriginal ?? "Unknown Game"
             }
             .store(in: &cancellables)
         
-        viewModel.$errorMessage
+        gameDetailVM.$errorMessage
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] errorMessage in
@@ -48,6 +48,6 @@ class GameDetailViewController: UIViewController {
     }
     
     private func fetchGameDetail() {
-        viewModel.fetchGameDetail(gameId: 46889)
+        gameDetailVM.fetchGameDetail(gameId: 46889)
     }
 }

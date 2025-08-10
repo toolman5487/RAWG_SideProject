@@ -69,6 +69,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		150BA9E52E48D762008A4BA3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		159F8E0E2E478ABC0021339B = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +132,7 @@
 		159F8E462E4868FD0021339B /* GameDtail */ = {
 			isa = PBXGroup;
 			children = (
+				150BA9E52E48D762008A4BA3 /* View */,
 				159F8E512E4886E20021339B /* ViewModel */,
 				159F8E4E2E4872A50021339B /* Service */,
 				159F8E482E4869260021339B /* Model */,

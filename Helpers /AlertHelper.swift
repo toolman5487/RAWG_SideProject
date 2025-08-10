@@ -22,7 +22,6 @@ class AlertHelper {
         
         let confirmAction = UIAlertAction(title: "Done", style: .default)
         alert.addAction(confirmAction)
-        
         viewController.present(alert, animated: true)
     }
 }

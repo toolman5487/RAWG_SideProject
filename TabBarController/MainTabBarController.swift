@@ -17,18 +17,18 @@ final class MainTabBarController: UITabBarController {
 
     private func setupTabs() {
         let homeVC = HomeViewController()
-        homeVC.title = "首頁"
+        homeVC.title = "Home"
         let homeNav = UINavigationController(rootViewController: homeVC)
-        homeNav.tabBarItem = UITabBarItem(title: "首頁",
+        homeNav.tabBarItem = UITabBarItem(title: "Home",
                                           image: UIImage(systemName: "house"),
                                           selectedImage: UIImage(systemName: "house.fill"))
 
         let otherVC = GameDetailViewController()
-        otherVC.title = "遊戲詳細"
+        otherVC.title = "Game"
         let otherNav = UINavigationController(rootViewController: otherVC)
-        otherNav.tabBarItem = UITabBarItem(title: "遊戲詳細",
-                                           image: UIImage(systemName: "square.grid.2x2"),
-                                           selectedImage: UIImage(systemName: "square.grid.2x2.fill"))
+        otherNav.tabBarItem = UITabBarItem(title: "Game",
+                                           image: UIImage(systemName: "gamecontroller"),
+                                           selectedImage: UIImage(systemName: "gamecontroller.fill"))
 
         viewControllers = [homeNav, otherNav]
     }
