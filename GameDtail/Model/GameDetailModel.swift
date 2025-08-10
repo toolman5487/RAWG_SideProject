@@ -18,9 +18,9 @@ struct GameDetailModel: Codable {
     let metacritic: Int?
     let metacriticPlatforms: [MetacriticPlatform]?
 
-    let released: Date?
+    let released: String?
     let tba: Bool?
-    let updated: Date?
+    let updated: String?
 
     let backgroundImage: String?
     let backgroundImageAdditional: String?
@@ -166,7 +166,7 @@ struct SimplePlatform: Codable {
 // MARK: - Platform (detailed per platform + requirements)
 struct Platform: Codable {
     let platform: PlatformPlatform?
-    let releasedAt: Date?
+    let releasedAt: String?
     let requirements: Requirements?
 
     enum CodingKeys: String, CodingKey {

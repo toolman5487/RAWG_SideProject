@@ -16,6 +16,7 @@
 		159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E442E4862A30021339B /* GameDetailViewController.swift */; };
 		159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E492E48693F0021339B /* GameDetailModel.swift */; };
 		159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E4C2E486D5D0021339B /* FlexibleTypes.swift */; };
+		159F8E502E4872C40021339B /* GameDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E4F2E4872C40021339B /* GameDetailService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		159F8E442E4862A30021339B /* GameDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailViewController.swift; sourceTree = "<group>"; };
 		159F8E492E48693F0021339B /* GameDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailModel.swift; sourceTree = "<group>"; };
 		159F8E4C2E486D5D0021339B /* FlexibleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleTypes.swift; sourceTree = "<group>"; };
+		159F8E4F2E4872C40021339B /* GameDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -119,6 +121,7 @@
 		159F8E462E4868FD0021339B /* GameDtail */ = {
 			isa = PBXGroup;
 			children = (
+				159F8E4E2E4872A50021339B /* Service */,
 				159F8E482E4869260021339B /* Model */,
 				159F8E472E48691A0021339B /* VC */,
 			);
@@ -147,6 +150,14 @@
 				159F8E4C2E486D5D0021339B /* FlexibleTypes.swift */,
 			);
 			path = "Helpers ";
+			sourceTree = "<group>";
+		};
+		159F8E4E2E4872A50021339B /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				159F8E4F2E4872C40021339B /* GameDetailService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,6 +244,7 @@
 			files = (
 				159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */,
 				159F8E422E4860960021339B /* APIConfig.swift in Sources */,
+				159F8E502E4872C40021339B /* GameDetailService.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
 				159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
