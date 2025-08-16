@@ -33,19 +33,15 @@ class GameHeaderCell: UITableViewCell {
         selectionStyle = .none
         
         contentView.addSubview(gameImageView)
-        
-        setupConstraints()
-    }
-    
-    private func setupConstraints() {
         gameImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.centerX.equalToSuperview()
+            make.width.lessThanOrEqualToSuperview()
+            make.height.equalTo(gameImageView.snp.width).multipliedBy(0.6)
         }
     }
     
     func configure(with game: GameDetailModel?) {
         guard let game = game else { return }
-        
         if let imageUrl = game.backgroundImage {
             gameImageView.sd_setImage(with: URL(string: imageUrl))
         }

@@ -22,12 +22,20 @@ class GameDetailTableView: UITableView {
     
     private func setupTableView() {
         setupTableViewStyle()
+        registerCells()
     }
     
     private func setupTableViewStyle() {
         backgroundColor = .systemBackground
         separatorStyle = .none
         allowsSelection = false
+        estimatedRowHeight = 100
+        rowHeight = UITableView.automaticDimension
+    }
+    
+    private func registerCells() {
+        register(GameHeaderCell.self, forCellReuseIdentifier: "GameHeaderCell")
+        
     }
 }
 

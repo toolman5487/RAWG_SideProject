@@ -15,6 +15,12 @@ class GameDetailViewController: UIViewController {
     private let gameDetailVM = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
     
+    private lazy var tableView: GameDetailTableView = {
+        let tableView = GameDetailTableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        return tableView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +33,11 @@ class GameDetailViewController: UIViewController {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     private func bindingVM() {
@@ -34,6 +45,7 @@ class GameDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] gameDetail in
                 self?.title = gameDetail?.nameOriginal ?? "Unknown Game"
+                self?.tableView.reloadData()
             }
             .store(in: &cancellables)
         
@@ -49,5 +61,21 @@ class GameDetailViewController: UIViewController {
     
     private func fetchGameDetail() {
         gameDetailVM.fetchGameDetail(gameId: 46889)
+    }
+}
+
+extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return gameDetailVM.gameDetail != nil ? 1 : 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameHeaderCell", for: indexPath) as! GameHeaderCell
+        cell.configure(with: gameDetailVM.gameDetail)
+        return cell
     }
 }

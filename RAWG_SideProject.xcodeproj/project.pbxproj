@@ -76,18 +76,18 @@
 		150BA9E52E48D762008A4BA3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				152DEADF2E48DADE003DC29E /* TableViewCell */,
-				152DEADD2E48D833003DC29E /* GameDetailTableView.swift */,
+				152DEADF2E48DADE003DC29E /* TableView */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		152DEADF2E48DADE003DC29E /* TableViewCell */ = {
+		152DEADF2E48DADE003DC29E /* TableView */ = {
 			isa = PBXGroup;
 			children = (
 				152DEAE02E48DB2E003DC29E /* GameHeaderCell.swift */,
+				152DEADD2E48D833003DC29E /* GameDetailTableView.swift */,
 			);
-			path = TableViewCell;
+			path = TableView;
 			sourceTree = "<group>";
 		};
 		159F8E0E2E478ABC0021339B = {
