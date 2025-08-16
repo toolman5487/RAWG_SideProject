@@ -29,13 +29,12 @@ class GameDetailTableView: UITableView {
         backgroundColor = .systemBackground
         separatorStyle = .none
         allowsSelection = false
-        estimatedRowHeight = 100
         rowHeight = UITableView.automaticDimension
     }
     
     private func registerCells() {
         register(GameHeaderCell.self, forCellReuseIdentifier: "GameHeaderCell")
-        
+        register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
     }
 }
 

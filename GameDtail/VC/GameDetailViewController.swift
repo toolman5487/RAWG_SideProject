@@ -65,17 +65,29 @@ class GameDetailViewController: UIViewController {
 }
 
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 1 : 0
+        return gameDetailVM.gameDetail != nil ? 2 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GameHeaderCell", for: indexPath) as! GameHeaderCell
-        cell.configure(with: gameDetailVM.gameDetail)
-        return cell
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameHeaderCell", for: indexPath) as! GameHeaderCell
+            cell.configure(with: gameDetailVM.gameDetail)
+            return cell
+            
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameInfoCell", for: indexPath) as! GameInfoCell
+            cell.configure(with: gameDetailVM.gameDetail)
+            return cell
+            
+        default:
+            return UITableViewCell()
+        }
     }
 }
