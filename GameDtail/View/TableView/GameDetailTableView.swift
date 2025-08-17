@@ -35,7 +35,9 @@ class GameDetailTableView: UITableView {
     private func registerCells() {
         register(GameHeaderCell.self, forCellReuseIdentifier: "GameHeaderCell")
         register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
+        register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
     }
 }
+
 
 

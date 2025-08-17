@@ -71,7 +71,7 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 2 : 0
+        return gameDetailVM.gameDetail != nil ? 3 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,9 +85,13 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "GameInfoCell", for: indexPath) as! GameInfoCell
             cell.configure(with: gameDetailVM.gameDetail)
             return cell
-            
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RatingCell", for: indexPath) as! RatingCell
+            cell.configure(with: gameDetailVM.gameDetail)
+            return cell
         default:
             return UITableViewCell()
         }
     }
 }
+

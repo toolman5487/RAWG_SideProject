@@ -123,6 +123,10 @@ class GameInfoCell: UITableViewCell {
             infoItems.append("TBA")
         }
         
+        if let esrbRating = game.esrbRating?.name {
+            infoItems.append("ESRB: \(esrbRating)")
+        }
+        
         if let updated = game.updated {
             infoItems.append("Updated: \(updated)")
         }
@@ -155,5 +159,114 @@ extension GameInfoCell: UICollectionViewDelegate, UICollectionViewDataSource, UI
         let text = infoItems[indexPath.item]
         let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 14, weight: .semibold)]).width
         return CGSize(width: textWidth + 32, height: 40)
+    }
+}
+
+// MARK: - Rating
+class RatingCell: UITableViewCell {
+    
+    private let ratingLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .label
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private let starStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 4
+        return stackView
+    }()
+    
+    private let totalRatingsLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .secondaryLabel
+        label.textAlignment = .center
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        contentView.addSubview(ratingLabel)
+        contentView.addSubview(starStackView)
+        contentView.addSubview(totalRatingsLabel)
+        
+        ratingLabel.snp.makeConstraints { make in
+            make.top.centerX.equalToSuperview()
+        }
+        
+        starStackView.snp.makeConstraints { make in
+            make.top.equalTo(ratingLabel.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        
+        totalRatingsLabel.snp.makeConstraints { make in
+            make.top.equalTo(starStackView.snp.bottom).offset(8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-16)
+        }
+        
+        setupStars()
+    }
+    
+    private func setupStars() {
+        for _ in 0..<5 {
+            let starImageView = UIImageView()
+            starImageView.image = UIImage(systemName: "star")
+            starImageView.tintColor = .systemYellow
+            starImageView.contentMode = .scaleAspectFit
+            starStackView.addArrangedSubview(starImageView)
+        }
+    }
+    
+    func configure(with game: GameDetailModel?) {
+        guard let game = game else { return }
+        
+        if let rating = game.rating {
+            ratingLabel.text = String(format: "%.1f", rating)
+            updateStars(rating: rating)
+        } else {
+            ratingLabel.text = "N/A"
+        }
+        
+        if let ratingsCount = game.ratingsCount {
+            totalRatingsLabel.text = "\(ratingsCount) ratings"
+        } else {
+            totalRatingsLabel.text = "No ratings"
+        }
+    }
+    
+    private func updateStars(rating: Double) {
+        let fullStars = Int(rating)
+        let hasHalfStar = rating.truncatingRemainder(dividingBy: 1) >= 0.5
+        for (index, starView) in starStackView.arrangedSubviews.enumerated() {
+            guard let starImageView = starView as? UIImageView else { continue }
+            
+            if index < fullStars {
+                starImageView.image = UIImage(systemName: "star.fill")
+                starImageView.tintColor = .systemYellow
+            } else if index == fullStars && hasHalfStar {
+                starImageView.image = UIImage(systemName: "star.leadinghalf.filled")
+                starImageView.tintColor = .systemYellow
+            } else {
+                starImageView.image = UIImage(systemName: "star")
+                starImageView.tintColor = .systemGray3
+            }
+        }
     }
 }
