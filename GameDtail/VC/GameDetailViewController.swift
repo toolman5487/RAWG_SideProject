@@ -62,16 +62,26 @@ class GameDetailViewController: UIViewController {
     private func fetchGameDetail() {
         gameDetailVM.fetchGameDetail(gameId: 46889)
     }
+    
+    private func presentDescriptionSheet() {
+        let raw = gameDetailVM.gameDetail?.description ?? "No description available."
+        let clean = raw.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+        let gameTitle = gameDetailVM.gameDetail?.nameOriginal ?? "Unknown Game"
+        let vc = DescriptionViewController(text: clean, gameTitle: gameTitle)
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .pageSheet
+        if let sheet = navController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(navController, animated: true)
+    }
 }
 
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 3 : 0
+        return gameDetailVM.gameDetail != nil ? 4 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,14 +90,22 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "GameHeaderCell", for: indexPath) as! GameHeaderCell
             cell.configure(with: gameDetailVM.gameDetail)
             return cell
-            
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GameInfoCell", for: indexPath) as! GameInfoCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RatingCell", for: indexPath) as! RatingCell
             cell.configure(with: gameDetailVM.gameDetail)
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RatingCell", for: indexPath) as! RatingCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GameInfoCell", for: indexPath) as! GameInfoCell
             cell.configure(with: gameDetailVM.gameDetail)
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DescriptionCell", for: indexPath) as! DescriptionCell
+            let raw = gameDetailVM.gameDetail?.description ?? "No description available."
+            let clean = raw.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+            cell.configure(text: clean)
+            cell.tapPublisher
+                .sink { [weak self] in self?.presentDescriptionSheet() }
+                .store(in: &cell.cancellables)
             return cell
         default:
             return UITableViewCell()

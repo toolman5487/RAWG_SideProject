@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 import SDWebImage
+import Combine
 
 
 // MARK: - HeaderImage
@@ -38,7 +39,7 @@ class GameHeaderCell: UITableViewCell {
         gameImageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(gameImageView.snp.width).multipliedBy(0.6)
-            make.bottom.equalToSuperview() 
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -47,118 +48,6 @@ class GameHeaderCell: UITableViewCell {
         if let imageUrl = game.backgroundImage {
             gameImageView.sd_setImage(with: URL(string: imageUrl))
         }
-    }
-}
-
-// MARK: - Info
-class GameInfoCell: UITableViewCell {
-    
-    private var infoItems: [String] = []
-    
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        return collectionView
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .label
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        return label
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupUI() {
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        contentView.addSubview(collectionView)
-        contentView.addSubview(descriptionLabel)
-        
-        collectionView.register(InfoPillCell.self, forCellWithReuseIdentifier: "InfoPillCell")
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
-        }
-        
-        descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview().inset(8)
-            make.bottom.equalToSuperview().offset(-8)
-        }
-    }
-
-    func configure(with game: GameDetailModel?) {
-        guard let game = game else { return }
-        
-        infoItems.removeAll()
-        
-        if let released = game.released {
-            infoItems.append("Released: \(released)")
-        }
-        
-        if game.tba == true {
-            infoItems.append("TBA")
-        }
-        
-        if let esrbRating = game.esrbRating?.name {
-            infoItems.append("ESRB: \(esrbRating)")
-        }
-        
-        if let updated = game.updated {
-            infoItems.append("Updated: \(updated)")
-        }
-        
-        if let description = game.description {
-            let cleanDescription = description.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
-            descriptionLabel.text = cleanDescription
-        } else {
-            descriptionLabel.text = "No description available."
-        }
-        
-        collectionView.reloadData()
-    }
-}
-
-extension GameInfoCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return infoItems.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InfoPillCell", for: indexPath) as! InfoPillCell
-        let text = infoItems[indexPath.item]
-        cell.configure(with: text)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text = infoItems[indexPath.item]
-        let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 14, weight: .semibold)]).width
-        return CGSize(width: textWidth + 32, height: 40)
     }
 }
 
@@ -176,6 +65,7 @@ class RatingCell: UITableViewCell {
     private let starStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.alignment = .center
         stackView.distribution = .fillEqually
         stackView.spacing = 4
         return stackView
@@ -183,10 +73,19 @@ class RatingCell: UITableViewCell {
     
     private let totalRatingsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .secondaryLabel
         label.textAlignment = .center
         return label
+    }()
+    
+    private let hStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fillEqually
+        stack.spacing = 12
+        return stack
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -201,27 +100,23 @@ class RatingCell: UITableViewCell {
     private func setupUI() {
         backgroundColor = .clear
         selectionStyle = .none
-        contentView.addSubview(ratingLabel)
-        contentView.addSubview(starStackView)
-        contentView.addSubview(totalRatingsLabel)
-        
-        ratingLabel.snp.makeConstraints { make in
-            make.top.centerX.equalToSuperview()
-        }
-        
-        starStackView.snp.makeConstraints { make in
-            make.top.equalTo(ratingLabel.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(20)
-        }
-        
-        totalRatingsLabel.snp.makeConstraints { make in
-            make.top.equalTo(starStackView.snp.bottom).offset(8)
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-16)
-        }
         
         setupStars()
+        
+        contentView.addSubview(hStack)
+        hStack.addArrangedSubview(ratingLabel)
+        hStack.addArrangedSubview(starStackView)
+        hStack.addArrangedSubview(totalRatingsLabel)
+        
+        ratingLabel.setContentHuggingPriority(.required, for: .horizontal)
+        ratingLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        totalRatingsLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        starStackView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        
+        hStack.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.bottom.equalToSuperview().inset(8)
+        }
     }
     
     private func setupStars() {
@@ -230,6 +125,9 @@ class RatingCell: UITableViewCell {
             starImageView.image = UIImage(systemName: "star")
             starImageView.tintColor = .systemYellow
             starImageView.contentMode = .scaleAspectFit
+            starImageView.snp.makeConstraints { make in
+                make.width.height.equalTo(20)
+            }
             starStackView.addArrangedSubview(starImageView)
         }
     }
@@ -256,7 +154,6 @@ class RatingCell: UITableViewCell {
         let hasHalfStar = rating.truncatingRemainder(dividingBy: 1) >= 0.5
         for (index, starView) in starStackView.arrangedSubviews.enumerated() {
             guard let starImageView = starView as? UIImageView else { continue }
-            
             if index < fullStars {
                 starImageView.image = UIImage(systemName: "star.fill")
                 starImageView.tintColor = .systemYellow
@@ -269,4 +166,138 @@ class RatingCell: UITableViewCell {
             }
         }
     }
+}
+
+// MARK: - Info
+class GameInfoCell: UITableViewCell {
+    
+    private var infoItems: [String] = []
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(collectionView)
+        collectionView.register(InfoPillCell.self, forCellWithReuseIdentifier: "InfoPillCell")
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(48)
+            make.bottom.equalToSuperview()
+        }
+    }
+    
+    func configure(with game: GameDetailModel?) {
+        guard let game = game else { return }
+        
+        infoItems.removeAll()
+        if let released = game.released { infoItems.append("Released: \(released)") }
+        if game.tba == true { infoItems.append("TBA") }
+        if let esrbRating = game.esrbRating?.name { infoItems.append("ESRB: \(esrbRating)") }
+        if let updated = game.updated { infoItems.append("Updated: \(updated)") }
+        
+        collectionView.reloadData()
+    }
+}
+
+extension GameInfoCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return infoItems.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InfoPillCell", for: indexPath) as! InfoPillCell
+        let text = infoItems[indexPath.item]
+        cell.configure(with: text)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let text = infoItems[indexPath.item]
+        let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 14, weight: .semibold)]).width
+        return CGSize(width: textWidth + 32, height: 40)
+    }
+}
+
+// MARK: - Description
+class DescriptionCell: UITableViewCell {
+    
+    let tapSubject = PassthroughSubject<Void, Never>()
+    var tapPublisher: AnyPublisher<Void, Never> { tapSubject.eraseToAnyPublisher() }
+    var cancellables = Set<AnyCancellable>()
+    
+    private let button: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.title = "Description"
+        config.baseForegroundColor = .label
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        button.titleLabel?.numberOfLines = 6
+        button.titleLabel?.lineBreakMode = .byTruncatingTail
+        button.titleLabel?.textAlignment = .left
+        button.contentHorizontalAlignment = .leading
+        return button
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .clear
+        selectionStyle = .none
+        contentView.addSubview(button)
+        button.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(120)
+            make.bottom.equalToSuperview()
+        }
+        button.setContentHuggingPriority(.required, for: .vertical)
+        button.setContentCompressionResistancePriority(.required, for: .vertical)
+        button.addTarget(self, action: #selector(tap), for: .touchUpInside)
+    }
+    
+    func configure(text: String) {
+        let limitedText = String(text.prefix(200)) + (text.count > 200 ? "..." : "")
+        var config = button.configuration ?? .plain()
+        config.title = limitedText
+        config.baseForegroundColor = .secondaryLabel
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        button.configuration = config
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.lineBreakMode = .byWordWrapping
+    }
+    
+    @objc private func tap() { tapSubject.send(()) }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cancellables.removeAll()
+    }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }

@@ -30,7 +30,7 @@ class InfoPillCell: UICollectionViewCell {
     
     private func setupUI() {
         backgroundColor = .label
-        layer.cornerRadius = 16
+        layer.cornerRadius = 20
         layer.masksToBounds = true
         
         contentView.addSubview(valueLabel)
