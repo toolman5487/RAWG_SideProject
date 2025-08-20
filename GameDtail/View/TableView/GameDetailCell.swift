@@ -12,15 +12,35 @@ import SDWebImage
 import Combine
 
 
-// MARK: - HeaderImage
-class GameHeaderCell: UITableViewCell {
+// MARK: - ImageCarousel
+class ImageCarouselCell: UITableViewCell {
     
-    private let gameImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        return imageView
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPageIndicatorTintColor = .label
+        pageControl.pageIndicatorTintColor = .secondaryLabel
+        pageControl.hidesForSinglePage = true
+        return pageControl
     }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.sectionInset = UIEdgeInsets.zero
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ImageCarouselItemCell.self, forCellWithReuseIdentifier: "ImageCarouselItemCell")
+        return collectionView
+    }()
+    
+    private var imageUrls: [String] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,19 +55,64 @@ class GameHeaderCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        contentView.addSubview(gameImageView)
-        gameImageView.snp.makeConstraints { make in
+        contentView.addSubview(collectionView)
+        contentView.addSubview(pageControl)
+        
+        collectionView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(gameImageView.snp.width).multipliedBy(0.6)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(0.6)
             make.bottom.equalToSuperview()
+            
+            pageControl.snp.makeConstraints { make in
+                make.bottom.equalTo(collectionView.snp.bottom).offset(-16)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(20)
+            }
+            
+            pageControl.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            pageControl.layer.cornerRadius = 10
+            pageControl.layer.masksToBounds = true
+            pageControl.currentPageIndicatorTintColor = .white
+            pageControl.pageIndicatorTintColor = UIColor.white.withAlphaComponent(0.5)
         }
     }
     
     func configure(with game: GameDetailModel?) {
         guard let game = game else { return }
-        if let imageUrl = game.backgroundImage {
-            gameImageView.sd_setImage(with: URL(string: imageUrl))
+        
+        imageUrls.removeAll()
+        if let mainImage = game.backgroundImage {
+            imageUrls.append(mainImage)
         }
+        if let additionalImage = game.backgroundImageAdditional {
+            imageUrls.append(additionalImage)
+        }
+        
+        pageControl.numberOfPages = imageUrls.count
+        pageControl.currentPage = 0
+        collectionView.reloadData()
+    }
+}
+
+extension ImageCarouselCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imageUrls.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCarouselItemCell", for: indexPath) as! ImageCarouselItemCell
+        cell.configure(with: imageUrls[indexPath.item])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return collectionView.bounds.size
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let page = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        pageControl.currentPage = page
     }
 }
 
@@ -256,10 +321,10 @@ class DescriptionCell: UITableViewCell {
         var config = UIButton.Configuration.plain()
         config.title = "Description"
         config.baseForegroundColor = .label
-        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         let button = UIButton(configuration: config, primaryAction: nil)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        button.titleLabel?.numberOfLines = 6
+        button.titleLabel?.numberOfLines = 8
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         button.titleLabel?.textAlignment = .left
         button.contentHorizontalAlignment = .leading
@@ -282,11 +347,11 @@ class DescriptionCell: UITableViewCell {
     }
     
     func configure(text: String) {
-        let limitedText = String(text.prefix(200)) + (text.count > 200 ? "..." : "")
+        let limitedText = String(text.prefix(220)) + (text.count > 220 ? "..." : "")
         var config = button.configuration ?? .plain()
         config.title = limitedText
         config.baseForegroundColor = .secondaryLabel
-        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
         button.configuration = config
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
@@ -301,3 +366,6 @@ class DescriptionCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
+
+
+// MARK: - 

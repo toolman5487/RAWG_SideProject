@@ -12,6 +12,7 @@
 		152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEAE42E50BC8F003DC29E /* GameDetailCell.swift */; };
 		152DEAE82E50C3DB003DC29E /* InfoPillCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEAE72E50C3DB003DC29E /* InfoPillCell.swift */; };
 		152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB042E54B8ED003DC29E /* DescriptionViewController.swift */; };
+		152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */; };
 		159F8E332E478D250021339B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E322E478D250021339B /* HomeViewController.swift */; };
 		159F8E362E478D990021339B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E352E478D990021339B /* MainTabBarController.swift */; };
 		159F8E392E47908C0021339B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E382E47908C0021339B /* SnapKit */; };
@@ -31,6 +32,7 @@
 		152DEAE42E50BC8F003DC29E /* GameDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailCell.swift; sourceTree = "<group>"; };
 		152DEAE72E50C3DB003DC29E /* InfoPillCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoPillCell.swift; sourceTree = "<group>"; };
 		152DEB042E54B8ED003DC29E /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
+		152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselItemCell.swift; sourceTree = "<group>"; };
 		159F8E172E478ABC0021339B /* RAWG_SideProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAWG_SideProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		159F8E322E478D250021339B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		159F8E352E478D990021339B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				152DEAE72E50C3DB003DC29E /* InfoPillCell.swift */,
+				152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				150BA9E42E48A35D008A4BA3 /* AlertHelper.swift in Sources */,
 				159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */,
 				152DEAE82E50C3DB003DC29E /* InfoPillCell.swift in Sources */,
+				152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */,
 				152DEADE2E48D833003DC29E /* GameDetailTableView.swift in Sources */,
 				159F8E532E4887010021339B /* GameDetailViewModel.swift in Sources */,
 				159F8E422E4860960021339B /* APIConfig.swift in Sources */,

@@ -33,7 +33,7 @@ class GameDetailTableView: UITableView {
     }
     
     private func registerCells() {
-        register(GameHeaderCell.self, forCellReuseIdentifier: "GameHeaderCell")
+        register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
         register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
         register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
         register(DescriptionCell.self, forCellReuseIdentifier: "DescriptionCell")

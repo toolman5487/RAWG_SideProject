@@ -38,6 +38,7 @@ class GameDetailViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        tableView.register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
     }
     
     private func bindingVM() {
@@ -87,7 +88,7 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GameHeaderCell", for: indexPath) as! GameHeaderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCarouselCell", for: indexPath) as! ImageCarouselCell
             cell.configure(with: gameDetailVM.gameDetail)
             return cell
         case 1:
@@ -100,7 +101,7 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DescriptionCell", for: indexPath) as! DescriptionCell
-            let raw = gameDetailVM.gameDetail?.description ?? "No description available."
+            let raw = gameDetailVM.gameDetail?.description ?? "No Description Available."
             let clean = raw.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
             cell.configure(text: clean)
             cell.tapPublisher
