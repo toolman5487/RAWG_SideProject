@@ -138,7 +138,7 @@ class RatingCell: UITableViewCell {
     
     private let totalRatingsLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .secondaryLabel
         label.textAlignment = .center
         return label
@@ -201,8 +201,13 @@ class RatingCell: UITableViewCell {
         guard let game = game else { return }
         
         if let rating = game.rating {
-            ratingLabel.text = String(format: "%.1f", rating)
-            updateStars(rating: rating)
+            let roundedRating = round(rating * 10) / 10
+            if roundedRating.truncatingRemainder(dividingBy: 1) == 0 {
+                ratingLabel.text = String(format: "%.1f / 5.0", roundedRating)
+            } else {
+                ratingLabel.text = String(format: "%.1f / 5.0", roundedRating)
+            }
+            updateStars(rating: roundedRating)
         } else {
             ratingLabel.text = "N/A"
         }
