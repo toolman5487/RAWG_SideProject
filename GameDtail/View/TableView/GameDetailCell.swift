@@ -343,8 +343,8 @@ class DescriptionCell: UITableViewCell {
         contentView.addSubview(button)
         button.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(120)
-            make.bottom.equalToSuperview()
+            make.height.equalTo(160)
+            make.bottom.equalToSuperview().offset(-16)
         }
         button.setContentHuggingPriority(.required, for: .vertical)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -352,7 +352,7 @@ class DescriptionCell: UITableViewCell {
     }
     
     func configure(text: String) {
-        let limitedText = String(text.prefix(220)) + (text.count > 220 ? "..." : "")
+        let limitedText = String(text.prefix(300)) + (text.count > 300 ? "... Read More" : "")
         var config = button.configuration ?? .plain()
         config.title = limitedText
         config.baseForegroundColor = .secondaryLabel
@@ -377,14 +377,6 @@ class MetacriticCell: UITableViewCell {
     
     private var platforms: [MetacriticPlatform] = []
     private var viewModel: GameDetailViewModel?
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Metacritic Scores"
-        label.font = .systemFont(ofSize: 16, weight: .bold)
-        label.textColor = .label
-        return label
-    }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -415,20 +407,11 @@ class MetacriticCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        contentView.addSubview(titleLabel)
         contentView.addSubview(collectionView)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-        
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(80)
-            make.bottom.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -454,6 +437,104 @@ extension MetacriticCell: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 120, height: 80)
+    }
+}
+
+// MARK: - Developers
+class DevelopersCell: UITableViewCell {
+    
+    private let contentStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .top
+        stackView.distribution = .fillEqually
+        stackView.spacing = 16
+        return stackView
+    }()
+    
+    private let developersLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private let publishersLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(contentStackView)
+        contentStackView.addArrangedSubview(developersLabel)
+        contentStackView.addArrangedSubview(publishersLabel)
+        
+        contentStackView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().offset(-16)
+        }
+    }
+    
+    func configure(with game: GameDetailModel?) {
+        guard let game = game else { return }
+        
+        if let developers = game.developers, !developers.isEmpty {
+            let developerNames = developers.compactMap { $0.name }.joined(separator: "\n")
+            let attributedString = NSMutableAttributedString()
+            
+            let titleAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
+                .foregroundColor: UIColor.label
+            ]
+            let contentAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16),
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+            
+            attributedString.append(NSAttributedString(string: "Developers\n", attributes: titleAttributes))
+            attributedString.append(NSAttributedString(string: developerNames, attributes: contentAttributes))
+            
+            developersLabel.attributedText = attributedString
+        } else {
+            developersLabel.text = "Developers\nUnknown"
+        }
+        
+        if let publishers = game.publishers, !publishers.isEmpty {
+            let publisherNames = publishers.compactMap { $0.name }.joined(separator: "\n")
+            let attributedString = NSMutableAttributedString()
+            
+            let titleAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
+                .foregroundColor: UIColor.label
+            ]
+            let contentAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16),
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+            
+            attributedString.append(NSAttributedString(string: "Publishers\n", attributes: titleAttributes))
+            attributedString.append(NSAttributedString(string: publisherNames, attributes: contentAttributes))
+            
+            publishersLabel.attributedText = attributedString
+        } else {
+            publishersLabel.text = "Publishers\nUnknown"
+        }
     }
 }
 
