@@ -15,6 +15,7 @@ class GameDetailViewController: UIViewController {
     private let gameDetailVM = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
     
+// MARK: - UI
     private lazy var tableView: GameDetailTableView = {
         let tableView = GameDetailTableView()
         tableView.delegate = self
@@ -22,6 +23,7 @@ class GameDetailViewController: UIViewController {
         return tableView
     }()
     
+// MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -39,6 +41,7 @@ class GameDetailViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         tableView.register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
+        tableView.register(MetacriticCell.self, forCellReuseIdentifier: "MetacriticCell")
     }
     
     private func bindingVM() {
@@ -82,7 +85,7 @@ class GameDetailViewController: UIViewController {
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 4 : 0
+        return gameDetailVM.gameDetail != nil ? 5 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,9 +111,16 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 .sink { [weak self] in self?.presentDescriptionSheet() }
                 .store(in: &cell.cancellables)
             return cell
+            
+        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MetacriticCell", for: indexPath) as! MetacriticCell
+            cell.configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
+            return cell
+            
         default:
             return UITableViewCell()
         }
     }
 }
+
 

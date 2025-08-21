@@ -372,5 +372,73 @@ class DescriptionCell: UITableViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
+// MARK: - Metacritic
+class MetacriticCell: UITableViewCell {
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(MetacriticPlatformCell.self, forCellWithReuseIdentifier: "MetacriticPlatformCell")
+        return collectionView
+    }()
+    
+    private var platforms: [MetacriticPlatform] = []
+    private var viewModel: GameDetailViewModel?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(80)
+            make.bottom.equalToSuperview().offset(-8)
+        }
+    }
+    
+    func configure(with game: GameDetailModel?, viewModel: GameDetailViewModel) {
+        self.viewModel = viewModel
+        self.platforms = game?.metacriticPlatforms ?? []
+        collectionView.reloadData()
+    }
+}
+
+extension MetacriticCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return platforms.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MetacriticPlatformCell", for: indexPath) as! MetacriticPlatformCell
+        let platform = platforms[indexPath.item]
+        cell.configure(with: platform, viewModel: viewModel)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 120, height: 80)
+    }
+}
 
 // MARK: - 

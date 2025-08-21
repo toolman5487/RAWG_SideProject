@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class GameDetailViewModel: ObservableObject {
     
@@ -41,5 +42,41 @@ class GameDetailViewModel: ObservableObject {
                 }
             )
             .store(in: &cancellables)
+    }
+    
+    func getPlatformIcon(for platformName: String) -> String {
+        switch platformName.lowercased() {
+        case "pc":
+            return "desktopcomputer"
+        case "playstation 5", "ps5":
+            return "playstation.logo"
+        case "playstation 4", "ps4":
+            return "playstation.logo"
+        case "xbox series x", "xbox one":
+            return "gamecontroller.fill"
+        case "nintendo switch":
+            return "gamecontroller"
+        case "ios":
+            return "iphone"
+        case "android":
+            return "iphone"
+        case "mac":
+            return "macbook"
+        case "linux":
+            return "desktopcomputer"
+        default:
+            return "gamecontroller"
+        }
+    }
+    
+    func getMetacriticColor(for score: Int) -> UIColor {
+        switch score {
+        case 75...100:
+            return .systemGreen
+        case 50..<75:
+            return .systemYellow
+        default:
+            return .systemRed
+        }
     }
 }
