@@ -53,7 +53,7 @@ class GameDetailViewModel: ObservableObject {
         case "playstation 4", "ps4":
             return "playstation.logo"
         case "xbox series x", "xbox one":
-            return "gamecontroller.fill"
+            return "xbox.logo"
         case "nintendo switch":
             return "gamecontroller"
         case "ios":

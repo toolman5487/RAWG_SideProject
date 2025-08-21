@@ -375,6 +375,17 @@ class DescriptionCell: UITableViewCell {
 // MARK: - Metacritic
 class MetacriticCell: UITableViewCell {
     
+    private var platforms: [MetacriticPlatform] = []
+    private var viewModel: GameDetailViewModel?
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Metacritic Scores"
+        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .label
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -391,9 +402,6 @@ class MetacriticCell: UITableViewCell {
         return collectionView
     }()
     
-    private var platforms: [MetacriticPlatform] = []
-    private var viewModel: GameDetailViewModel?
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -407,12 +415,20 @@ class MetacriticCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
+        contentView.addSubview(titleLabel)
         contentView.addSubview(collectionView)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(80)
-            make.bottom.equalToSuperview().offset(-8)
+            make.bottom.equalToSuperview().offset(-16)
         }
     }
     
