@@ -25,6 +25,7 @@
 		159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E4C2E486D5D0021339B /* FlexibleTypes.swift */; };
 		159F8E502E4872C40021339B /* GameDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E4F2E4872C40021339B /* GameDetailService.swift */; };
 		159F8E532E4887010021339B /* GameDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E522E4887010021339B /* GameDetailViewModel.swift */; };
+		15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		159F8E4C2E486D5D0021339B /* FlexibleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleTypes.swift; sourceTree = "<group>"; };
 		159F8E4F2E4872C40021339B /* GameDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailService.swift; sourceTree = "<group>"; };
 		159F8E522E4887010021339B /* GameDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailViewModel.swift; sourceTree = "<group>"; };
+		15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -106,6 +108,7 @@
 				152DEAE72E50C3DB003DC29E /* InfoPillCell.swift */,
 				152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */,
 				152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */,
+				15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				159F8E502E4872C40021339B /* GameDetailService.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
 				159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */,
+				15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
 				152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */,

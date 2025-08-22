@@ -15,7 +15,7 @@ class GameDetailViewController: UIViewController {
     private let gameDetailVM = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
     
-// MARK: - UI
+    // MARK: - UI
     private lazy var tableView: GameDetailTableView = {
         let tableView = GameDetailTableView()
         tableView.delegate = self
@@ -23,7 +23,7 @@ class GameDetailViewController: UIViewController {
         return tableView
     }()
     
-// MARK: - LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -41,7 +41,11 @@ class GameDetailViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         tableView.register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
+        tableView.register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
+        tableView.register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
+        tableView.register(DescriptionCell.self, forCellReuseIdentifier: "DescriptionCell")
         tableView.register(MetacriticCell.self, forCellReuseIdentifier: "MetacriticCell")
+        tableView.register(ScreenshotsCell.self, forCellReuseIdentifier: "ScreenshotsCell")
         tableView.register(DevelopersCell.self, forCellReuseIdentifier: "DevelopersCell")
     }
     
@@ -50,6 +54,13 @@ class GameDetailViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] gameDetail in
                 self?.title = gameDetail?.nameOriginal ?? "Unknown Game"
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        gameDetailVM.$screenshots
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
@@ -86,7 +97,7 @@ class GameDetailViewController: UIViewController {
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 6 : 0
+        return gameDetailVM.gameDetail != nil ? 7 : 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -112,17 +123,18 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 .sink { [weak self] in self?.presentDescriptionSheet() }
                 .store(in: &cell.cancellables)
             return cell
-            
         case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "MetacriticCell", for: indexPath) as! MetacriticCell
             cell.configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
             return cell
-            
         case 5:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenshotsCell", for: indexPath) as! ScreenshotsCell
+            cell.configure(with: gameDetailVM.screenshots)
+            return cell
+        case 6:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DevelopersCell", for: indexPath) as! DevelopersCell
             cell.configure(with: gameDetailVM.gameDetail)
             return cell
-            
         default:
             return UITableViewCell()
         }

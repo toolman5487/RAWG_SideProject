@@ -267,4 +267,17 @@ struct Tag: Codable {
     }
 }
 
+// MARK: - Screenshot Response
+struct ScreenshotResponse: Codable {
+    let count: Int?
+    let next: String?
+    let previous: String?
+    let results: [Screenshot]?
+}
+
+struct Screenshot: Codable {
+    let image: String?
+    let hidden: Bool?
+}
+
 

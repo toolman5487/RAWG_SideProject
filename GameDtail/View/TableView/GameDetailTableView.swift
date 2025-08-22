@@ -38,6 +38,7 @@ class GameDetailTableView: UITableView {
         register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
         register(DescriptionCell.self, forCellReuseIdentifier: "DescriptionCell")
         register(MetacriticCell.self, forCellReuseIdentifier: "MetacriticCell")
+        register(ScreenshotsCell.self, forCellReuseIdentifier: "ScreenshotsCell")
         register(DevelopersCell.self, forCellReuseIdentifier: "DevelopersCell")
     }
 }

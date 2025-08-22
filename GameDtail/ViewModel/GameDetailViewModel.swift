@@ -12,6 +12,7 @@ import UIKit
 class GameDetailViewModel: ObservableObject {
     
     @Published var gameDetail: GameDetailModel?
+    @Published var screenshots: [Screenshot] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -21,7 +22,8 @@ class GameDetailViewModel: ObservableObject {
     init(gameDetailService: GameDetailServiceProtocol = GameDetailService()) {
         self.gameDetailService = gameDetailService
     }
-    
+
+// MARK: - Fetch Detail of Game
     func fetchGameDetail(gameId: Int) {
         isLoading = true
         errorMessage = nil
@@ -39,11 +41,25 @@ class GameDetailViewModel: ObservableObject {
                 },
                 receiveValue: { [weak self] gameDetail in
                     self?.gameDetail = gameDetail
+                    self?.fetchScreenshots(gameId: gameId)
                 }
             )
             .store(in: &cancellables)
     }
     
+// MARK: - Fetch ScreenShot
+    private func fetchScreenshots(gameId: Int) {
+        gameDetailService.fetchScreenshots(gameId: gameId)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] screenshotResponse in
+                    self?.screenshots = screenshotResponse.results ?? []
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+// MARK: - Transform Platform Icon
     func getPlatformIcon(for platformName: String) -> String {
         switch platformName.lowercased() {
         case "pc":
