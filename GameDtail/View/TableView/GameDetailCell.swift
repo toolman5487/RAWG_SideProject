@@ -279,7 +279,7 @@ class GameInfoCell: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(48)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-8)
         }
     }
     
@@ -345,7 +345,7 @@ class DescriptionCell: UITableViewCell {
         button.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(120)
-            make.bottom.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview().offset(-32)
         }
         button.setContentHuggingPriority(.required, for: .vertical)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -403,15 +403,24 @@ class ScreenshotsCell: UITableViewCell {
     
     private var screenshots: [Screenshot] = []
     
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPageIndicatorTintColor = .label
+        pageControl.pageIndicatorTintColor = .secondaryLabel
+        pageControl.hidesForSinglePage = true
+        return pageControl
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.sectionInset = UIEdgeInsets.zero
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
+        collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -433,16 +442,34 @@ class ScreenshotsCell: UITableViewCell {
         selectionStyle = .none
         
         contentView.addSubview(collectionView)
+        contentView.addSubview(pageControl)
         
         collectionView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(0.6)
             make.bottom.equalToSuperview().offset(-16)
         }
+        
+        pageControl.snp.makeConstraints { make in
+            make.bottom.equalTo(collectionView.snp.bottom).offset(-16)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(20)
+            make.bottom.equalToSuperview()
+        }
+        
+        pageControl.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        pageControl.layer.cornerRadius = 10
+        pageControl.layer.masksToBounds = true
+        pageControl.currentPageIndicatorTintColor = .white
+        pageControl.pageIndicatorTintColor = UIColor.white.withAlphaComponent(0.5)
     }
     
     func configure(with screenshots: [Screenshot]) {
         self.screenshots = screenshots
+        
+        pageControl.numberOfPages = screenshots.count
+        pageControl.currentPage = 0
+        
         collectionView.reloadData()
     }
 }
@@ -461,7 +488,12 @@ extension ScreenshotsCell: UICollectionViewDelegate, UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 280, height: 180)
+        return collectionView.bounds.size
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let page = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        pageControl.currentPage = page
     }
 }
 
@@ -471,6 +503,19 @@ class MetacriticCell: UITableViewCell {
     
     private var platforms: [MetacriticPlatform] = []
     private var viewModel: GameDetailViewModel?
+    
+    private let noReviewsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "No Metacritic Reviews Available"
+        label.backgroundColor = .systemGray6
+        label.font =  UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.layer.cornerRadius = 16
+        label.clipsToBounds = true
+        label.isHidden = true
+        return label
+    }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -502,17 +547,33 @@ class MetacriticCell: UITableViewCell {
         selectionStyle = .none
         
         contentView.addSubview(collectionView)
+        contentView.addSubview(noReviewsLabel)
+        
         collectionView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(80)
             make.bottom.equalToSuperview()
+        }
+        
+        noReviewsLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.greaterThanOrEqualTo(80)
         }
     }
     
     func configure(with game: GameDetailModel?, viewModel: GameDetailViewModel) {
         self.viewModel = viewModel
         self.platforms = game?.metacriticPlatforms ?? []
+        if platforms.isEmpty {
+            showNoReviewsMessage()
+        }
         collectionView.reloadData()
+    }
+    
+    private func showNoReviewsMessage() {
+        noReviewsLabel.isHidden = false
+        collectionView.isHidden = true
     }
 }
 

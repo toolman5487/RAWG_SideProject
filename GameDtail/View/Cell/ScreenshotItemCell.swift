@@ -76,6 +76,7 @@ class ScreenshotItemCell: UICollectionViewCell {
             )
         } else {
             imageView.image = UIImage(systemName: "gamecontroller.circle.fill")
+            imageView.tintColor = .label
         }
     }
 }
