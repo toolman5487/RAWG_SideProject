@@ -181,6 +181,7 @@ class RatingCell: UITableViewCell {
         hStack.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)
             make.top.bottom.equalToSuperview().inset(8)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -343,7 +344,7 @@ class DescriptionCell: UITableViewCell {
         contentView.addSubview(button)
         button.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(160)
+            make.height.equalTo(120)
             make.bottom.equalToSuperview().offset(-16)
         }
         button.setContentHuggingPriority(.required, for: .vertical)
@@ -352,11 +353,36 @@ class DescriptionCell: UITableViewCell {
     }
     
     func configure(text: String) {
-        let limitedText = String(text.prefix(300)) + (text.count > 300 ? "... Read More" : "")
+        let readMore = "... Read More"
+        
+        let limitedText = String(text.prefix(280))
+        let fullText = text.count > 280 ? limitedText + readMore : limitedText
+        
         var config = button.configuration ?? .plain()
-        config.title = limitedText
-        config.baseForegroundColor = .secondaryLabel
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
+        if text.count > 280 {
+            let attributedString = NSMutableAttributedString()
+            
+            let normalAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16),
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+            
+            let readMoreAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16, weight: .bold),
+                .foregroundColor: UIColor.label
+            ]
+            
+            attributedString.append(NSAttributedString(string: limitedText, attributes: normalAttributes))
+            attributedString.append(NSAttributedString(string: readMore, attributes: readMoreAttributes))
+            
+            config.attributedTitle = AttributedString(attributedString)
+        } else {
+            config.title = fullText
+            config.baseForegroundColor = .secondaryLabel
+        }
+        
+        config.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 8, bottom: 8, trailing: 8)
         button.configuration = config
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
@@ -371,6 +397,74 @@ class DescriptionCell: UITableViewCell {
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
+
+// MARK: - Screenshots
+class ScreenshotsCell: UITableViewCell {
+    
+    private var screenshots: [Screenshot] = []
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(ScreenshotItemCell.self, forCellWithReuseIdentifier: "ScreenshotItemCell")
+        return collectionView
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(collectionView)
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(200)
+            make.bottom.equalToSuperview().offset(-16)
+        }
+    }
+    
+    func configure(with screenshots: [Screenshot]) {
+        self.screenshots = screenshots
+        collectionView.reloadData()
+    }
+}
+
+extension ScreenshotsCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return screenshots.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ScreenshotItemCell", for: indexPath) as! ScreenshotItemCell
+        let screenshot = screenshots[indexPath.item]
+        cell.configure(with: screenshot)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 280, height: 180)
+    }
+}
+
 
 // MARK: - Metacritic
 class MetacriticCell: UITableViewCell {
@@ -499,8 +593,9 @@ class DevelopersCell: UITableViewCell {
             let attributedString = NSMutableAttributedString()
             
             let titleAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
-                .foregroundColor: UIColor.label
+                .font: UIFont.systemFont(ofSize: 20, weight: .bold),
+                .foregroundColor: UIColor.label,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
             let contentAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 16),
@@ -520,8 +615,9 @@ class DevelopersCell: UITableViewCell {
             let attributedString = NSMutableAttributedString()
             
             let titleAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
-                .foregroundColor: UIColor.label
+                .font: UIFont.systemFont(ofSize: 20, weight: .bold),
+                .foregroundColor: UIColor.label,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
             let contentAttributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 16),
@@ -537,71 +633,3 @@ class DevelopersCell: UITableViewCell {
         }
     }
 }
-
-// MARK: - Screenshots
-class ScreenshotsCell: UITableViewCell {
-    
-    private var screenshots: [Screenshot] = []
-    
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(ScreenshotItemCell.self, forCellWithReuseIdentifier: "ScreenshotItemCell")
-        return collectionView
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupUI() {
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        contentView.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
-            make.bottom.equalToSuperview()
-        }
-    }
-    
-    func configure(with screenshots: [Screenshot]) {
-        self.screenshots = screenshots
-        collectionView.reloadData()
-    }
-}
-
-extension ScreenshotsCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return screenshots.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ScreenshotItemCell", for: indexPath) as! ScreenshotItemCell
-        let screenshot = screenshots[indexPath.item]
-        cell.configure(with: screenshot)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 280, height: 180)
-    }
-}
-
-// MARK: - 

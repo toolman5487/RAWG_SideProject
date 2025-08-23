@@ -67,8 +67,22 @@ class MetacriticPlatformCell: UICollectionViewCell {
         platformNameLabel.text = platform.platform?.name ?? "Unknown"
         
         if let metascore = platform.metascore {
-            scoreLabel.text = "\(metascore)"
-            scoreLabel.textColor = viewModel?.getMetacriticColor(for: metascore) ?? .label
+            let attributedString = NSMutableAttributedString()
+            
+            let scoreAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16, weight: .bold),
+                .foregroundColor: viewModel?.getMetacriticColor(for: metascore) ?? .label
+            ]
+            
+            let separatorAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16, weight: .medium),
+                .foregroundColor: UIColor.label
+            ]
+            
+            attributedString.append(NSAttributedString(string: "\(metascore)", attributes: scoreAttributes))
+            attributedString.append(NSAttributedString(string: " / 100", attributes: separatorAttributes))
+            
+            scoreLabel.attributedText = attributedString
         } else {
             scoreLabel.text = "N/A"
             scoreLabel.textColor = .secondaryLabel

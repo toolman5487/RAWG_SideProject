@@ -124,12 +124,12 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
                 .store(in: &cell.cancellables)
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MetacriticCell", for: indexPath) as! MetacriticCell
-            cell.configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
-            return cell
-        case 5:
             let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenshotsCell", for: indexPath) as! ScreenshotsCell
             cell.configure(with: gameDetailVM.screenshots)
+            return cell
+        case 5:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MetacriticCell", for: indexPath) as! MetacriticCell
+            cell.configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
             return cell
         case 6:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DevelopersCell", for: indexPath) as! DevelopersCell

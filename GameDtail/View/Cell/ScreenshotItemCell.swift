@@ -20,6 +20,13 @@ class ScreenshotItemCell: UICollectionViewCell {
         return imageView
     }()
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        indicator.color = .label
+        return indicator
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -31,14 +38,44 @@ class ScreenshotItemCell: UICollectionViewCell {
     
     private func setupUI() {
         contentView.addSubview(imageView)
+        contentView.addSubview(activityIndicator)
+        
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
     
     func configure(with screenshot: Screenshot) {
         if let imageUrl = screenshot.image {
-            imageView.sd_setImage(with: URL(string: imageUrl), placeholderImage: UIImage(systemName: "gamecontroller.circle.fill"))
+            activityIndicator.startAnimating()
+            
+            let options: SDWebImageOptions = [
+                .progressiveLoad,
+                .refreshCached,
+                .highPriority,
+                .avoidAutoSetImage
+            ]
+            
+            imageView.sd_setImage(
+                with: URL(string: imageUrl),
+                placeholderImage: UIImage(systemName: "gamecontroller.circle.fill"),
+                options: options,
+                completed: { [weak self] image, error, cacheType, url in
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.stopAnimating()
+                        
+                        if let image = image {
+                            self?.imageView.image = image
+                        }
+                    }
+                }
+            )
+        } else {
+            imageView.image = UIImage(systemName: "gamecontroller.circle.fill")
         }
     }
 }
