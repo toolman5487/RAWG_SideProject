@@ -598,29 +598,57 @@ extension MetacriticCell: UICollectionViewDelegate, UICollectionViewDataSource, 
 // MARK: - Developers
 class DevelopersCell: UITableViewCell {
     
-    private let contentStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .top
-        stackView.distribution = .fillEqually
-        stackView.spacing = 16
-        return stackView
-    }()
+    private var developers: [Company] = []
+    private var publishers: [Company] = []
     
-    private let developersLabel: UILabel = {
+    private let developersTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
+        label.text = "Developers"
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
         return label
     }()
     
-    private let publishersLabel: UILabel = {
+    private let publishersTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
+        label.text = "Publishers"
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
         return label
+    }()
+    
+    private lazy var developersCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.tag = 0
+        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
+        return collectionView
+    }()
+    
+    private lazy var publishersCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.tag = 1
+        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
+        return collectionView
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -636,61 +664,150 @@ class DevelopersCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        contentView.addSubview(contentStackView)
-        contentStackView.addArrangedSubview(developersLabel)
-        contentStackView.addArrangedSubview(publishersLabel)
+        contentView.addSubview(developersTitleLabel)
+        contentView.addSubview(developersCollectionView)
+        contentView.addSubview(publishersTitleLabel)
+        contentView.addSubview(publishersCollectionView)
         
-        contentStackView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().offset(-16)
+        developersTitleLabel.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().inset(16)
+            make.trailing.equalToSuperview().inset(16)
+        }
+        
+        developersCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(developersTitleLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
+        }
+        
+        publishersTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(developersCollectionView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        publishersCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(publishersTitleLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
+            make.bottom.equalToSuperview().inset(16)
         }
     }
     
     func configure(with game: GameDetailModel?) {
         guard let game = game else { return }
         
-        if let developers = game.developers, !developers.isEmpty {
-            let developerNames = developers.compactMap { $0.name }.joined(separator: "\n")
-            let attributedString = NSMutableAttributedString()
-            
-            let titleAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 20, weight: .bold),
-                .foregroundColor: UIColor.label,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-            let contentAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.secondaryLabel
-            ]
-            
-            attributedString.append(NSAttributedString(string: "Developers\n", attributes: titleAttributes))
-            attributedString.append(NSAttributedString(string: developerNames, attributes: contentAttributes))
-            
-            developersLabel.attributedText = attributedString
+        developers = game.developers ?? []
+        publishers = game.publishers ?? []
+        
+        developersCollectionView.reloadData()
+        publishersCollectionView.reloadData()
+    }
+}
+
+extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView.tag == 0 {
+            return developers.count
         } else {
-            developersLabel.text = "Developers\nUnknown"
+            return publishers.count
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DeveloperItemCell", for: indexPath) as! DeveloperItemCell
+        
+        if collectionView.tag == 0 {
+            let developer = developers[indexPath.item]
+            let name = developer.name ?? "Unknown"
+            cell.configure(with: name)
+        } else {
+            let publisher = publishers[indexPath.item]
+            let name = publisher.name ?? "Unknown"
+            cell.configure(with: name)
         }
         
-        if let publishers = game.publishers, !publishers.isEmpty {
-            let publisherNames = publishers.compactMap { $0.name }.joined(separator: "\n")
-            let attributedString = NSMutableAttributedString()
-            
-            let titleAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 20, weight: .bold),
-                .foregroundColor: UIColor.label,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-            let contentAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.secondaryLabel
-            ]
-            
-            attributedString.append(NSAttributedString(string: "Publishers\n", attributes: titleAttributes))
-            attributedString.append(NSAttributedString(string: publisherNames, attributes: contentAttributes))
-            
-            publishersLabel.attributedText = attributedString
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let text: String
+        if collectionView.tag == 0 {
+            text = developers[indexPath.item].name ?? "Unknown"
         } else {
-            publishersLabel.text = "Publishers\nUnknown"
+            text = publishers[indexPath.item].name ?? "Unknown"
         }
+        
+        let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 16, weight: .medium)]).width
+        let maxWidth = collectionView.bounds.width - 32
+        let finalWidth = min(textWidth + 24, maxWidth)
+        
+        let textHeight = text.boundingRect(
+            with: CGSize(width: finalWidth - 16, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .medium)],
+            context: nil
+        ).height
+        
+        let finalHeight = max(textHeight + 16, 32)
+        
+        return CGSize(width: finalWidth, height: finalHeight)
+    }
+}
+
+// MARK: - DeveloperItemCell
+class DeveloperItemCell: UICollectionViewCell {
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        return label
+    }()
+    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.systemGray4.cgColor
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        contentView.addSubview(containerView)
+        containerView.addSubview(nameLabel)
+        
+        containerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        nameLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(8)
+            make.top.bottom.equalToSuperview().inset(4)
+        }
+    }
+    
+    func configure(with name: String) {
+        nameLabel.text = name
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nameLabel.text = nil
     }
 }

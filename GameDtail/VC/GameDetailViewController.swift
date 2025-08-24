@@ -76,7 +76,7 @@ class GameDetailViewController: UIViewController {
     }
     
     private func fetchGameDetail() {
-        gameDetailVM.fetchGameDetail(gameId: 1800)
+        gameDetailVM.fetchGameDetail(gameId: 46889)
     }
     
     private func presentDescriptionSheet() {
