@@ -454,7 +454,6 @@ class ScreenshotsCell: UITableViewCell {
             make.bottom.equalTo(collectionView.snp.bottom).offset(-16)
             make.centerX.equalToSuperview()
             make.height.equalTo(20)
-            make.bottom.equalToSuperview()
         }
         
         pageControl.backgroundColor = UIColor.black.withAlphaComponent(0.3)
@@ -600,6 +599,8 @@ class DevelopersCell: UITableViewCell {
     
     private var developers: [Company] = []
     private var publishers: [Company] = []
+    private var platforms: [Platform] = []
+    private var genres: [Genre] = []
     
     private let developersTitleLabel: UILabel = {
         let label = UILabel()
@@ -612,6 +613,22 @@ class DevelopersCell: UITableViewCell {
     private let publishersTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Publishers"
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
+        return label
+    }()
+    
+    private let platformsTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Platforms"
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .label
+        return label
+    }()
+    
+    private let genresTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Genres"
         label.font = .systemFont(ofSize: 20, weight: .bold)
         label.textColor = .label
         return label
@@ -651,6 +668,40 @@ class DevelopersCell: UITableViewCell {
         return collectionView
     }()
     
+    private lazy var platformsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.tag = 2
+        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
+        return collectionView
+    }()
+    
+    private lazy var genresCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.tag = 3
+        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
+        return collectionView
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -668,6 +719,10 @@ class DevelopersCell: UITableViewCell {
         contentView.addSubview(developersCollectionView)
         contentView.addSubview(publishersTitleLabel)
         contentView.addSubview(publishersCollectionView)
+        contentView.addSubview(platformsTitleLabel)
+        contentView.addSubview(platformsCollectionView)
+        contentView.addSubview(genresTitleLabel)
+        contentView.addSubview(genresCollectionView)
         
         developersTitleLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(16)
@@ -689,6 +744,28 @@ class DevelopersCell: UITableViewCell {
             make.top.equalTo(publishersTitleLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(40)
+        }
+        
+        platformsTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(publishersCollectionView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        platformsCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(platformsTitleLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
+        }
+        
+        genresTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(platformsCollectionView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        genresCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(genresTitleLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
             make.bottom.equalToSuperview().inset(16)
         }
     }
@@ -698,33 +775,50 @@ class DevelopersCell: UITableViewCell {
         
         developers = game.developers ?? []
         publishers = game.publishers ?? []
+        platforms = game.platforms ?? []
+        genres = game.genres ?? []
         
         developersCollectionView.reloadData()
         publishersCollectionView.reloadData()
+        platformsCollectionView.reloadData()
+        genresCollectionView.reloadData()
     }
 }
 
 extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView.tag == 0 {
-            return developers.count
-        } else {
-            return publishers.count
+        switch collectionView.tag {
+        case 0: return developers.count
+        case 1: return publishers.count
+        case 2: return platforms.count
+        case 3: return genres.count
+        default: return 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DeveloperItemCell", for: indexPath) as! DeveloperItemCell
         
-        if collectionView.tag == 0 {
+        switch collectionView.tag {
+        case 0:
             let developer = developers[indexPath.item]
             let name = developer.name ?? "Unknown"
             cell.configure(with: name)
-        } else {
+        case 1:
             let publisher = publishers[indexPath.item]
             let name = publisher.name ?? "Unknown"
             cell.configure(with: name)
+        case 2:
+            let platform = platforms[indexPath.item]
+            let name = platform.platform?.name ?? "Unknown"
+            cell.configure(with: name)
+        case 3:
+            let genre = genres[indexPath.item]
+            let name = genre.name ?? "Unknown"
+            cell.configure(with: name)
+        default:
+            break
         }
         
         return cell
@@ -732,10 +826,18 @@ extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let text: String
-        if collectionView.tag == 0 {
+        
+        switch collectionView.tag {
+        case 0:
             text = developers[indexPath.item].name ?? "Unknown"
-        } else {
+        case 1:
             text = publishers[indexPath.item].name ?? "Unknown"
+        case 2:
+            text = platforms[indexPath.item].platform?.name ?? "Unknown"
+        case 3:
+            text = genres[indexPath.item].name ?? "Unknown"
+        default:
+            text = "Unknown"
         }
         
         let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 16, weight: .medium)]).width
@@ -752,62 +854,5 @@ extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         let finalHeight = max(textHeight + 16, 32)
         
         return CGSize(width: finalWidth, height: finalHeight)
-    }
-}
-
-// MARK: - DeveloperItemCell
-class DeveloperItemCell: UICollectionViewCell {
-    
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .label
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        return label
-    }()
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.systemGray4.cgColor
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupUI() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(nameLabel)
-        
-        containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        nameLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(8)
-            make.top.bottom.equalToSuperview().inset(4)
-        }
-    }
-    
-    func configure(with name: String) {
-        nameLabel.text = name
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        nameLabel.text = nil
     }
 }
