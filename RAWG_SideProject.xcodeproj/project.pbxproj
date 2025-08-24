@@ -148,6 +148,9 @@
 		159F8E302E478CFC0021339B /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				15A133482E5B153F0035A0E2 /* Service */,
+				15A133472E5B15390035A0E2 /* ViewModel */,
+				15A133462E5B15320035A0E2 /* Model */,
 				159F8E312E478D0E0021339B /* View */,
 			);
 			path = Home;
@@ -228,6 +231,27 @@
 				159F8E522E4887010021339B /* GameDetailViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		15A133462E5B15320035A0E2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		15A133472E5B15390035A0E2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		15A133482E5B153F0035A0E2 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
