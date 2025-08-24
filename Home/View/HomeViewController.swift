@@ -11,10 +11,16 @@ import SnapKit
 import Combine
 
 class HomeViewController: UIViewController {
+
+// MARK: - UI
     
+    
+// MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        self.title = "Home"
+        self.title = "RAWG"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
     }
 }
