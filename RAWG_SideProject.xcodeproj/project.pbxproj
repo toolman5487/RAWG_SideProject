@@ -150,6 +150,7 @@
 		159F8E302E478CFC0021339B /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				15B06E9B2E5CA9FC00477E5D /* ViewController */,
 				15A133482E5B153F0035A0E2 /* Service */,
 				15A133472E5B15390035A0E2 /* ViewModel */,
 				15A133462E5B15320035A0E2 /* Model */,
@@ -161,7 +162,6 @@
 		159F8E312E478D0E0021339B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				159F8E322E478D250021339B /* HomeViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -263,6 +263,14 @@
 				15B06E992E5B61EC00477E5D /* GameSearchModel.swift */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		15B06E9B2E5CA9FC00477E5D /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				159F8E322E478D250021339B /* HomeViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
