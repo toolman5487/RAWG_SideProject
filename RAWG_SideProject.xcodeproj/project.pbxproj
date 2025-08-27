@@ -28,6 +28,7 @@
 		15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */; };
 		15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A133442E5B0BCD0035A0E2 /* DeveloperItemCell.swift */; };
 		15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06E992E5B61EC00477E5D /* GameSearchModel.swift */; };
+		15B06EA22E5F531700477E5D /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA12E5F531700477E5D /* SearchResultsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotItemCell.swift; sourceTree = "<group>"; };
 		15A133442E5B0BCD0035A0E2 /* DeveloperItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperItemCell.swift; sourceTree = "<group>"; };
 		15B06E992E5B61EC00477E5D /* GameSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSearchModel.swift; sourceTree = "<group>"; };
+		15B06EA12E5F531700477E5D /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -269,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				159F8E322E478D250021339B /* HomeViewController.swift */,
+				15B06EA12E5F531700477E5D /* SearchResultsViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				150BA9E42E48A35D008A4BA3 /* AlertHelper.swift in Sources */,
 				152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */,
 				159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */,
+				15B06EA22E5F531700477E5D /* SearchResultsViewController.swift in Sources */,
 				152DEAE82E50C3DB003DC29E /* InfoPillCell.swift in Sources */,
 				152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */,
 				152DEADE2E48D833003DC29E /* GameDetailTableView.swift in Sources */,
