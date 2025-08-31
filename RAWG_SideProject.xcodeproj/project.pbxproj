@@ -29,6 +29,8 @@
 		15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A133442E5B0BCD0035A0E2 /* DeveloperItemCell.swift */; };
 		15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06E992E5B61EC00477E5D /* GameSearchModel.swift */; };
 		15B06EA22E5F531700477E5D /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA12E5F531700477E5D /* SearchResultsViewController.swift */; };
+		15B06EA42E647CB700477E5D /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA32E647CB700477E5D /* SearchService.swift */; };
+		15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA52E647E5B00477E5D /* SearchViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		15A133442E5B0BCD0035A0E2 /* DeveloperItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperItemCell.swift; sourceTree = "<group>"; };
 		15B06E992E5B61EC00477E5D /* GameSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSearchModel.swift; sourceTree = "<group>"; };
 		15B06EA12E5F531700477E5D /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
+		15B06EA32E647CB700477E5D /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		15B06EA52E647E5B00477E5D /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -248,6 +252,7 @@
 		15A133472E5B15390035A0E2 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				15B06EA52E647E5B00477E5D /* SearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -255,6 +260,7 @@
 		15A133482E5B153F0035A0E2 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				15B06EA32E647CB700477E5D /* SearchService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -374,8 +380,10 @@
 				15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
+				15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */,
 				152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */,
 				15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */,
+				15B06EA42E647CB700477E5D /* SearchService.swift in Sources */,
 				159F8E332E478D250021339B /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

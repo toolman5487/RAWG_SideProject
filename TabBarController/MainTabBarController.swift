@@ -23,7 +23,7 @@ final class MainTabBarController: UITabBarController {
                                           image: UIImage(systemName: "house"),
                                           selectedImage: UIImage(systemName: "house.fill"))
 
-        let otherVC = GameDetailViewController()
+        let otherVC = ViewController()
         otherVC.title = "Game"
         let otherNav = UINavigationController(rootViewController: otherVC)
         otherNav.tabBarItem = UITabBarItem(title: "Game",

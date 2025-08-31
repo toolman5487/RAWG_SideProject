@@ -344,7 +344,7 @@ class DescriptionCell: UITableViewCell {
         contentView.addSubview(button)
         button.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(120)
+            make.height.equalTo(144)
             make.bottom.equalToSuperview().offset(-32)
         }
         button.setContentHuggingPriority(.required, for: .vertical)
@@ -355,12 +355,12 @@ class DescriptionCell: UITableViewCell {
     func configure(text: String) {
         let readMore = "... Read More"
         
-        let limitedText = String(text.prefix(280))
-        let fullText = text.count > 280 ? limitedText + readMore : limitedText
+        let limitedText = String(text.prefix(240))
+        let fullText = text.count > 240 ? limitedText + readMore : limitedText
         
         var config = button.configuration ?? .plain()
         
-        if text.count > 280 {
+        if text.count > 240 {
             let attributedString = NSMutableAttributedString()
             
             let normalAttributes: [NSAttributedString.Key: Any] = [

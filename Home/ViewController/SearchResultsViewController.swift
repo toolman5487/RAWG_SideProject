@@ -6,14 +6,16 @@
 //
 import UIKit
 import SnapKit
+import Combine
 
 final class SearchResultsViewController: UIViewController {
     
-    let tableView = UITableView()
+    let gameSelected = PassthroughSubject<GameSearchResult, Never>()
     var results: [GameSearchResult] = [] {
         didSet { tableView.reloadData() }
     }
-    var onSelect: ((GameSearchResult) -> Void)?
+    
+    let tableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,7 @@ final class SearchResultsViewController: UIViewController {
 }
 
 extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { results.count }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
@@ -36,7 +39,8 @@ extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegat
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        onSelect?(results[indexPath.row])
+        let selectedGame = results[indexPath.row]
+        gameSelected.send(selectedGame)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

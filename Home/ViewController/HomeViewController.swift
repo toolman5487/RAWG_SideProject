@@ -10,6 +10,9 @@ import SnapKit
 import Combine
 
 class HomeViewController: UIViewController {
+    
+    private let searchViewModel = SearchViewModel()
+    private var cancellables = Set<AnyCancellable>()
 
 // MARK: - UI
     private lazy var searchController: UISearchController = {
@@ -27,9 +30,12 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupNavigation()
-        resultsVC.onSelect = { [weak self] item in
-            // push 到詳情頁等動作
-        }
+        setupBindings()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     private func setupNavigation() {
@@ -39,16 +45,26 @@ class HomeViewController: UIViewController {
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
+    
+    private func setupBindings() {
+        searchViewModel.$searchResults
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.results, on: resultsVC)
+            .store(in: &cancellables)
+        
+        resultsVC.gameSelected
+            .sink { [weak self] selectedGame in
+                let gameDetailVC = GameDetailViewController(gameId: selectedGame.id)
+                gameDetailVC.gameId = selectedGame.id
+                self?.navigationController?.pushViewController(gameDetailVC, animated: true)
+            }
+            .store(in: &cancellables)
+    }
 }
 
 extension HomeViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-        guard !query.isEmpty else {
-            resultsVC.results = []
-            return
-        }
-        // TODO: 呼叫搜尋後指派結果
-        // resultsVC.results = fetchedResults
+        searchViewModel.searchGames(query: query)
     }
 }

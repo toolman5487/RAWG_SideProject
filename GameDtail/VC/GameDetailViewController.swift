@@ -12,8 +12,18 @@ import Combine
 
 class GameDetailViewController: UIViewController {
     
+    var gameId: Int
     private let gameDetailVM = GameDetailViewModel()
     private var cancellables = Set<AnyCancellable>()
+    
+    init(gameId: Int) {
+        self.gameId = gameId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - UI
     private lazy var tableView: GameDetailTableView = {
@@ -31,11 +41,14 @@ class GameDetailViewController: UIViewController {
         fetchGameDetail()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     private func setupUI() {
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
-        
+        navigationItem.largeTitleDisplayMode = .never
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -76,7 +89,7 @@ class GameDetailViewController: UIViewController {
     }
     
     private func fetchGameDetail() {
-        gameDetailVM.fetchGameDetail(gameId: 46889)
+        gameDetailVM.fetchGameDetail(gameId: gameId)
     }
     
     private func presentDescriptionSheet() {
