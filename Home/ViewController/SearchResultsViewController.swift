@@ -23,21 +23,27 @@ final class SearchResultsViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+
+        tableView.register(SearchResultCell.self, forCellReuseIdentifier: "SearchResultCell")
+        tableView.rowHeight = 80
+        
         tableView.dataSource = self
         tableView.delegate = self
     }
 }
 
 extension SearchResultsViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 
+        results.count 
+    }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { results.count }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell", for: indexPath) as! SearchResultCell
         let item = results[indexPath.row]
-        cell.textLabel?.text = item.name
+        cell.configure(with: item)
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedGame = results[indexPath.row]
         gameSelected.send(selectedGame)
