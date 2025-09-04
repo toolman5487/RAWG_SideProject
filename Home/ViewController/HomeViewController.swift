@@ -13,8 +13,8 @@ class HomeViewController: UIViewController {
     
     private let searchViewModel = SearchViewModel()
     private var cancellables = Set<AnyCancellable>()
-
-// MARK: - UI
+    
+    // MARK: - UI
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultsVC)
         controller.obscuresBackgroundDuringPresentation = false
@@ -24,13 +24,22 @@ class HomeViewController: UIViewController {
     }()
     
     private let resultsVC = SearchResultsViewController()
-
-// MARK: - LifeCycle
+    
+    private let tableView: UITableView = {
+        let tableview = UITableView(frame: .zero, style: .plain)
+        tableview.backgroundColor = .clear
+        tableview.separatorStyle = .none
+        tableview.showsVerticalScrollIndicator = false
+        return tableview
+    }()
+    
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         setupNavigation()
         setupBindings()
+        setupTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,10 +50,22 @@ class HomeViewController: UIViewController {
     private func setupNavigation() {
         self.title = "RAWG"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .never
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
+    
+    private func setupTableView() {
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
+    
     
     private func setupBindings() {
         searchViewModel.$searchResults
@@ -68,3 +89,28 @@ extension HomeViewController: UISearchResultsUpdating {
         searchViewModel.searchGames(query: query)
     }
 }
+
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 20
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.backgroundColor = .label
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 16
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }
+}
+    
+
