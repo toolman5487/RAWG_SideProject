@@ -592,104 +592,13 @@ class DevelopersCell: UITableViewCell {
     private var platforms: [Platform] = []
     private var genres: [Genre] = []
     
-    private let developersTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Developers"
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .label
-        return label
-    }()
-    
-    private let publishersTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Publishers"
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .label
-        return label
-    }()
-    
-    private let platformsTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Platforms"
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .label
-        return label
-    }()
-    
-    private let genresTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Genres"
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .label
-        return label
-    }()
-    
-    private lazy var developersCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.tag = 0
-        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
-        return collectionView
-    }()
-    
-    private lazy var publishersCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.tag = 1
-        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
-        return collectionView
-    }()
-    
-    private lazy var platformsCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.tag = 2
-        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
-        return collectionView
-    }()
-    
-    private lazy var genresCollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 12
-        layout.minimumLineSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.tag = 3
-        collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
-        return collectionView
+    private let stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 16
+        stack.alignment = .fill
+        stack.distribution = .fill
+        return stack
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -705,57 +614,9 @@ class DevelopersCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        contentView.addSubview(developersTitleLabel)
-        contentView.addSubview(developersCollectionView)
-        contentView.addSubview(publishersTitleLabel)
-        contentView.addSubview(publishersCollectionView)
-        contentView.addSubview(platformsTitleLabel)
-        contentView.addSubview(platformsCollectionView)
-        contentView.addSubview(genresTitleLabel)
-        contentView.addSubview(genresCollectionView)
-        
-        developersTitleLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(16)
-            make.trailing.equalToSuperview().inset(16)
-        }
-        
-        developersCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(developersTitleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
-        }
-        
-        publishersTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(developersCollectionView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        publishersCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(publishersTitleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
-        }
-        
-        platformsTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(publishersCollectionView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        platformsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(platformsTitleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
-        }
-        
-        genresTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(platformsCollectionView.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        genresCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(genresTitleLabel.snp.bottom).offset(8)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
+        contentView.addSubview(stackView)
+        stackView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().inset(16)
         }
     }
@@ -768,143 +629,104 @@ class DevelopersCell: UITableViewCell {
         platforms = game.platforms ?? []
         genres = game.genres ?? []
         
-        updateVisibility()
-        updateLayoutConstraints()
-        
-        developersCollectionView.reloadData()
-        publishersCollectionView.reloadData()
-        platformsCollectionView.reloadData()
-        genresCollectionView.reloadData()
+        setupSections()
     }
     
-    private func updateVisibility() {
-        developersTitleLabel.isHidden = developers.isEmpty
-        developersCollectionView.isHidden = developers.isEmpty
-        publishersTitleLabel.isHidden = publishers.isEmpty
-        publishersCollectionView.isHidden = publishers.isEmpty
-        platformsTitleLabel.isHidden = platforms.isEmpty
-        platformsCollectionView.isHidden = platforms.isEmpty
-        genresTitleLabel.isHidden = genres.isEmpty
-        genresCollectionView.isHidden = genres.isEmpty
-    }
-    
-    private func updateLayoutConstraints() {
-        var lastView: UIView = contentView
-        var lastBottomConstraint: ConstraintItem = contentView.snp.top
-        
+    private func setupSections() {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         if !developers.isEmpty {
-            developersTitleLabel.snp.remakeConstraints { make in
-                make.top.equalTo(lastBottomConstraint).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-            }
-            
-            developersCollectionView.snp.remakeConstraints { make in
-                make.top.equalTo(developersTitleLabel.snp.bottom).offset(8)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(40)
-            }
-            lastBottomConstraint = developersCollectionView.snp.bottom
+            let sectionView = createSectionView(title: "Developers", data: developers.map { $0.name ?? "Unknown" })
+            stackView.addArrangedSubview(sectionView)
         }
         
         if !publishers.isEmpty {
-            publishersTitleLabel.snp.remakeConstraints { make in
-                make.top.equalTo(lastBottomConstraint).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-            }
-            
-            publishersCollectionView.snp.remakeConstraints { make in
-                make.top.equalTo(publishersTitleLabel.snp.bottom).offset(8)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(40)
-            }
-            lastBottomConstraint = publishersCollectionView.snp.bottom
+            let sectionView = createSectionView(title: "Publishers", data: publishers.map { $0.name ?? "Unknown" })
+            stackView.addArrangedSubview(sectionView)
         }
         
         if !platforms.isEmpty {
-            platformsTitleLabel.snp.remakeConstraints { make in
-                make.top.equalTo(lastBottomConstraint).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-            }
-            
-            platformsCollectionView.snp.remakeConstraints { make in
-                make.top.equalTo(platformsTitleLabel.snp.bottom).offset(8)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(40)
-            }
-            lastBottomConstraint = platformsCollectionView.snp.bottom
+            let sectionView = createSectionView(title: "Platforms", data: platforms.map { $0.platform?.name ?? "Unknown" })
+            stackView.addArrangedSubview(sectionView)
         }
         
         if !genres.isEmpty {
-            genresTitleLabel.snp.remakeConstraints { make in
-                make.top.equalTo(lastBottomConstraint).offset(16)
-                make.leading.trailing.equalToSuperview().inset(16)
-            }
-            
-            genresCollectionView.snp.remakeConstraints { make in
-                make.top.equalTo(genresTitleLabel.snp.bottom).offset(8)
-                make.leading.trailing.equalToSuperview()
-                make.height.equalTo(40)
-                make.bottom.equalToSuperview().inset(16)
-            }
+            let sectionView = createSectionView(title: "Genres", data: genres.map { $0.name ?? "Unknown" })
+            stackView.addArrangedSubview(sectionView)
         }
     }
+    
+    private func createSectionView(title: String, data: [String]) -> UIView {
+        let containerView = UIView()
+        
+        let titleLabel: UILabel = {
+            let label = UILabel()
+            label.text = title
+            label.font = .systemFont(ofSize: 20, weight: .bold)
+            label.textColor = .label
+            return label
+        }()
+        
+        let collectionView: UICollectionView = {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.minimumInteritemSpacing = 12
+            layout.minimumLineSpacing = 12
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            
+            let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+            collectionView.backgroundColor = .clear
+            collectionView.showsHorizontalScrollIndicator = false
+            collectionView.delegate = self
+            collectionView.dataSource = self
+            collectionView.register(DeveloperItemCell.self, forCellWithReuseIdentifier: "DeveloperItemCell")
+            return collectionView
+        }()
+        
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(collectionView)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(40)
+            make.bottom.equalToSuperview()
+        }
+        
+        collectionView.tag = data.hashValue
+        objc_setAssociatedObject(collectionView, &AssociatedKeys.data, data, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        
+        return containerView
+    }
+}
+
+private struct AssociatedKeys {
+    static var data = "data"
 }
 
 extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView.tag {
-        case 0: return developers.count
-        case 1: return publishers.count
-        case 2: return platforms.count
-        case 3: return genres.count
-        default: return 0
-        }
+        guard let data = objc_getAssociatedObject(collectionView, &AssociatedKeys.data) as? [String] else { return 0 }
+        return data.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DeveloperItemCell", for: indexPath) as! DeveloperItemCell
         
-        switch collectionView.tag {
-        case 0:
-            let developer = developers[indexPath.item]
-            let name = developer.name ?? "Unknown"
-            cell.configure(with: name)
-        case 1:
-            let publisher = publishers[indexPath.item]
-            let name = publisher.name ?? "Unknown"
-            cell.configure(with: name)
-        case 2:
-            let platform = platforms[indexPath.item]
-            let name = platform.platform?.name ?? "Unknown"
-            cell.configure(with: name)
-        case 3:
-            let genre = genres[indexPath.item]
-            let name = genre.name ?? "Unknown"
-            cell.configure(with: name)
-        default:
-            break
-        }
+        guard let data = objc_getAssociatedObject(collectionView, &AssociatedKeys.data) as? [String] else { return cell }
+        cell.configure(with: data[indexPath.item])
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let text: String
+        guard let data = objc_getAssociatedObject(collectionView, &AssociatedKeys.data) as? [String] else { return CGSize.zero }
         
-        switch collectionView.tag {
-        case 0:
-            text = developers[indexPath.item].name ?? "Unknown"
-        case 1:
-            text = publishers[indexPath.item].name ?? "Unknown"
-        case 2:
-            text = platforms[indexPath.item].platform?.name ?? "Unknown"
-        case 3:
-            text = genres[indexPath.item].name ?? "Unknown"
-        default:
-            text = "Unknown"
-        }
-        
+        let text = data[indexPath.item]
         let textWidth = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 16, weight: .medium)]).width
         let maxWidth = collectionView.bounds.width - 32
         let finalWidth = min(textWidth + 24, maxWidth)
