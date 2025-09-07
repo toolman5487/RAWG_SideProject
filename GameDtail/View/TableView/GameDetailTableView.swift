@@ -31,7 +31,6 @@ class GameDetailTableView: UITableView {
         allowsSelection = false
         rowHeight = UITableView.automaticDimension
         
-        // 設定 section 間距
         sectionHeaderHeight = 0
         sectionFooterHeight = 0
         estimatedSectionHeaderHeight = 0

@@ -279,7 +279,6 @@ class GameInfoCell: UITableViewCell {
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(48)
-            make.bottom.equalToSuperview().offset(-8)
         }
     }
     
@@ -325,15 +324,13 @@ class DescriptionCell: UITableViewCell {
     
     private let button: UIButton = {
         var config = UIButton.Configuration.plain()
-        config.title = "Description"
         config.baseForegroundColor = .label
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
         let button = UIButton(configuration: config, primaryAction: nil)
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        button.titleLabel?.numberOfLines = 8
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         button.titleLabel?.textAlignment = .left
-        button.contentHorizontalAlignment = .leading
+        button.contentHorizontalAlignment = .center
         return button
     }()
     
@@ -343,9 +340,7 @@ class DescriptionCell: UITableViewCell {
         selectionStyle = .none
         contentView.addSubview(button)
         button.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(144)
-            make.bottom.equalToSuperview().offset(-32)
+            make.top.leading.trailing.bottom.equalToSuperview()
         }
         button.setContentHuggingPriority(.required, for: .vertical)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -356,33 +351,28 @@ class DescriptionCell: UITableViewCell {
         let readMore = "... Read More"
         
         let limitedText = String(text.prefix(240))
-        let fullText = text.count > 240 ? limitedText + readMore : limitedText
+        let displayText = limitedText + readMore
         
         var config = button.configuration ?? .plain()
         
-        if text.count > 240 {
-            let attributedString = NSMutableAttributedString()
-            
-            let normalAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.secondaryLabel
-            ]
-            
-            let readMoreAttributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16, weight: .bold),
-                .foregroundColor: UIColor.label
-            ]
-            
-            attributedString.append(NSAttributedString(string: limitedText, attributes: normalAttributes))
-            attributedString.append(NSAttributedString(string: readMore, attributes: readMoreAttributes))
-            
-            config.attributedTitle = AttributedString(attributedString)
-        } else {
-            config.title = fullText
-            config.baseForegroundColor = .secondaryLabel
-        }
+        let attributedString = NSMutableAttributedString()
         
-        config.contentInsets = NSDirectionalEdgeInsets(top: 24, leading: 8, bottom: 8, trailing: 8)
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16, weight: .semibold),
+            .foregroundColor: UIColor.label
+        ]
+        
+        let readMoreAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16, weight: .bold),
+            .foregroundColor: UIColor.secondaryLabel
+        ]
+        
+        attributedString.append(NSAttributedString(string: limitedText, attributes: normalAttributes))
+        attributedString.append(NSAttributedString(string: readMore, attributes: readMoreAttributes))
+        
+        config.attributedTitle = AttributedString(attributedString)
+        
+        config.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8)
         button.configuration = config
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.lineBreakMode = .byWordWrapping
@@ -778,10 +768,85 @@ class DevelopersCell: UITableViewCell {
         platforms = game.platforms ?? []
         genres = game.genres ?? []
         
+        updateVisibility()
+        updateLayoutConstraints()
+        
         developersCollectionView.reloadData()
         publishersCollectionView.reloadData()
         platformsCollectionView.reloadData()
         genresCollectionView.reloadData()
+    }
+    
+    private func updateVisibility() {
+        developersTitleLabel.isHidden = developers.isEmpty
+        developersCollectionView.isHidden = developers.isEmpty
+        publishersTitleLabel.isHidden = publishers.isEmpty
+        publishersCollectionView.isHidden = publishers.isEmpty
+        platformsTitleLabel.isHidden = platforms.isEmpty
+        platformsCollectionView.isHidden = platforms.isEmpty
+        genresTitleLabel.isHidden = genres.isEmpty
+        genresCollectionView.isHidden = genres.isEmpty
+    }
+    
+    private func updateLayoutConstraints() {
+        var lastView: UIView = contentView
+        var lastBottomConstraint: ConstraintItem = contentView.snp.top
+        
+        if !developers.isEmpty {
+            developersTitleLabel.snp.remakeConstraints { make in
+                make.top.equalTo(lastBottomConstraint).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            developersCollectionView.snp.remakeConstraints { make in
+                make.top.equalTo(developersTitleLabel.snp.bottom).offset(8)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(40)
+            }
+            lastBottomConstraint = developersCollectionView.snp.bottom
+        }
+        
+        if !publishers.isEmpty {
+            publishersTitleLabel.snp.remakeConstraints { make in
+                make.top.equalTo(lastBottomConstraint).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            publishersCollectionView.snp.remakeConstraints { make in
+                make.top.equalTo(publishersTitleLabel.snp.bottom).offset(8)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(40)
+            }
+            lastBottomConstraint = publishersCollectionView.snp.bottom
+        }
+        
+        if !platforms.isEmpty {
+            platformsTitleLabel.snp.remakeConstraints { make in
+                make.top.equalTo(lastBottomConstraint).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            platformsCollectionView.snp.remakeConstraints { make in
+                make.top.equalTo(platformsTitleLabel.snp.bottom).offset(8)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(40)
+            }
+            lastBottomConstraint = platformsCollectionView.snp.bottom
+        }
+        
+        if !genres.isEmpty {
+            genresTitleLabel.snp.remakeConstraints { make in
+                make.top.equalTo(lastBottomConstraint).offset(16)
+                make.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            genresCollectionView.snp.remakeConstraints { make in
+                make.top.equalTo(genresTitleLabel.snp.bottom).offset(8)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(40)
+                make.bottom.equalToSuperview().inset(16)
+            }
+        }
     }
 }
 
