@@ -32,6 +32,7 @@
 		15B06EA42E647CB700477E5D /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA32E647CB700477E5D /* SearchService.swift */; };
 		15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA52E647E5B00477E5D /* SearchViewModel.swift */; };
 		15B06EA82E6490A000477E5D /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA72E6490A000477E5D /* SearchResultCell.swift */; };
+		15B06EAA2E6D922C00477E5D /* HomeViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B06EA92E6D922C00477E5D /* HomeViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		15B06EA32E647CB700477E5D /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		15B06EA52E647E5B00477E5D /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		15B06EA72E6490A000477E5D /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		15B06EA92E6D922C00477E5D /* HomeViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				15B06EA72E6490A000477E5D /* SearchResultCell.swift */,
+				15B06EA92E6D922C00477E5D /* HomeViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
 				15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */,
+				15B06EAA2E6D922C00477E5D /* HomeViewCell.swift in Sources */,
 				152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */,
 				15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */,
 				15B06EA42E647CB700477E5D /* SearchService.swift in Sources */,
