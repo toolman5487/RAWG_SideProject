@@ -31,7 +31,7 @@ final class HomeListService: HomeListServiceProtocol {
         
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
-            .decode(type: GameSearchResponse.self, decoder: JSONDecoder())
+            .decode(type: GameListResponse.self, decoder: JSONDecoder())
             .map { response in
                 response.results.map { GameListItemModel(from: $0) }
             }
