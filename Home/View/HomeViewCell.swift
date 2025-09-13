@@ -13,6 +13,13 @@ import SDWebImage
 // MARK: - NewGame
 class NewGameCell: UITableViewCell {
     
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textColor = .label
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -45,11 +52,23 @@ class NewGameCell: UITableViewCell {
     }
     
     private func setupUI() {
+        contentView.addSubview(titleLabel)
         contentView.addSubview(collectionView)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(200)
         }
+    }
+    
+    func configure(title: String) {
+        titleLabel.text = title
     }
 }
 
