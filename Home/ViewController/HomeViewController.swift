@@ -12,6 +12,7 @@ import Combine
 class HomeViewController: UIViewController {
     
     private let searchViewModel = SearchViewModel()
+    private let homeListViewModel = HomeListViewModel()
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI
@@ -62,15 +63,20 @@ class HomeViewController: UIViewController {
         }
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.register(NewGameCell.self, forCellReuseIdentifier: "NewGameCell")
     }
-    
     
     private func setupBindings() {
         searchViewModel.$searchResults
             .receive(on: DispatchQueue.main)
             .assign(to: \.results, on: resultsVC)
+            .store(in: &cancellables)
+        
+        homeListViewModel.$games
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
             .store(in: &cancellables)
         
         resultsVC.gameSelected
@@ -93,11 +99,12 @@ extension HomeViewController: UISearchResultsUpdating {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
+        cell.games = homeListViewModel.games
         return cell
     }
 }

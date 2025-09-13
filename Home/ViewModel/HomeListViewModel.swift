@@ -2,7 +2,7 @@
 //  HomeListViewModel.swift
 //  RAWG_SideProject
 //
-//  Created by Willy Hsu on 2025/9/12.
+//  Created by Willy Hsu on 2025/9/13.
 //
 
 import Foundation
@@ -14,23 +14,26 @@ class HomeListViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let service: HomeListServiceProtocol
+    private let homeListService = HomeListService()
     private var cancellables = Set<AnyCancellable>()
     
-    init(service: HomeListServiceProtocol = HomeListService()) {
-        self.service = service
+    init() {
+        fetchNewestGames()
     }
     
-    func loadNewestGames() {
+    func fetchNewestGames() {
         isLoading = true
         errorMessage = nil
         
-        service.fetchNewestGames(daysBack: 30, pageSize: 20)
+        homeListService.fetchNewestGames()
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
                     self?.isLoading = false
-                    if case .failure(let error) = completion {
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
                         self?.errorMessage = error.localizedDescription
                     }
                 },
@@ -39,9 +42,5 @@ class HomeListViewModel: ObservableObject {
                 }
             )
             .store(in: &cancellables)
-    }
-    
-    func refreshGames() {
-        loadNewestGames()
     }
 }

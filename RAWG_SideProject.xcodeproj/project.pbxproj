@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		150A72712E752B3A00E5925F /* HomeListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150A72702E752B3A00E5925F /* HomeListViewModel.swift */; };
+		150A72742E754C0800E5925F /* NewGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150A72732E754C0800E5925F /* NewGameListCell.swift */; };
 		150BA9E42E48A35D008A4BA3 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150BA9E32E48A35D008A4BA3 /* AlertHelper.swift */; };
 		152DEADE2E48D833003DC29E /* GameDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEADD2E48D833003DC29E /* GameDetailTableView.swift */; };
 		152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEAE42E50BC8F003DC29E /* GameDetailCell.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		150A72702E752B3A00E5925F /* HomeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListViewModel.swift; sourceTree = "<group>"; };
+		150A72732E754C0800E5925F /* NewGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameListCell.swift; sourceTree = "<group>"; };
 		150BA9E32E48A35D008A4BA3 /* AlertHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 		152DEADD2E48D833003DC29E /* GameDetailTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailTableView.swift; sourceTree = "<group>"; };
 		152DEAE42E50BC8F003DC29E /* GameDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailCell.swift; sourceTree = "<group>"; };
@@ -101,11 +105,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		150A72722E754A2000E5925F /* SubCell */ = {
+			isa = PBXGroup;
+			children = (
+				150A72732E754C0800E5925F /* NewGameListCell.swift */,
+			);
+			path = SubCell;
+			sourceTree = "<group>";
+		};
 		150BA9E52E48D762008A4BA3 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				152DEB032E54B8B9003DC29E /* DescriptionView */,
-				152DEAE62E50C316003DC29E /* Cell */,
+				152DEAE62E50C316003DC29E /* SubCell */,
 				152DEADF2E48DADE003DC29E /* TableView */,
 			);
 			path = View;
@@ -120,7 +132,7 @@
 			path = TableView;
 			sourceTree = "<group>";
 		};
-		152DEAE62E50C316003DC29E /* Cell */ = {
+		152DEAE62E50C316003DC29E /* SubCell */ = {
 			isa = PBXGroup;
 			children = (
 				152DEAE72E50C3DB003DC29E /* InfoPillCell.swift */,
@@ -129,7 +141,7 @@
 				15A133192E58FA0C0035A0E2 /* ScreenshotItemCell.swift */,
 				15A133442E5B0BCD0035A0E2 /* DeveloperItemCell.swift */,
 			);
-			path = Cell;
+			path = SubCell;
 			sourceTree = "<group>";
 		};
 		152DEB032E54B8B9003DC29E /* DescriptionView */ = {
@@ -176,6 +188,7 @@
 		159F8E312E478D0E0021339B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				150A72722E754A2000E5925F /* SubCell */,
 				15B06EA72E6490A000477E5D /* SearchResultCell.swift */,
 				15B06EA92E6D922C00477E5D /* HomeViewCell.swift */,
 			);
@@ -264,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				15B06EA52E647E5B00477E5D /* SearchViewModel.swift */,
+				150A72702E752B3A00E5925F /* HomeListViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -378,11 +392,13 @@
 				152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */,
 				152DEADE2E48D833003DC29E /* GameDetailTableView.swift in Sources */,
 				159F8E532E4887010021339B /* GameDetailViewModel.swift in Sources */,
+				150A72712E752B3A00E5925F /* HomeListViewModel.swift in Sources */,
 				159F8E422E4860960021339B /* APIConfig.swift in Sources */,
 				159F8E502E4872C40021339B /* GameDetailService.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
 				159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */,
 				15B06EAE2E7318C300477E5D /* HomeListService.swift in Sources */,
+				150A72742E754C0800E5925F /* NewGameListCell.swift in Sources */,
 				15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */,
 				15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
