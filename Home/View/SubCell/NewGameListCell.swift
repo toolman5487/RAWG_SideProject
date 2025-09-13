@@ -24,11 +24,13 @@ class NewGameListCell: UICollectionViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .label
-        label.numberOfLines = 2
+        label.numberOfLines = 1
+        label.minimumScaleFactor = 0.8
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
-    private lazy var ratingLabel: UILabel = {
+    private lazy var releaseDateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .secondaryLabel
@@ -47,7 +49,7 @@ class NewGameListCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(ratingLabel)
+        contentView.addSubview(releaseDateLabel)
         
         imageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -59,7 +61,7 @@ class NewGameListCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
         }
         
-        ratingLabel.snp.makeConstraints { make in
+        releaseDateLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
@@ -69,10 +71,10 @@ class NewGameListCell: UICollectionViewCell {
     func configure(with game: GameListItemModel) {
         titleLabel.text = game.name
         
-        if let rating = game.rating {
-            ratingLabel.text = String(format: "%.1f", rating)
+        if let released = game.released {
+            releaseDateLabel.text = released
         } else {
-            ratingLabel.text = "N/A"
+            releaseDateLabel.text = "TBA"
         }
         
         if let imageURL = game.backgroundImage {

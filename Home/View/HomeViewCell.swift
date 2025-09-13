@@ -9,9 +9,13 @@ import Foundation
 import UIKit
 import SnapKit
 import SDWebImage
+import Combine
 
 // MARK: - NewGame
 class NewGameCell: UITableViewCell {
+    
+    private var games: [GameListItemModel] = []
+    private var cancellables = Set<AnyCancellable>()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -36,12 +40,6 @@ class NewGameCell: UITableViewCell {
         return collectionView
     }()
     
-    var games: [GameListItemModel] = [] {
-        didSet {
-            collectionView.reloadData()
-        }
-    }
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -56,7 +54,7 @@ class NewGameCell: UITableViewCell {
         contentView.addSubview(collectionView)
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
@@ -67,8 +65,16 @@ class NewGameCell: UITableViewCell {
         }
     }
     
-    func configure(title: String) {
+    func configure(title: String, gamesPublisher: AnyPublisher<[GameListItemModel], Never>) {
         titleLabel.text = title
+        
+        gamesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] games in
+                self?.games = games
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 }
 

@@ -104,8 +104,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
-        cell.games = homeListViewModel.games
-        cell.configure(title: "New and Trending")
+        cell.configure(title: "New and Trending", gamesPublisher: homeListViewModel.$games.eraseToAnyPublisher())
         return cell
     }
 }
