@@ -105,7 +105,24 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
         cell.configure(title: "New and Trending", gamesPublisher: homeListViewModel.$games.eraseToAnyPublisher())
+        cell.delegate = self
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension HomeViewController: NewGameCellDelegate {
+    func didSelectGame(_ game: GameListItemModel) {
+        let gameDetailVC = GameDetailViewController(gameId: game.id)
+        navigationController?.pushViewController(gameDetailVC, animated: true)
+    }
+    
+    func didSelectNewGameSection() {
+        let newGameVC = NewGameViewController()
+        navigationController?.pushViewController(newGameVC, animated: true)
     }
 }
     

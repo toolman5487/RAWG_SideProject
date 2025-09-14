@@ -11,11 +11,17 @@ import SnapKit
 import SDWebImage
 import Combine
 
+protocol NewGameCellDelegate: AnyObject {
+    func didSelectGame(_ game: GameListItemModel)
+    func didSelectNewGameSection()
+}
+
 // MARK: - NewGame
 class NewGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
     private var cancellables = Set<AnyCancellable>()
+    weak var delegate: NewGameCellDelegate?
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -54,7 +60,7 @@ class NewGameCell: UITableViewCell {
         contentView.addSubview(collectionView)
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
@@ -76,6 +82,13 @@ class NewGameCell: UITableViewCell {
             }
             .store(in: &cancellables)
     }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if selected {
+            delegate?.didSelectNewGameSection()
+        }
+    }
 }
 
 extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -95,5 +108,10 @@ extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
         let spacing: CGFloat = 16
         let itemWidth = (screenWidth - padding - spacing) / 3
         return CGSize(width: itemWidth, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedGame = games[indexPath.item]
+        delegate?.didSelectGame(selectedGame)
     }
 }
