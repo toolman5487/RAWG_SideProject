@@ -11,12 +11,20 @@ import SnapKit
 import SDWebImage
 import Combine
 
+// MARK: - Banner
+
+class BannerCell: UITableViewCell {
+    
+    
+}
+
+// MARK: - NewGame
+
 protocol NewGameCellDelegate: AnyObject {
     func didSelectGame(_ game: GameListItemModel)
     func didSelectNewGameSection()
 }
 
-// MARK: - NewGame
 class NewGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
@@ -115,3 +123,4 @@ extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
         delegate?.didSelectGame(selectedGame)
     }
 }
+

@@ -10,9 +10,28 @@ import Combine
 
 protocol HomeListServiceProtocol {
     func fetchNewestGames(daysBack: Int, pageSize: Int) -> AnyPublisher<[GameListItemModel], Error>
+    func fetchTopGames() -> AnyPublisher<[GameListItemModel], Error>
 }
 
 final class HomeListService: HomeListServiceProtocol {
+    
+    func fetchTopGames() -> AnyPublisher<[GameListItemModel], Error> {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let lastYear = currentYear - 1
+        let urlString = "\(APIConfig.baseURL)/games?key=\(APIConfig.apiKey)&ordering=-added&page_size=5&dates=\(lastYear)-01-01,\(currentYear)-12-31"
+        
+        guard let url = URL(string: urlString) else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: GameListResponse.self, decoder: JSONDecoder())
+            .map { response in
+                response.results.map { GameListItemModel(from: $0) }
+            }
+            .eraseToAnyPublisher()
+    }
     
     func fetchNewestGames(daysBack: Int = 30, pageSize: Int = 20) -> AnyPublisher<[GameListItemModel], Error> {
         let to = Date()
