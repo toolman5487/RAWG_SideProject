@@ -47,13 +47,17 @@ struct GameListItemPlatformInfo: Codable {
     let slug: String
 }
 
-struct GameListItemModel {
+struct GameListItemModel: Equatable {
     let id: Int
     let name: String
     let backgroundImage: String?
     let rating: Double?
     let released: String?
     let platforms: [String]
+    
+    static func == (lhs: GameListItemModel, rhs: GameListItemModel) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 extension GameListItemModel {

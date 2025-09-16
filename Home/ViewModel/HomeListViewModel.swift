@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SDWebImage
 
 class HomeListViewModel: ObservableObject {
     
@@ -44,9 +45,18 @@ class HomeListViewModel: ObservableObject {
             receiveValue: { [weak self] gamesData in
                 self?.games = gamesData.0
                 self?.topGames = gamesData.1
+                self?.preloadImages(for: gamesData.0)
+                self?.preloadImages(for: gamesData.1)
             }
         )
         .store(in: &cancellables)
+    }
+    
+    private func preloadImages(for games: [GameListItemModel]) {
+        let imageURLs = games.compactMap { game in
+            game.backgroundImage.flatMap { URL(string: $0) }
+        }
+        SDWebImagePrefetcher.shared.prefetchURLs(imageURLs)
     }
     
     func fetchNewestGames() {
@@ -67,6 +77,7 @@ class HomeListViewModel: ObservableObject {
                 },
                 receiveValue: { [weak self] games in
                     self?.games = games
+                    self?.preloadImages(for: games)
                 }
             )
             .store(in: &cancellables)

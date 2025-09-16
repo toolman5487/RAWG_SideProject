@@ -63,6 +63,7 @@ class HomeViewController: UIViewController {
         }
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.register(BannerCell.self, forCellReuseIdentifier: "BannerCell")
         tableView.register(NewGameCell.self, forCellReuseIdentifier: "NewGameCell")
     }
     
@@ -73,6 +74,13 @@ class HomeViewController: UIViewController {
             .store(in: &cancellables)
         
         homeListViewModel.$games
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        homeListViewModel.$topGames
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -99,14 +107,21 @@ extension HomeViewController: UISearchResultsUpdating {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
-        cell.configure(title: "New and Trending", gamesPublisher: homeListViewModel.$games.eraseToAnyPublisher())
-        cell.delegate = self
-        return cell
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "BannerCell", for: indexPath) as! BannerCell
+            cell.configure(with: homeListViewModel.topGames)
+            cell.delegate = self
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
+            cell.configure(title: "New and Trending", gamesPublisher: homeListViewModel.$games.eraseToAnyPublisher())
+            cell.delegate = self
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -125,5 +140,12 @@ extension HomeViewController: NewGameCellDelegate {
         navigationController?.pushViewController(newGameVC, animated: true)
     }
 }
-    
+
+extension HomeViewController: BannerCellDelegate {
+    func didSelectBannerGame(_ game: GameListItemModel) {
+        let gameDetailVC = GameDetailViewController(gameId: game.id)
+        navigationController?.pushViewController(gameDetailVC, animated: true)
+    }
+}
+
 
