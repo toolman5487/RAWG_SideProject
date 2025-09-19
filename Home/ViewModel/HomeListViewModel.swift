@@ -27,29 +27,49 @@ class HomeListViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        Publishers.Zip(
-            homeListService.fetchNewestGames(),
-            homeListService.fetchTopGames()
-        )
-        .receive(on: DispatchQueue.main)
-        .sink(
-            receiveCompletion: { [weak self] completion in
-                self?.isLoading = false
-                switch completion {
-                case .finished:
-                    break
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
+        fetchNewestGamesData()
+        fetchTopGamesData()
+    }
+    
+    private func fetchNewestGamesData() {
+        homeListService.fetchNewestGames()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] games in
+                    self?.games = games
+                    self?.preloadImages(for: games)
                 }
-            },
-            receiveValue: { [weak self] gamesData in
-                self?.games = gamesData.0
-                self?.topGames = gamesData.1
-                self?.preloadImages(for: gamesData.0)
-                self?.preloadImages(for: gamesData.1)
-            }
-        )
-        .store(in: &cancellables)
+            )
+            .store(in: &cancellables)
+    }
+    
+    private func fetchTopGamesData() {
+        homeListService.fetchTopGames()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    switch completion {
+                    case .finished:
+                        break
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] topGames in
+                    self?.topGames = topGames
+                    self?.preloadImages(for: topGames)
+                }
+            )
+            .store(in: &cancellables)
     }
     
     private func preloadImages(for games: [GameListItemModel]) {
