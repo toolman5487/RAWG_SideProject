@@ -227,7 +227,7 @@ class NewGameCell: UITableViewCell {
         contentView.addSubview(collectionView)
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(8)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         

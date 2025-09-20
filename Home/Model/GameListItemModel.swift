@@ -22,7 +22,7 @@ struct GameListItemResult: Codable {
     let rating: Double
     let released: String?
     let genres: [GameListItemGenre]
-    let platforms: [GameListItemPlatform]
+    let platforms: [GameListItemPlatform]?
     let score: String?
     
     enum CodingKeys: String, CodingKey {
@@ -67,6 +67,6 @@ extension GameListItemModel {
         self.backgroundImage = result.backgroundImage
         self.rating = result.rating
         self.released = result.released
-        self.platforms = result.platforms.map { $0.platform.name }
+        self.platforms = result.platforms?.map { $0.platform.name } ?? []
     }
 }
