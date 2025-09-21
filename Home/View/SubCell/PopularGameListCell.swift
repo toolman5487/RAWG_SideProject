@@ -33,7 +33,7 @@ class PopularGameListCell: UICollectionViewCell {
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .systemOrange
+        label.textColor = .systemYellow
         return label
     }()
     

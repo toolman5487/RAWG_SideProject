@@ -81,7 +81,7 @@ class NewGameListCell: UICollectionViewCell {
             imageView.sd_setImage(with: URL(string: imageURL))
         } else {
             imageView.image = UIImage(systemName: "photo")
-            imageView.tintColor = .label
+            imageView.tintColor = .secondaryLabel
         }
     }
 }

@@ -234,10 +234,10 @@ class NewGameCell: UITableViewCell {
         let chevronImage = UIImage(systemName: "chevron.forward")
         
         let attachment = NSTextAttachment()
-        attachment.image = chevronImage
-        attachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
+        attachment.image = chevronImage?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
+        attachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 16)
         
-        let attributedString = NSMutableAttributedString(string: titleText)
+        let attributedString = NSMutableAttributedString(string: titleText + " ")
         attributedString.append(NSAttributedString(attachment: attachment))
         
         titleLabel.attributedText = attributedString
@@ -350,10 +350,10 @@ class PopularGameCell: UITableViewCell {
         let chevronImage = UIImage(systemName: "chevron.forward")
         
         let attachment = NSTextAttachment()
-        attachment.image = chevronImage
-        attachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
+        attachment.image = chevronImage?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
+        attachment.bounds = CGRect(x: 0, y: 0, width: 16, height: 16)
         
-        let attributedString = NSMutableAttributedString(string: titleText)
+        let attributedString = NSMutableAttributedString(string: titleText + " ")
         attributedString.append(NSAttributedString(attachment: attachment))
         
         titleLabel.attributedText = attributedString
