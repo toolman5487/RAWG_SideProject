@@ -98,3 +98,45 @@ class GameDetailViewModel: ObservableObject {
         }
     }
 }
+
+extension GameDetailViewModel {
+    
+    enum CellType: CaseIterable {
+        case imageCarousel
+        case rating
+        case gameInfo
+        case description
+        case screenshots
+        case metacritic
+        case developers
+        
+        var cellIdentifier: String {
+            switch self {
+            case .imageCarousel: return "ImageCarouselCell"
+            case .rating: return "RatingCell"
+            case .gameInfo: return "GameInfoCell"
+            case .description: return "DescriptionCell"
+            case .screenshots: return "ScreenshotsCell"
+            case .metacritic: return "MetacriticCell"
+            case .developers: return "DevelopersCell"
+            }
+        }
+    }
+    
+    var visibleCells: [CellType] {
+        guard let gameDetail = gameDetail else { return [] }
+        
+        var cells: [CellType] = [.imageCarousel, .rating, .gameInfo, .description, .screenshots]
+        
+        if !gameDetail.metacriticPlatforms!.isEmpty {
+            cells.append(.metacritic)
+        }
+        
+        cells.append(.developers)
+        return cells
+    }
+    
+    var numberOfCells: Int {
+        return visibleCells.count
+    }
+}

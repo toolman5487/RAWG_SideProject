@@ -110,47 +110,40 @@ class GameDetailViewController: UIViewController {
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameDetailVM.gameDetail != nil ? 7 : 0
+        return gameDetailVM.numberOfCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCarouselCell", for: indexPath) as! ImageCarouselCell
-            cell.configure(with: gameDetailVM.gameDetail)
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RatingCell", for: indexPath) as! RatingCell
-            cell.configure(with: gameDetailVM.gameDetail)
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GameInfoCell", for: indexPath) as! GameInfoCell
-            cell.configure(with: gameDetailVM.gameDetail)
-            return cell
-        case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DescriptionCell", for: indexPath) as! DescriptionCell
+        let visibleCells = gameDetailVM.visibleCells
+        guard indexPath.row < visibleCells.count else { return UITableViewCell() }
+        
+        let cellType = visibleCells[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellType.cellIdentifier, for: indexPath)
+        
+        switch cellType {
+        case .imageCarousel:
+            (cell as! ImageCarouselCell).configure(with: gameDetailVM.gameDetail)
+        case .rating:
+            (cell as! RatingCell).configure(with: gameDetailVM.gameDetail)
+        case .gameInfo:
+            (cell as! GameInfoCell).configure(with: gameDetailVM.gameDetail)
+        case .description:
+            let descriptionCell = cell as! DescriptionCell
             let raw = gameDetailVM.gameDetail?.description ?? "No Description Available."
             let clean = raw.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
-            cell.configure(text: clean)
-            cell.tapPublisher
+            descriptionCell.configure(text: clean)
+            descriptionCell.tapPublisher
                 .sink { [weak self] in self?.presentDescriptionSheet() }
-                .store(in: &cell.cancellables)
-            return cell
-        case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ScreenshotsCell", for: indexPath) as! ScreenshotsCell
-            cell.configure(with: gameDetailVM.screenshots)
-            return cell
-        case 5:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MetacriticCell", for: indexPath) as! MetacriticCell
-            cell.configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
-            return cell
-        case 6:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "DevelopersCell", for: indexPath) as! DevelopersCell
-            cell.configure(with: gameDetailVM.gameDetail)
-            return cell
-        default:
-            return UITableViewCell()
+                .store(in: &descriptionCell.cancellables)
+        case .screenshots:
+            (cell as! ScreenshotsCell).configure(with: gameDetailVM.screenshots)
+        case .metacritic:
+            (cell as! MetacriticCell).configure(with: gameDetailVM.gameDetail, viewModel: gameDetailVM)
+        case .developers:
+            (cell as! DevelopersCell).configure(with: gameDetailVM.gameDetail)
         }
+        
+        return cell
     }
 }
 
