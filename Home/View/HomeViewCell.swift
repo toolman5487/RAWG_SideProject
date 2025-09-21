@@ -59,8 +59,8 @@ class BannerCell: UITableViewCell {
         }
         
         pageControl.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-12)
             make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-4)
         }
     }
     
@@ -98,24 +98,15 @@ class BannerCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         titleLabel.text = game.name
         
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        overlayView.layer.cornerRadius = 12
-        
         containerView.addSubview(imageView)
-        containerView.addSubview(overlayView)
         containerView.addSubview(titleLabel)
         
         imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        overlayView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         

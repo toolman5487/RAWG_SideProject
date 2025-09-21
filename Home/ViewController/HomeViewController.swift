@@ -118,6 +118,19 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
         return 3
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.row {
+        case 0:
+            return 200
+        case 1:
+            return 250
+        case 2:
+            return 250
+        default:
+            return 200
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BannerCell", for: indexPath) as! BannerCell
@@ -161,7 +174,8 @@ extension HomeViewController: PopularGameCellDelegate {
     }
     
     func didSelectPopularGameSection() {
-        print("Navigate to popular games page")
+        let popularGameVC = PopularGameViewController()
+        navigationController?.pushViewController(popularGameVC, animated: true)
     }
 }
 

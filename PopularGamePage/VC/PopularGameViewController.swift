@@ -1,8 +1,8 @@
 //
-//  NewGameViewController.swift
+//  PopularGameViewController.swift
 //  RAWG_SideProject
 //
-//  Created by Willy Hsu on 2025/9/14.
+//  Created by Willy Hsu on 2025/9/21.
 //
 
 import Foundation
@@ -11,11 +11,11 @@ import Combine
 import SnapKit
 import SDWebImage
 
-class NewGameViewController: UIViewController {
+class PopularGameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "New and Trending"
+        self.title = "Popular"
         view.backgroundColor = .systemBackground
     }
 }
