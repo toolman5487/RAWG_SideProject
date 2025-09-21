@@ -230,7 +230,17 @@ class NewGameCell: UITableViewCell {
     }
     
     func configure(title: String, gamesPublisher: AnyPublisher<[GameListItemModel], Never>) {
-        titleLabel.text = title
+        let titleText = title
+        let chevronImage = UIImage(systemName: "chevron.forward")
+        
+        let attachment = NSTextAttachment()
+        attachment.image = chevronImage
+        attachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
+        
+        let attributedString = NSMutableAttributedString(string: titleText)
+        attributedString.append(NSAttributedString(attachment: attachment))
+        
+        titleLabel.attributedText = attributedString
         
         gamesPublisher
             .receive(on: DispatchQueue.main)
@@ -264,7 +274,7 @@ extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
         let screenWidth = UIScreen.main.bounds.width
         let padding: CGFloat = 32
         let spacing: CGFloat = 16
-        let itemWidth = (screenWidth - padding - spacing) / 3
+        let itemWidth = (screenWidth - padding - spacing) / 2.5
         return CGSize(width: itemWidth, height: 200)
     }
     
@@ -306,7 +316,7 @@ class PopularGameCell: UITableViewCell {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(NewGameListCell.self, forCellWithReuseIdentifier: "NewGameListCell")
+        collectionView.register(PopularGameListCell.self, forCellWithReuseIdentifier: "PopularGameListCell")
         return collectionView
     }()
     
@@ -336,7 +346,17 @@ class PopularGameCell: UITableViewCell {
     }
     
     func configure(title: String, gamesPublisher: AnyPublisher<[GameListItemModel], Never>) {
-        titleLabel.text = title
+        let titleText = title
+        let chevronImage = UIImage(systemName: "chevron.forward")
+        
+        let attachment = NSTextAttachment()
+        attachment.image = chevronImage
+        attachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
+        
+        let attributedString = NSMutableAttributedString(string: titleText)
+        attributedString.append(NSAttributedString(attachment: attachment))
+        
+        titleLabel.attributedText = attributedString
         
         gamesPublisher
             .receive(on: DispatchQueue.main)
@@ -361,7 +381,7 @@ extension PopularGameCell: UICollectionViewDataSource, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameListCell", for: indexPath) as! NewGameListCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularGameListCell", for: indexPath) as! PopularGameListCell
         cell.configure(with: games[indexPath.item])
         return cell
     }
@@ -370,7 +390,7 @@ extension PopularGameCell: UICollectionViewDataSource, UICollectionViewDelegateF
         let screenWidth = UIScreen.main.bounds.width
         let padding: CGFloat = 32
         let spacing: CGFloat = 16
-        let itemWidth = (screenWidth - padding - spacing) / 3
+        let itemWidth = (screenWidth - padding - spacing) / 2.5
         return CGSize(width: itemWidth, height: 200)
     }
     

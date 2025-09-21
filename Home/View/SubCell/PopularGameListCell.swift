@@ -1,8 +1,8 @@
 //
-//  NewGameListCell.swift
+//  PopularGameListCell.swift
 //  RAWG_SideProject
 //
-//  Created by Willy Hsu on 2025/9/13.
+//  Created by Willy Hsu on 2025/9/21.
 //
 
 import Foundation
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SDWebImage
 
-class NewGameListCell: UICollectionViewCell {
+class PopularGameListCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -30,11 +30,19 @@ class NewGameListCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var releaseDateLabel: UILabel = {
+    private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-        label.textColor = .secondaryLabel
+        label.textColor = .systemOrange
         return label
+    }()
+    
+    private lazy var ratingIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "star.fill")
+        imageView.tintColor = .systemOrange
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
     
     override init(frame: CGRect) {
@@ -49,7 +57,8 @@ class NewGameListCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(releaseDateLabel)
+        contentView.addSubview(ratingIcon)
+        contentView.addSubview(ratingLabel)
         
         imageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -61,9 +70,16 @@ class NewGameListCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
         }
         
-        releaseDateLabel.snp.makeConstraints { make in
+        ratingIcon.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.size.equalTo(12)
+        }
+        
+        ratingLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(ratingIcon)
+            make.leading.equalTo(ratingIcon.snp.trailing).offset(4)
+            make.trailing.lessThanOrEqualToSuperview()
             make.bottom.equalToSuperview().offset(-8)
         }
     }
@@ -71,17 +87,17 @@ class NewGameListCell: UICollectionViewCell {
     func configure(with game: GameListItemModel) {
         titleLabel.text = game.name
         
-        if let released = game.released {
-            releaseDateLabel.text = released
+        if let rating = game.rating, rating > 0 {
+            ratingLabel.text = String(format: "%.1f", rating)
         } else {
-            releaseDateLabel.text = "TBA"
+            ratingLabel.text = "N/A"
         }
         
         if let imageURL = game.backgroundImage {
             imageView.sd_setImage(with: URL(string: imageURL))
         } else {
             imageView.image = UIImage(systemName: "photo")
-            imageView.tintColor = .label
+            imageView.tintColor = .secondaryLabel
         }
     }
 }

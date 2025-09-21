@@ -18,6 +18,7 @@
 		152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */; };
 		152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */; };
 		1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157323192E7FF6BD007132B6 /* PopularGameViewController.swift */; };
+		1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1573231B2E80366B007132B6 /* PopularGameListCell.swift */; };
 		159F8E332E478D250021339B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E322E478D250021339B /* HomeViewController.swift */; };
 		159F8E362E478D990021339B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E352E478D990021339B /* MainTabBarController.swift */; };
 		159F8E392E47908C0021339B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E382E47908C0021339B /* SnapKit */; };
@@ -53,6 +54,7 @@
 		152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselItemCell.swift; sourceTree = "<group>"; };
 		152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetacriticPlatformCell.swift; sourceTree = "<group>"; };
 		157323192E7FF6BD007132B6 /* PopularGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewController.swift; sourceTree = "<group>"; };
+		1573231B2E80366B007132B6 /* PopularGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameListCell.swift; sourceTree = "<group>"; };
 		159F8E172E478ABC0021339B /* RAWG_SideProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAWG_SideProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		159F8E322E478D250021339B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		159F8E352E478D990021339B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				150A72732E754C0800E5925F /* NewGameListCell.swift */,
+				1573231B2E80366B007132B6 /* PopularGameListCell.swift */,
 			);
 			path = SubCell;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				150A72742E754C0800E5925F /* NewGameListCell.swift in Sources */,
 				15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */,
 				15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */,
+				1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
 				15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */,
