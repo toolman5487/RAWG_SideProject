@@ -65,6 +65,7 @@ class HomeViewController: UIViewController {
         tableView.delegate = self
         tableView.register(BannerCell.self, forCellReuseIdentifier: "BannerCell")
         tableView.register(NewGameCell.self, forCellReuseIdentifier: "NewGameCell")
+        tableView.register(PopularGameCell.self, forCellReuseIdentifier: "PopularGameCell")
     }
     
     private func setupBindings() {
@@ -81,6 +82,13 @@ class HomeViewController: UIViewController {
             .store(in: &cancellables)
         
         homeListViewModel.$topGames
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        homeListViewModel.$popularGames
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -107,7 +115,7 @@ extension HomeViewController: UISearchResultsUpdating {
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -116,9 +124,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
             cell.configure(with: homeListViewModel.topGames)
             cell.delegate = self
             return cell
-        } else {
+        } else if indexPath.row == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewGameCell", for: indexPath) as! NewGameCell
             cell.configure(title: "New and Trending", gamesPublisher: homeListViewModel.$games.eraseToAnyPublisher())
+            cell.delegate = self
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PopularGameCell", for: indexPath) as! PopularGameCell
+            cell.configure(title: "Popular Games", gamesPublisher: homeListViewModel.$popularGames.eraseToAnyPublisher())
             cell.delegate = self
             return cell
         }
@@ -138,6 +151,17 @@ extension HomeViewController: NewGameCellDelegate {
     func didSelectNewGameSection() {
         let newGameVC = NewGameViewController()
         navigationController?.pushViewController(newGameVC, animated: true)
+    }
+}
+
+extension HomeViewController: PopularGameCellDelegate {
+    func didSelectPopularGame(_ game: GameListItemModel) {
+        let gameDetailVC = GameDetailViewController(gameId: game.id)
+        navigationController?.pushViewController(gameDetailVC, animated: true)
+    }
+    
+    func didSelectPopularGameSection() {
+        print("Navigate to popular games page")
     }
 }
 

@@ -11,6 +11,7 @@ import Combine
 protocol HomeListServiceProtocol {
     func fetchNewestGames(daysBack: Int, pageSize: Int) -> AnyPublisher<[GameListItemModel], Error>
     func fetchTopGames() -> AnyPublisher<[GameListItemModel], Error>
+    func fetchPopularGames(pageSize: Int) -> AnyPublisher<[GameListItemModel], Error>
 }
 
 final class HomeListService: HomeListServiceProtocol {
@@ -44,6 +45,22 @@ final class HomeListService: HomeListServiceProtocol {
         let toStr = formatter.string(from: to)
         
         let urlString = "\(APIConfig.baseURL)/games?key=\(APIConfig.apiKey)&dates=\(fromStr),\(toStr)&ordering=-released&page_size=\(pageSize)"
+        guard let url = URL(string: urlString) else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: GameListResponse.self, decoder: JSONDecoder())
+            .map { response in
+                response.results.map { GameListItemModel(from: $0) }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchPopularGames(pageSize: Int = 20) -> AnyPublisher<[GameListItemModel], Error> {
+        let urlString = "\(APIConfig.baseURL)/games?key=\(APIConfig.apiKey)&ordering=-added&page_size=\(pageSize)"
+        
         guard let url = URL(string: urlString) else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
