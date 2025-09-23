@@ -17,6 +17,7 @@
 		152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB042E54B8ED003DC29E /* DescriptionViewController.swift */; };
 		152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */; };
 		152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */; };
+		156056032E82E56900A51EE4 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 156056022E82E56900A51EE4 /* SkeletonView */; };
 		1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157323192E7FF6BD007132B6 /* PopularGameViewController.swift */; };
 		1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1573231B2E80366B007132B6 /* PopularGameListCell.swift */; };
 		159F8E332E478D250021339B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E322E478D250021339B /* HomeViewController.swift */; };
@@ -102,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				156056032E82E56900A51EE4 /* SkeletonView in Frameworks */,
 				159F8E3C2E4790B60021339B /* SDWebImage in Frameworks */,
 				159F8E3F2E4790D90021339B /* CombineCocoa in Frameworks */,
 				159F8E392E47908C0021339B /* SnapKit in Frameworks */,
@@ -388,6 +390,7 @@
 				159F8E382E47908C0021339B /* SnapKit */,
 				159F8E3B2E4790B60021339B /* SDWebImage */,
 				159F8E3E2E4790D90021339B /* CombineCocoa */,
+				156056022E82E56900A51EE4 /* SkeletonView */,
 			);
 			productName = RAWG_SideProject;
 			productReference = 159F8E172E478ABC0021339B /* RAWG_SideProject.app */;
@@ -421,6 +424,7 @@
 				159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */,
 				159F8E3A2E4790B60021339B /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				159F8E3D2E4790D90021339B /* XCRemoteSwiftPackageReference "CombineCocoa" */,
+				156056012E82E56900A51EE4 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 159F8E182E478ABC0021339B /* Products */;
@@ -682,6 +686,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		156056012E82E56900A51EE4 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.31.0;
+			};
+		};
 		159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -709,6 +721,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		156056022E82E56900A51EE4 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 156056012E82E56900A51EE4 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
+		};
 		159F8E382E47908C0021339B /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 159F8E372E47908C0021339B /* XCRemoteSwiftPackageReference "SnapKit" */;
