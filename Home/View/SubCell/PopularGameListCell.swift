@@ -4,7 +4,7 @@
 //
 //  Created by Willy Hsu on 2025/9/21.
 //
- 
+
 import Foundation
 import UIKit
 import SnapKit
@@ -91,22 +91,21 @@ class PopularGameListCell: UICollectionViewCell {
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.layoutIfNeeded()
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.sd_cancelCurrentImageLoad()
         imageView.image = nil
         titleLabel.text = nil
         ratingLabel.text = nil
         DispatchQueue.main.async {
-            self.showSkeletonForAll()
+            self.titleLabel.hideSkeleton()
+            self.ratingIcon.hideSkeleton()
+            self.ratingLabel.hideSkeleton()
+            self.imageView.hideSkeleton()
         }
     }
     
-    private func showSkeletonForAll() {
+    private func showAllSkeleton() {
         DispatchQueue.main.async {
             self.imageView.showAnimatedGradientSkeleton()
             self.titleLabel.showAnimatedGradientSkeleton()
@@ -130,20 +129,20 @@ class PopularGameListCell: UICollectionViewCell {
     }
     
     func configure(with game: GameListItemModel) {
+        showAllSkeleton()
+        
+        titleLabel.text = game.name
+        if let rating = game.rating, rating > 0 {
+            ratingLabel.text = String(format: "%.1f", rating)
+        } else {
+            ratingLabel.text = "N/A"
+        }
+        
         DispatchQueue.main.async {
-            self.titleLabel.text = game.name
-            if let rating = game.rating, rating > 0 {
-                self.ratingLabel.text = String(format: "%.1f", rating)
-            } else {
-                self.ratingLabel.text = "N/A"
-            }
             self.hideSkeletonForLabels()
         }
         
         if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
-            DispatchQueue.main.async {
-                self.imageView.showAnimatedGradientSkeleton()
-            }
             imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
                 self?.hideSkeletonForImage()
             }
@@ -156,3 +155,4 @@ class PopularGameListCell: UICollectionViewCell {
         }
     }
 }
+
