@@ -74,22 +74,20 @@ class NewGameListCell: UICollectionViewCell {
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.layoutIfNeeded()
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageView.sd_cancelCurrentImageLoad()
         imageView.image = nil
         titleLabel.text = nil
         releaseDateLabel.text = nil
         DispatchQueue.main.async {
-            self.showSkeletonForAll()
+            self.titleLabel.hideSkeleton()
+            self.releaseDateLabel.hideSkeleton()
+            self.imageView.hideSkeleton()
         }
     }
     
-    private func showSkeletonForAll() {
+    private func showAllSkeleton() {
         DispatchQueue.main.async {
             self.imageView.showAnimatedGradientSkeleton()
             self.titleLabel.showAnimatedGradientSkeleton()
@@ -111,20 +109,20 @@ class NewGameListCell: UICollectionViewCell {
     }
     
     func configure(with game: GameListItemModel) {
+        showAllSkeleton()
+        
+        titleLabel.text = game.name
+        if let released = game.released {
+            releaseDateLabel.text = released
+        } else {
+            releaseDateLabel.text = "TBA"
+        }
+        
         DispatchQueue.main.async {
-            self.titleLabel.text = game.name
-            if let released = game.released {
-                self.releaseDateLabel.text = released
-            } else {
-                self.releaseDateLabel.text = "TBA"
-            }
             self.hideSkeletonForLabels()
         }
         
         if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
-            DispatchQueue.main.async {
-                self.imageView.showAnimatedGradientSkeleton()
-            }
             imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
                 self?.hideSkeletonForImage()
             }
