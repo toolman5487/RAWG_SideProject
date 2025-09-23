@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import SDWebImage
 import SkeletonView
+import Combine
 
 class NewGameListCell: UICollectionViewCell {
     
@@ -38,6 +39,15 @@ class NewGameListCell: UICollectionViewCell {
         return label
     }()
     
+    private var cancellables = Set<AnyCancellable>()
+    
+    private enum ImageLoadingState {
+        case loading
+        case loaded(UIImage)
+        case failed
+        case placeholder
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -50,8 +60,6 @@ class NewGameListCell: UICollectionViewCell {
     private func setupUI() {
         contentView.isSkeletonable = true
         imageView.isSkeletonable = true
-        titleLabel.isSkeletonable = true
-        releaseDateLabel.isSkeletonable = true
         
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
@@ -76,62 +84,65 @@ class NewGameListCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        cancellables.removeAll()
         imageView.sd_cancelCurrentImageLoad()
         imageView.image = nil
         titleLabel.text = nil
         releaseDateLabel.text = nil
-        DispatchQueue.main.async {
-            self.titleLabel.hideSkeleton()
-            self.releaseDateLabel.hideSkeleton()
-            self.imageView.hideSkeleton()
-        }
+        imageView.hideSkeleton()
     }
     
-    private func showAllSkeleton() {
-        DispatchQueue.main.async {
-            self.imageView.showAnimatedGradientSkeleton()
-            self.titleLabel.showAnimatedGradientSkeleton()
-            self.releaseDateLabel.showAnimatedGradientSkeleton()
+    private func imageLoadingPublisher(for imageURL: String?) -> AnyPublisher<ImageLoadingState, Never> {
+        guard let imageURL = imageURL, let url = URL(string: imageURL) else {
+            return Just(.placeholder).eraseToAnyPublisher()
         }
+        
+        return Future<ImageLoadingState, Never> { promise in
+            DispatchQueue.main.async {
+                self.imageView.showAnimatedGradientSkeleton()
+            }
+            
+            self.imageView.sd_setImage(with: url) { image, error, _, _ in
+                if let image = image {
+                    promise(.success(.loaded(image)))
+                } else {
+                    promise(.success(.failed))
+                }
+            }
+        }
+        .prepend(.loading)
+        .eraseToAnyPublisher()
     }
     
-    private func hideSkeletonForLabels() {
-        DispatchQueue.main.async {
-            self.titleLabel.hideSkeleton()
-            self.releaseDateLabel.hideSkeleton()
-        }
-    }
-    
-    private func hideSkeletonForImage() {
-        DispatchQueue.main.async {
-            self.imageView.hideSkeleton()
+    private func handleImageState(_ state: ImageLoadingState) {
+        switch state {
+        case .loading:
+            imageView.showAnimatedGradientSkeleton()
+        case .loaded(let image):
+            imageView.hideSkeleton()
+            imageView.image = image
+        case .failed:
+            imageView.hideSkeleton()
+            imageView.image = UIImage(systemName: "photo")
+            imageView.tintColor = .secondaryLabel
+        case .placeholder:
+            imageView.hideSkeleton()
+            imageView.image = UIImage(systemName: "photo")
+            imageView.tintColor = .secondaryLabel
         }
     }
     
     func configure(with game: GameListItemModel) {
-        showAllSkeleton()
+        cancellables.removeAll()
         
         titleLabel.text = game.name
-        if let released = game.released {
-            releaseDateLabel.text = released
-        } else {
-            releaseDateLabel.text = "TBA"
-        }
+        releaseDateLabel.text = game.released ?? "TBA"
         
-        DispatchQueue.main.async {
-            self.hideSkeletonForLabels()
-        }
-        
-        if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
-            imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
-                self?.hideSkeletonForImage()
+        imageLoadingPublisher(for: game.backgroundImage)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.handleImageState(state)
             }
-        } else {
-            DispatchQueue.main.async {
-                self.imageView.image = UIImage(systemName: "photo")
-                self.imageView.tintColor = .secondaryLabel
-                self.hideSkeletonForImage()
-            }
-        }
+            .store(in: &cancellables)
     }
 }

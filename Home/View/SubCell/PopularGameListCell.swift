@@ -4,12 +4,13 @@
 //
 //  Created by Willy Hsu on 2025/9/21.
 //
-
+ 
 import Foundation
 import UIKit
 import SnapKit
 import SDWebImage
 import SkeletonView
+import Combine
 
 class PopularGameListCell: UICollectionViewCell {
     
@@ -46,6 +47,15 @@ class PopularGameListCell: UICollectionViewCell {
         return imageView
     }()
     
+    private var cancellables = Set<AnyCancellable>()
+    
+    private enum ImageLoadingState {
+        case loading
+        case loaded(UIImage)
+        case failed
+        case placeholder
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -58,9 +68,6 @@ class PopularGameListCell: UICollectionViewCell {
     private func setupUI() {
         contentView.isSkeletonable = true
         imageView.isSkeletonable = true
-        titleLabel.isSkeletonable = true
-        ratingIcon.isSkeletonable = true
-        ratingLabel.isSkeletonable = true
         
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
@@ -93,43 +100,56 @@ class PopularGameListCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        cancellables.removeAll()
         imageView.sd_cancelCurrentImageLoad()
         imageView.image = nil
         titleLabel.text = nil
         ratingLabel.text = nil
-        DispatchQueue.main.async {
-            self.titleLabel.hideSkeleton()
-            self.ratingIcon.hideSkeleton()
-            self.ratingLabel.hideSkeleton()
-            self.imageView.hideSkeleton()
-        }
+        imageView.hideSkeleton()
     }
     
-    private func showAllSkeleton() {
-        DispatchQueue.main.async {
-            self.imageView.showAnimatedGradientSkeleton()
-            self.titleLabel.showAnimatedGradientSkeleton()
-            self.ratingIcon.showAnimatedGradientSkeleton()
-            self.ratingLabel.showAnimatedGradientSkeleton()
+    private func imageLoadingPublisher(for imageURL: String?) -> AnyPublisher<ImageLoadingState, Never> {
+        guard let imageURL = imageURL, let url = URL(string: imageURL) else {
+            return Just(.placeholder).eraseToAnyPublisher()
         }
+        
+        return Future<ImageLoadingState, Never> { promise in
+            DispatchQueue.main.async {
+                self.imageView.showAnimatedGradientSkeleton()
+            }
+            
+            self.imageView.sd_setImage(with: url) { image, error, _, _ in
+                if let image = image {
+                    promise(.success(.loaded(image)))
+                } else {
+                    promise(.success(.failed))
+                }
+            }
+        }
+        .prepend(.loading)
+        .eraseToAnyPublisher()
     }
     
-    private func hideSkeletonForLabels() {
-        DispatchQueue.main.async {
-            self.titleLabel.hideSkeleton()
-            self.ratingIcon.hideSkeleton()
-            self.ratingLabel.hideSkeleton()
-        }
-    }
-    
-    private func hideSkeletonForImage() {
-        DispatchQueue.main.async {
-            self.imageView.hideSkeleton()
+    private func handleImageState(_ state: ImageLoadingState) {
+        switch state {
+        case .loading:
+            imageView.showAnimatedGradientSkeleton()
+        case .loaded(let image):
+            imageView.hideSkeleton()
+            imageView.image = image
+        case .failed:
+            imageView.hideSkeleton()
+            imageView.image = UIImage(systemName: "photo")
+            imageView.tintColor = .secondaryLabel
+        case .placeholder:
+            imageView.hideSkeleton()
+            imageView.image = UIImage(systemName: "photo")
+            imageView.tintColor = .secondaryLabel
         }
     }
     
     func configure(with game: GameListItemModel) {
-        showAllSkeleton()
+        cancellables.removeAll()
         
         titleLabel.text = game.name
         if let rating = game.rating, rating > 0 {
@@ -138,21 +158,11 @@ class PopularGameListCell: UICollectionViewCell {
             ratingLabel.text = "N/A"
         }
         
-        DispatchQueue.main.async {
-            self.hideSkeletonForLabels()
-        }
-        
-        if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
-            imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
-                self?.hideSkeletonForImage()
+        imageLoadingPublisher(for: game.backgroundImage)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.handleImageState(state)
             }
-        } else {
-            DispatchQueue.main.async {
-                self.imageView.image = UIImage(systemName: "photo")
-                self.imageView.tintColor = .secondaryLabel
-                self.hideSkeletonForImage()
-            }
-        }
+            .store(in: &cancellables)
     }
 }
-
