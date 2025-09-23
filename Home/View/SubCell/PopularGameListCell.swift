@@ -4,11 +4,12 @@
 //
 //  Created by Willy Hsu on 2025/9/21.
 //
-
+ 
 import Foundation
 import UIKit
 import SnapKit
 import SDWebImage
+import SkeletonView
 
 class PopularGameListCell: UICollectionViewCell {
     
@@ -55,6 +56,12 @@ class PopularGameListCell: UICollectionViewCell {
     }
     
     private func setupUI() {
+        contentView.isSkeletonable = true
+        imageView.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        ratingIcon.isSkeletonable = true
+        ratingLabel.isSkeletonable = true
+        
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(ratingIcon)
@@ -84,20 +91,68 @@ class PopularGameListCell: UICollectionViewCell {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutIfNeeded()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        titleLabel.text = nil
+        ratingLabel.text = nil
+        DispatchQueue.main.async {
+            self.showSkeletonForAll()
+        }
+    }
+    
+    private func showSkeletonForAll() {
+        DispatchQueue.main.async {
+            self.imageView.showAnimatedGradientSkeleton()
+            self.titleLabel.showAnimatedGradientSkeleton()
+            self.ratingIcon.showAnimatedGradientSkeleton()
+            self.ratingLabel.showAnimatedGradientSkeleton()
+        }
+    }
+    
+    private func hideSkeletonForLabels() {
+        DispatchQueue.main.async {
+            self.titleLabel.hideSkeleton()
+            self.ratingIcon.hideSkeleton()
+            self.ratingLabel.hideSkeleton()
+        }
+    }
+    
+    private func hideSkeletonForImage() {
+        DispatchQueue.main.async {
+            self.imageView.hideSkeleton()
+        }
+    }
+    
     func configure(with game: GameListItemModel) {
-        titleLabel.text = game.name
-        
-        if let rating = game.rating, rating > 0 {
-            ratingLabel.text = String(format: "%.1f", rating)
-        } else {
-            ratingLabel.text = "N/A"
+        DispatchQueue.main.async {
+            self.titleLabel.text = game.name
+            if let rating = game.rating, rating > 0 {
+                self.ratingLabel.text = String(format: "%.1f", rating)
+            } else {
+                self.ratingLabel.text = "N/A"
+            }
+            self.hideSkeletonForLabels()
         }
         
-        if let imageURL = game.backgroundImage {
-            imageView.sd_setImage(with: URL(string: imageURL))
+        if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
+            DispatchQueue.main.async {
+                self.imageView.showAnimatedGradientSkeleton()
+            }
+            imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
+                self?.hideSkeletonForImage()
+            }
         } else {
-            imageView.image = UIImage(systemName: "photo")
-            imageView.tintColor = .secondaryLabel
+            DispatchQueue.main.async {
+                self.imageView.image = UIImage(systemName: "photo")
+                self.imageView.tintColor = .secondaryLabel
+                self.hideSkeletonForImage()
+            }
         }
     }
 }

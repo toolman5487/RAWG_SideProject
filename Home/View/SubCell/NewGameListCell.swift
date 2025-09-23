@@ -4,11 +4,12 @@
 //
 //  Created by Willy Hsu on 2025/9/13.
 //
-
+ 
 import Foundation
 import UIKit
 import SnapKit
 import SDWebImage
+import SkeletonView
 
 class NewGameListCell: UICollectionViewCell {
     
@@ -47,6 +48,11 @@ class NewGameListCell: UICollectionViewCell {
     }
     
     private func setupUI() {
+        contentView.isSkeletonable = true
+        imageView.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        releaseDateLabel.isSkeletonable = true
+        
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(releaseDateLabel)
@@ -68,20 +74,66 @@ class NewGameListCell: UICollectionViewCell {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.layoutIfNeeded()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        titleLabel.text = nil
+        releaseDateLabel.text = nil
+        DispatchQueue.main.async {
+            self.showSkeletonForAll()
+        }
+    }
+    
+    private func showSkeletonForAll() {
+        DispatchQueue.main.async {
+            self.imageView.showAnimatedGradientSkeleton()
+            self.titleLabel.showAnimatedGradientSkeleton()
+            self.releaseDateLabel.showAnimatedGradientSkeleton()
+        }
+    }
+    
+    private func hideSkeletonForLabels() {
+        DispatchQueue.main.async {
+            self.titleLabel.hideSkeleton()
+            self.releaseDateLabel.hideSkeleton()
+        }
+    }
+    
+    private func hideSkeletonForImage() {
+        DispatchQueue.main.async {
+            self.imageView.hideSkeleton()
+        }
+    }
+    
     func configure(with game: GameListItemModel) {
-        titleLabel.text = game.name
-        
-        if let released = game.released {
-            releaseDateLabel.text = released
-        } else {
-            releaseDateLabel.text = "TBA"
+        DispatchQueue.main.async {
+            self.titleLabel.text = game.name
+            if let released = game.released {
+                self.releaseDateLabel.text = released
+            } else {
+                self.releaseDateLabel.text = "TBA"
+            }
+            self.hideSkeletonForLabels()
         }
         
-        if let imageURL = game.backgroundImage {
-            imageView.sd_setImage(with: URL(string: imageURL))
+        if let imageURL = game.backgroundImage, let url = URL(string: imageURL) {
+            DispatchQueue.main.async {
+                self.imageView.showAnimatedGradientSkeleton()
+            }
+            imageView.sd_setImage(with: url) { [weak self] _, _, _, _ in
+                self?.hideSkeletonForImage()
+            }
         } else {
-            imageView.image = UIImage(systemName: "photo")
-            imageView.tintColor = .secondaryLabel
+            DispatchQueue.main.async {
+                self.imageView.image = UIImage(systemName: "photo")
+                self.imageView.tintColor = .secondaryLabel
+                self.hideSkeletonForImage()
+            }
         }
     }
 }
