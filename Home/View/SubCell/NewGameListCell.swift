@@ -98,10 +98,6 @@ class NewGameListCell: UICollectionViewCell {
         }
         
         return Future<ImageLoadingState, Never> { promise in
-            DispatchQueue.main.async {
-                self.imageView.showAnimatedGradientSkeleton()
-            }
-            
             self.imageView.sd_setImage(with: url) { image, error, _, _ in
                 if let image = image {
                     promise(.success(.loaded(image)))
@@ -110,7 +106,6 @@ class NewGameListCell: UICollectionViewCell {
                 }
             }
         }
-        .prepend(.loading)
         .eraseToAnyPublisher()
     }
     
@@ -134,6 +129,8 @@ class NewGameListCell: UICollectionViewCell {
     
     func configure(with game: GameListItemModel) {
         cancellables.removeAll()
+        
+        imageView.showAnimatedGradientSkeleton()
         
         titleLabel.text = game.name
         releaseDateLabel.text = game.released ?? "TBA"
