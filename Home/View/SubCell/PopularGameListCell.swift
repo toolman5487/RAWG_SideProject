@@ -114,10 +114,6 @@ class PopularGameListCell: UICollectionViewCell {
         }
         
         return Future<ImageLoadingState, Never> { promise in
-            DispatchQueue.main.async {
-                self.imageView.showAnimatedGradientSkeleton()
-            }
-            
             self.imageView.sd_setImage(with: url) { image, error, _, _ in
                 if let image = image {
                     promise(.success(.loaded(image)))
@@ -126,14 +122,13 @@ class PopularGameListCell: UICollectionViewCell {
                 }
             }
         }
-        .prepend(.loading)
         .eraseToAnyPublisher()
     }
     
     private func handleImageState(_ state: ImageLoadingState) {
         switch state {
         case .loading:
-            imageView.showAnimatedGradientSkeleton()
+            break
         case .loaded(let image):
             imageView.hideSkeleton()
             imageView.image = image
@@ -151,6 +146,8 @@ class PopularGameListCell: UICollectionViewCell {
     func configure(with game: GameListItemModel) {
         cancellables.removeAll()
         
+        imageView.showAnimatedGradientSkeleton()
+        
         titleLabel.text = game.name
         if let rating = game.rating, rating > 0 {
             ratingLabel.text = String(format: "%.1f", rating)
@@ -164,5 +161,13 @@ class PopularGameListCell: UICollectionViewCell {
                 self?.handleImageState(state)
             }
             .store(in: &cancellables)
+    }
+
+    func showPlaceholder() {
+        cancellables.removeAll()
+        
+        imageView.showAnimatedGradientSkeleton()
+        titleLabel.text = ""
+        ratingLabel.text = ""
     }
 }

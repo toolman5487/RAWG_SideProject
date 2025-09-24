@@ -142,4 +142,12 @@ class NewGameListCell: UICollectionViewCell {
             }
             .store(in: &cancellables)
     }
+
+    func showPlaceholder() {
+        cancellables.removeAll()
+        
+        imageView.showAnimatedGradientSkeleton()
+        titleLabel.text = ""
+        releaseDateLabel.text = ""
+    }
 }

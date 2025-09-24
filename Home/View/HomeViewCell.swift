@@ -261,12 +261,18 @@ class NewGameCell: UITableViewCell {
 
 extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return games.count
+        return games.isEmpty ? 5 : games.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameListCell", for: indexPath) as! NewGameListCell
-        cell.configure(with: games[indexPath.item])
+        
+        if games.isEmpty {
+            cell.showPlaceholder()
+        } else {
+            cell.configure(with: games[indexPath.item])
+        }
+        
         return cell
     }
     
@@ -279,6 +285,7 @@ extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard !games.isEmpty else { return }
         let selectedGame = games[indexPath.item]
         delegate?.didSelectGame(selectedGame)
     }
@@ -377,12 +384,18 @@ class PopularGameCell: UITableViewCell {
 
 extension PopularGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return games.count
+        return games.isEmpty ? 5 : games.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularGameListCell", for: indexPath) as! PopularGameListCell
-        cell.configure(with: games[indexPath.item])
+        
+        if games.isEmpty {
+            cell.showPlaceholder()
+        } else {
+            cell.configure(with: games[indexPath.item])
+        }
+        
         return cell
     }
     
@@ -395,6 +408,7 @@ extension PopularGameCell: UICollectionViewDataSource, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard !games.isEmpty else { return }
         let selectedGame = games[indexPath.item]
         delegate?.didSelectPopularGame(selectedGame)
     }
