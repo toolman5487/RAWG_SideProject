@@ -21,77 +21,7 @@ class HomeListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        fetchData()
-    }
-    
-    private func fetchData() {
-        isLoading = true
-        errorMessage = nil
-        
-        fetchNewestGamesData()
-        fetchTopGamesData()
-        fetchPopularGamesData()
-    }
-    
-    private func fetchNewestGamesData() {
-        homeListService.fetchNewestGames()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                    }
-                },
-                receiveValue: { [weak self] games in
-                    self?.games = games
-                    self?.preloadImages(for: games)
-                }
-            )
-            .store(in: &cancellables)
-    }
-    
-    private func fetchTopGamesData() {
-        homeListService.fetchTopGames()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    self?.isLoading = false
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                    }
-                },
-                receiveValue: { [weak self] topGames in
-                    self?.topGames = topGames
-                    self?.preloadImages(for: topGames)
-                }
-            )
-            .store(in: &cancellables)
-    }
-    
-    private func fetchPopularGamesData() {
-        homeListService.fetchPopularGames()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                    }
-                },
-                receiveValue: { [weak self] popularGames in
-                    self?.popularGames = popularGames
-                    self?.preloadImages(for: popularGames)
-                }
-            )
-            .store(in: &cancellables)
+        refreshAll()
     }
     
     private func preloadImages(for games: [GameListItemModel]) {
@@ -144,6 +74,32 @@ class HomeListViewModel: ObservableObject {
                 receiveValue: { [weak self] popularGames in
                     self?.popularGames = popularGames
                     self?.preloadImages(for: popularGames)
+                }
+            )
+            .store(in: &cancellables)
+    }
+}
+
+extension HomeListViewModel {
+    func refreshAll() {
+        if isLoading { return }
+        isLoading = true
+        errorMessage = nil
+        
+        homeListService.fetchAllHomeData()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] newestGames, topGames, popularGames in
+                    self?.games = newestGames
+                    self?.topGames = topGames
+                    self?.popularGames = popularGames
+                    self?.preloadImages(for: newestGames + topGames + popularGames)
                 }
             )
             .store(in: &cancellables)

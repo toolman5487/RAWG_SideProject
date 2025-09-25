@@ -16,6 +16,8 @@ class HomeViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI
+    private let refreshControl = UIRefreshControl()
+    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultsVC)
         controller.obscuresBackgroundDuringPresentation = false
@@ -66,6 +68,8 @@ class HomeViewController: UIViewController {
         tableView.register(BannerCell.self, forCellReuseIdentifier: "BannerCell")
         tableView.register(NewGameCell.self, forCellReuseIdentifier: "NewGameCell")
         tableView.register(PopularGameCell.self, forCellReuseIdentifier: "PopularGameCell")
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
     }
     
     private func setupBindings() {
@@ -102,6 +106,19 @@ class HomeViewController: UIViewController {
                 self?.navigationController?.pushViewController(gameDetailVC, animated: true)
             }
             .store(in: &cancellables)
+        
+        homeListViewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loading in
+                if !loading {
+                    self?.refreshControl.endRefreshing()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    @objc private func handleRefresh() {
+        homeListViewModel.refreshAll()
     }
 }
 

@@ -74,3 +74,17 @@ final class HomeListService: HomeListServiceProtocol {
             .eraseToAnyPublisher()
     }
 }
+
+extension HomeListService {
+    func fetchAllHomeData() -> AnyPublisher<([GameListItemModel],[GameListItemModel],[GameListItemModel]), Error> {
+        let newest = fetchNewestGames()
+        let top = fetchTopGames()
+        let popular = fetchPopularGames()
+        return Publishers.Zip3(newest, top, popular)
+            .map { newest, top, popular in
+                (newest, top, popular)
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
