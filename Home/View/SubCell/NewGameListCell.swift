@@ -60,6 +60,8 @@ class NewGameListCell: UICollectionViewCell {
     private func setupUI() {
         contentView.isSkeletonable = true
         imageView.isSkeletonable = true
+        titleLabel.isSkeletonable = true
+        releaseDateLabel.isSkeletonable = true
         
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
@@ -89,7 +91,7 @@ class NewGameListCell: UICollectionViewCell {
         imageView.image = nil
         titleLabel.text = nil
         releaseDateLabel.text = nil
-        imageView.hideSkeleton()
+        contentView.hideSkeleton()
     }
     
     private func imageLoadingPublisher(for imageURL: String?) -> AnyPublisher<ImageLoadingState, Never> {
@@ -130,7 +132,7 @@ class NewGameListCell: UICollectionViewCell {
     func configure(with game: GameListItemModel) {
         cancellables.removeAll()
         
-        imageView.showAnimatedGradientSkeleton()
+        contentView.showAnimatedGradientSkeleton()
         
         titleLabel.text = game.name
         releaseDateLabel.text = game.released ?? "TBA"
@@ -146,7 +148,7 @@ class NewGameListCell: UICollectionViewCell {
     func showPlaceholder() {
         cancellables.removeAll()
         
-        imageView.showAnimatedGradientSkeleton()
+        contentView.showAnimatedGradientSkeleton()
         titleLabel.text = ""
         releaseDateLabel.text = ""
     }
