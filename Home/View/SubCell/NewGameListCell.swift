@@ -114,16 +114,16 @@ class NewGameListCell: UICollectionViewCell {
     private func handleImageState(_ state: ImageLoadingState) {
         switch state {
         case .loading:
-            imageView.showAnimatedGradientSkeleton()
+            break
         case .loaded(let image):
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = image
         case .failed:
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = UIImage(systemName: "photo")
             imageView.tintColor = .secondaryLabel
         case .placeholder:
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = UIImage(systemName: "photo")
             imageView.tintColor = .secondaryLabel
         }
@@ -134,13 +134,12 @@ class NewGameListCell: UICollectionViewCell {
         
         contentView.showAnimatedGradientSkeleton()
         
-        titleLabel.text = game.name
-        releaseDateLabel.text = game.released ?? "TBA"
-        
         imageLoadingPublisher(for: game.backgroundImage)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 self?.handleImageState(state)
+                self?.titleLabel.text = game.name
+                self?.releaseDateLabel.text = game.released ?? "TBA"
             }
             .store(in: &cancellables)
     }

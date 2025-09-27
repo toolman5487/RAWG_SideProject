@@ -133,14 +133,14 @@ class PopularGameListCell: UICollectionViewCell {
         case .loading:
             break
         case .loaded(let image):
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = image
         case .failed:
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = UIImage(systemName: "photo")
             imageView.tintColor = .secondaryLabel
         case .placeholder:
-            imageView.hideSkeleton()
+            contentView.hideSkeleton()
             imageView.image = UIImage(systemName: "photo")
             imageView.tintColor = .secondaryLabel
         }
@@ -151,17 +151,16 @@ class PopularGameListCell: UICollectionViewCell {
         
         contentView.showAnimatedGradientSkeleton()
         
-        titleLabel.text = game.name
-        if let rating = game.rating, rating > 0 {
-            ratingLabel.text = String(format: "%.1f", rating)
-        } else {
-            ratingLabel.text = "N/A"
-        }
-        
         imageLoadingPublisher(for: game.backgroundImage)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 self?.handleImageState(state)
+                self?.titleLabel.text = game.name
+                if let rating = game.rating, rating > 0 {
+                    self?.ratingLabel.text = String(format: "%.1f", rating)
+                } else {
+                    self?.ratingLabel.text = "N/A"
+                }
             }
             .store(in: &cancellables)
     }
