@@ -131,9 +131,7 @@ class NewGameListCell: UICollectionViewCell {
     
     func configure(with game: GameListItemModel) {
         cancellables.removeAll()
-        
         contentView.showAnimatedGradientSkeleton()
-        
         imageLoadingPublisher(for: game.backgroundImage)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in

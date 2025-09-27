@@ -20,6 +20,11 @@
 		156056032E82E56900A51EE4 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 156056022E82E56900A51EE4 /* SkeletonView */; };
 		1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157323192E7FF6BD007132B6 /* PopularGameViewController.swift */; };
 		1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1573231B2E80366B007132B6 /* PopularGameListCell.swift */; };
+		157C16A52E88373D008A2873 /* GameGenreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157C16A42E88373D008A2873 /* GameGenreModel.swift */; };
+		15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */; };
+		15992DFF2E8838EB00AB3BE3 /* GameGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */; };
+		15992E012E88393700AB3BE3 /* NewGameViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992E002E88393700AB3BE3 /* NewGameViewCell.swift */; };
+		15992E042E883CB700AB3BE3 /* GenreButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992E032E883CB700AB3BE3 /* GenreButtonCell.swift */; };
 		159F8E332E478D250021339B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E322E478D250021339B /* HomeViewController.swift */; };
 		159F8E362E478D990021339B /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159F8E352E478D990021339B /* MainTabBarController.swift */; };
 		159F8E392E47908C0021339B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 159F8E382E47908C0021339B /* SnapKit */; };
@@ -56,6 +61,11 @@
 		152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetacriticPlatformCell.swift; sourceTree = "<group>"; };
 		157323192E7FF6BD007132B6 /* PopularGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewController.swift; sourceTree = "<group>"; };
 		1573231B2E80366B007132B6 /* PopularGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameListCell.swift; sourceTree = "<group>"; };
+		157C16A42E88373D008A2873 /* GameGenreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreModel.swift; sourceTree = "<group>"; };
+		15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreService.swift; sourceTree = "<group>"; };
+		15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreViewModel.swift; sourceTree = "<group>"; };
+		15992E002E88393700AB3BE3 /* NewGameViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewCell.swift; sourceTree = "<group>"; };
+		15992E032E883CB700AB3BE3 /* GenreButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreButtonCell.swift; sourceTree = "<group>"; };
 		159F8E172E478ABC0021339B /* RAWG_SideProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAWG_SideProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		159F8E322E478D250021339B /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		159F8E352E478D990021339B /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -144,6 +154,8 @@
 		150A72772E76F85900E5925F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				15992E022E883CA400AB3BE3 /* SubCell */,
+				15992E002E88393700AB3BE3 /* NewGameViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -217,9 +229,28 @@
 			path = VC;
 			sourceTree = "<group>";
 		};
+		157C16A32E883716008A2873 /* Genre */ = {
+			isa = PBXGroup;
+			children = (
+				157C16A42E88373D008A2873 /* GameGenreModel.swift */,
+				15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */,
+				15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */,
+			);
+			path = Genre;
+			sourceTree = "<group>";
+		};
+		15992E022E883CA400AB3BE3 /* SubCell */ = {
+			isa = PBXGroup;
+			children = (
+				15992E032E883CB700AB3BE3 /* GenreButtonCell.swift */,
+			);
+			path = SubCell;
+			sourceTree = "<group>";
+		};
 		159F8E0E2E478ABC0021339B = {
 			isa = PBXGroup;
 			children = (
+				157C16A32E883716008A2873 /* Genre */,
 				157323172E7FF691007132B6 /* PopularGamePage */,
 				150A72752E76F84100E5925F /* NewGamePage */,
 				159F8E4B2E486D450021339B /* Helpers  */,
@@ -451,10 +482,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15992E012E88393700AB3BE3 /* NewGameViewCell.swift in Sources */,
 				150BA9E42E48A35D008A4BA3 /* AlertHelper.swift in Sources */,
 				152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */,
 				159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */,
 				15B06EA22E5F531700477E5D /* SearchResultsViewController.swift in Sources */,
+				15992E042E883CB700AB3BE3 /* GenreButtonCell.swift in Sources */,
 				15B06EAC2E73176700477E5D /* GameListItemModel.swift in Sources */,
 				15B06EA82E6490A000477E5D /* SearchResultCell.swift in Sources */,
 				152DEAE82E50C3DB003DC29E /* InfoPillCell.swift in Sources */,
@@ -464,6 +497,8 @@
 				150A72712E752B3A00E5925F /* HomeListViewModel.swift in Sources */,
 				159F8E422E4860960021339B /* APIConfig.swift in Sources */,
 				159F8E502E4872C40021339B /* GameDetailService.swift in Sources */,
+				15992DFF2E8838EB00AB3BE3 /* GameGenreViewModel.swift in Sources */,
+				15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
 				159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */,
 				15B06EAE2E7318C300477E5D /* HomeListService.swift in Sources */,
@@ -479,6 +514,7 @@
 				150A727B2E76F88B00E5925F /* NewGameViewController.swift in Sources */,
 				152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */,
 				15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */,
+				157C16A52E88373D008A2873 /* GameGenreModel.swift in Sources */,
 				15B06EA42E647CB700477E5D /* SearchService.swift in Sources */,
 				159F8E332E478D250021339B /* HomeViewController.swift in Sources */,
 			);
