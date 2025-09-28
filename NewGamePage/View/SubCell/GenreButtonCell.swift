@@ -13,7 +13,7 @@ class GenreButtonCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         label.textAlignment = .center
         return label
     }()
@@ -36,8 +36,18 @@ class GenreButtonCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(8)
+            make.leading.trailing.equalToSuperview().inset(12)
         }
+    }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let targetSize = CGSize(width: 0, height: 40)
+        let size = contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .required)
+        
+        let newAttributes = layoutAttributes.copy() as! UICollectionViewLayoutAttributes
+        newAttributes.frame.size.width = size.width
+        newAttributes.frame.size.height = 40
+        return newAttributes
     }
     
     func configure(with genre: GameGenreModel, isSelected: Bool) {
@@ -47,13 +57,13 @@ class GenreButtonCell: UICollectionViewCell {
     
     func setSelected(_ selected: Bool) {
         if selected {
-            backgroundColor = .systemBlue
-            titleLabel.textColor = .white
-            layer.borderColor = UIColor.systemBlue.cgColor
+            backgroundColor = .label
+            titleLabel.textColor = .systemBackground
+            layer.borderColor = UIColor.tertiaryLabel.cgColor
         } else {
             backgroundColor = .systemBackground
             titleLabel.textColor = .label
-            layer.borderColor = UIColor.systemGray4.cgColor
+            layer.borderColor = UIColor.tertiaryLabel.cgColor
         }
     }
 }

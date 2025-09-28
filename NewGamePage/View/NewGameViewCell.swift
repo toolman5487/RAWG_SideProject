@@ -24,6 +24,7 @@ class NGgenreListCell: UITableViewCell {
         layout.minimumInteritemSpacing = 12
         layout.minimumLineSpacing = 12
         layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -50,7 +51,7 @@ class NGgenreListCell: UITableViewCell {
         contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-            make.height.equalTo(40)
+            make.height.equalTo(48)
         }
     }
     
@@ -86,12 +87,6 @@ extension NGgenreListCell: UICollectionViewDataSource, UICollectionViewDelegate 
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GenreButtonCell {
             selectedCell.setSelected(true)
         }
-    }
-}
-
-extension NGgenreListCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 80, height: 40)
     }
 }
 
