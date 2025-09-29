@@ -48,11 +48,19 @@ class NewGameViewController: UIViewController {
         }
         
         tableView.register(NGgenreListCell.self, forCellReuseIdentifier: "NGgenreListCell")
+        tableView.register(NGgameListCell.self, forCellReuseIdentifier: "NGgameListCell")
         tableView.refreshControl = refreshControl
     }
     
     private func bindingViewModel() {
-        gameGenreViewModel.$genres
+        gameGenreViewModel.$genreTypes
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        gameGenreViewModel.$games
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -80,23 +88,42 @@ class NewGameViewController: UIViewController {
 
 extension NewGameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NGgenreListCell", for: indexPath) as! NGgenreListCell
-        cell.configure(with: gameGenreViewModel.genres)
-        cell.delegate = self
-        return cell
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NGgenreListCell", for: indexPath) as! NGgenreListCell
+            cell.configure(with: gameGenreViewModel.genreTypes)
+            cell.delegate = self
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NGgameListCell", for: indexPath) as! NGgameListCell
+            cell.configure(with: gameGenreViewModel.games)
+            cell.delegate = self
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40
+        if indexPath.row == 0 {
+            return 48
+        } else {
+            let rows = (gameGenreViewModel.games.count + 2) / 3
+            return CGFloat(rows) * 160 + CGFloat(rows - 1) * 16 + 32
+        }
     }
 }
 
 extension NewGameViewController: NGgenreListCellDelegate {
-    func didSelectGenre(_ genre: GameGenreModel) {
-        print("Selected genre: \(genre.name)")
+    func didSelectGenreType(_ genreType: GenreType) {
+        gameGenreViewModel.selectGenreType(genreType)
+    }
+}
+
+extension NewGameViewController: NGgameListCellDelegate {
+    func didSelectGame(_ game: GameListItemModel) {
+        let gameDetailVC = GameDetailViewController(gameId: game.id)
+        navigationController?.pushViewController(gameDetailVC, animated: true)
     }
 }

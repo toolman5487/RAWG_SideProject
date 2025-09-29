@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol NGgenreListCellDelegate: AnyObject {
-    func didSelectGenre(_ genre: GameGenreModel)
+    func didSelectGenreType(_ genreType: GenreType)
 }
 
 // MARK: - NewGame GenreList
@@ -18,7 +18,7 @@ protocol NGgenreListCellDelegate: AnyObject {
 class NGgenreListCell: UITableViewCell {
     
     weak var delegate: NGgenreListCellDelegate?
-    private var genres: [GameGenreModel] = []
+    private var genreTypes: [GenreType] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -57,28 +57,37 @@ class NGgenreListCell: UITableViewCell {
         }
     }
     
-    func configure(with genres: [GameGenreModel]) {
-        self.genres = genres
+    func configure(with genreTypes: [GenreType]) {
+        self.genreTypes = genreTypes
         collectionView.reloadData()
     }
 }
 
 extension NGgenreListCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genres.count
+        return genreTypes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreButtonCell", for: indexPath) as! GenreButtonCell
-        let genre = genres[indexPath.item]
-        cell.configure(with: genre, isSelected: indexPath.item == 0)
+        let genreType = genreTypes[indexPath.item]
+        
+        let tempGenre = GameGenreModel(
+            id: genreType.id,
+            name: genreType.displayName,
+            slug: genreType.genreModel?.slug ?? "all",
+            gamesCount: genreType.genreModel?.gamesCount ?? 0,
+            imageBackground: genreType.genreModel?.imageBackground
+        )
+        
+        cell.configure(with: tempGenre, isSelected: indexPath.item == 0)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let selectedGenre = genres[indexPath.item]
-        delegate?.didSelectGenre(selectedGenre)
+        let selectedGenreType = genreTypes[indexPath.item]
+        delegate?.didSelectGenreType(selectedGenreType)
         
         for cell in collectionView.visibleCells {
             if let genreCell = cell as? GenreButtonCell {
