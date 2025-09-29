@@ -48,8 +48,19 @@ final class GameGenreService: GameGenreServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    func fetchAllGames(pageSize: Int = 20) -> AnyPublisher<[GameListItemModel], Error> {
-        let urlString = "\(APIConfig.baseURL)/games?key=\(APIConfig.apiKey)&ordering=-released&page_size=\(pageSize)"
+    func fetchAllGames(pageSize: Int = 30) -> AnyPublisher<[GameListItemModel], Error> {
+        let today = Date()
+        let calendar = Calendar.current
+        
+        let startOfMonth = calendar.dateInterval(of: .month, for: today)?.start ?? today
+        let endOfMonth = calendar.dateInterval(of: .month, for: today)?.end ?? today
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let startDate = formatter.string(from: startOfMonth)
+        let endDate = formatter.string(from: endOfMonth)
+        
+        let urlString = "\(APIConfig.baseURL)/games?key=\(APIConfig.apiKey)&dates=\(startDate),\(endDate)&ordering=-released&page_size=\(pageSize)"
         
         guard let url = URL(string: urlString) else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()

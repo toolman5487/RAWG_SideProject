@@ -94,7 +94,7 @@ extension NewGameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NGgenreListCell", for: indexPath) as! NGgenreListCell
-            cell.configure(with: gameGenreViewModel.genreTypes)
+            cell.configure(with: gameGenreViewModel.genreTypes, selectedGenreType: gameGenreViewModel.selectedGenreType)
             cell.delegate = self
             return cell
         } else {

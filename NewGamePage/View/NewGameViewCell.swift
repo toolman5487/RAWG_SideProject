@@ -19,6 +19,7 @@ class NGgenreListCell: UITableViewCell {
     
     weak var delegate: NGgenreListCellDelegate?
     private var genreTypes: [GenreType] = []
+    private var selectedIndex: Int = 0
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -57,8 +58,22 @@ class NGgenreListCell: UITableViewCell {
         }
     }
     
-    func configure(with genreTypes: [GenreType]) {
+    func configure(with genreTypes: [GenreType], selectedGenreType: GenreType? = nil) {
         self.genreTypes = genreTypes
+       
+        if let selectedGenreType = selectedGenreType {
+            selectedIndex = genreTypes.firstIndex { genreType in
+                switch (genreType, selectedGenreType) {
+                case (.all, .all):
+                    return true
+                case (.genre(let g1), .genre(let g2)):
+                    return g1.id == g2.id
+                default:
+                    return false
+                }
+            } ?? 0
+        }
+        
         collectionView.reloadData()
     }
 }
@@ -80,7 +95,7 @@ extension NGgenreListCell: UICollectionViewDataSource, UICollectionViewDelegate 
             imageBackground: genreType.genreModel?.imageBackground
         )
         
-        cell.configure(with: tempGenre, isSelected: indexPath.item == 0)
+        cell.configure(with: tempGenre, isSelected: indexPath.item == selectedIndex)
         return cell
     }
     
@@ -88,7 +103,8 @@ extension NGgenreListCell: UICollectionViewDataSource, UICollectionViewDelegate 
         collectionView.deselectItem(at: indexPath, animated: true)
         let selectedGenreType = genreTypes[indexPath.item]
         delegate?.didSelectGenreType(selectedGenreType)
-        
+        selectedIndex = indexPath.item
+
         for cell in collectionView.visibleCells {
             if let genreCell = cell as? GenreButtonCell {
                 genreCell.setSelected(false)
@@ -124,7 +140,7 @@ class NGgameListCell: UITableViewCell {
         collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(NewGameListCell.self, forCellWithReuseIdentifier: "NewGameListCell")
+        collectionView.register(NewGameDetailCell.self, forCellWithReuseIdentifier: "NewGameDetailCell")
         return collectionView
     }()
     
@@ -167,7 +183,7 @@ extension NGgameListCell: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameListCell", for: indexPath) as! NewGameListCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameDetailCell", for: indexPath) as! NewGameDetailCell
         cell.configure(with: games[indexPath.item])
         return cell
     }
@@ -182,6 +198,6 @@ extension NGgameListCell: UICollectionViewDataSource, UICollectionViewDelegate {
 extension NGgameListCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.frame.width - 56) / 3
-        return CGSize(width: width, height: 160)
+        return CGSize(width: width, height: 200)
     }
 } 
