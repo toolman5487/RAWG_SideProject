@@ -109,8 +109,18 @@ extension NewGameViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.row == 0 {
             return 48
         } else {
+            guard !gameGenreViewModel.games.isEmpty else {
+                return 100
+            }
+            
             let rows = (gameGenreViewModel.games.count + 2) / 3
-            return CGFloat(rows) * 160 + CGFloat(rows - 1) * 16 + 32
+            let cellHeight: CGFloat = 200
+            let spacing: CGFloat = 16
+            let topInset: CGFloat = 16
+            let bottomInset: CGFloat = 16
+            
+            // 與 Collection View Cell 使用相同的計算公式
+            return CGFloat(rows) * cellHeight + CGFloat(max(rows - 1, 0)) * spacing + topInset + bottomInset
         }
     }
 }

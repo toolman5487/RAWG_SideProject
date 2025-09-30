@@ -138,6 +138,7 @@ class NGgameListCell: UITableViewCell {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(NewGameDetailCell.self, forCellWithReuseIdentifier: "NewGameDetailCell")
@@ -166,14 +167,22 @@ class NGgameListCell: UITableViewCell {
     
     func configure(with games: [GameListItemModel]) {
         self.games = games
-        collectionView.reloadData()
+        
+        guard !games.isEmpty else {
+            heightConstraint?.update(offset: 100)
+            collectionView.reloadData()
+            return
+        }
         
         let rows = (games.count + 2) / 3
-        let cellHeight: CGFloat = 160
+        let cellHeight: CGFloat = 200
         let spacing: CGFloat = 16
-        let totalHeight = CGFloat(rows) * cellHeight + CGFloat(rows - 1) * spacing + 32
+        let topInset: CGFloat = 16
+        let bottomInset: CGFloat = 16
+        let totalHeight = CGFloat(rows) * cellHeight + CGFloat(max(rows - 1, 0)) * spacing + topInset + bottomInset
         
         heightConstraint?.update(offset: totalHeight)
+        collectionView.reloadData()
     }
 }
 
