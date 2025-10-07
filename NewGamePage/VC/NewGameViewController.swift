@@ -13,7 +13,7 @@ import SDWebImage
 
 class NewGameViewController: UIViewController {
     
-    private let gameGenreViewModel = GameGenreViewModel()
+    private let gameGenreViewModel = NewGameViewModel()
     private var cancellables = Set<AnyCancellable>()
     
     private lazy var tableView: UITableView = {
@@ -119,7 +119,6 @@ extension NewGameViewController: UITableViewDelegate, UITableViewDataSource {
             let topInset: CGFloat = 16
             let bottomInset: CGFloat = 16
             
-            // 與 Collection View Cell 使用相同的計算公式
             return CGFloat(rows) * cellHeight + CGFloat(max(rows - 1, 0)) * spacing + topInset + bottomInset
         }
     }
