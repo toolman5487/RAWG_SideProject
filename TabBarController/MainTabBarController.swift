@@ -18,19 +18,31 @@ final class MainTabBarController: UITabBarController {
     private func setupTabs() {
         let homeVC = HomeViewController()
         homeVC.title = "Home"
-        let homeNav = UINavigationController(rootViewController: homeVC)
-        homeNav.tabBarItem = UITabBarItem(title: "Home",
-                                          image: UIImage(systemName: "house"),
-                                          selectedImage: UIImage(systemName: "house.fill"))
-
+        let homeTab = UITab(title: "Home", image: UIImage(systemName: "house"), identifier: "home") { _ in
+            let homeNav = UINavigationController(rootViewController: homeVC)
+            return homeNav
+        }
+        
         let otherVC = ViewController()
         otherVC.title = "Game"
-        let otherNav = UINavigationController(rootViewController: otherVC)
-        otherNav.tabBarItem = UITabBarItem(title: "Game",
-                                           image: UIImage(systemName: "gamecontroller"),
-                                           selectedImage: UIImage(systemName: "gamecontroller.fill"))
-
-        viewControllers = [homeNav, otherNav]
+        let gameTab = UITab(title: "Game", image: UIImage(systemName: "gamecontroller"), identifier: "game") { _ in
+            let gameNav = UINavigationController(rootViewController: otherVC)
+            return gameNav
+        }
+        
+        let searchVC = SearchTabViewController()
+        searchVC.title = "Search"
+        let searchTab = UISearchTab { tab in
+            let searchNav = UINavigationController(rootViewController: searchVC)
+            searchNav.navigationBar.prefersLargeTitles = true
+            return searchNav
+        }
+        
+        self.tabs = [homeTab, gameTab, searchTab]
+        
+        if #available(iOS 26.0, *) {
+            self.tabBarMinimizeBehavior = .onScrollDown
+        }
     }
 
     private func configureAppearance() {

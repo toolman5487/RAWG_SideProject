@@ -25,6 +25,7 @@
 		15904B8A2E95630400CDF358 /* PopularGameViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B892E95630400CDF358 /* PopularGameViewCell.swift */; };
 		15904B8F2E9A4D9400CDF358 /* PopularGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B8B2E9A4D9400CDF358 /* PopularGameService.swift */; };
 		15904B902E9A4D9400CDF358 /* PopularGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B8D2E9A4D9400CDF358 /* PopularGameViewModel.swift */; };
+		15904B942E9AADCD00CDF358 /* SearchTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B932E9AADCD00CDF358 /* SearchTabViewController.swift */; };
 		15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */; };
 		15992DFF2E8838EB00AB3BE3 /* GameGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */; };
 		15992E012E88393700AB3BE3 /* NewGameViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992E002E88393700AB3BE3 /* NewGameViewCell.swift */; };
@@ -71,6 +72,7 @@
 		15904B892E95630400CDF358 /* PopularGameViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewCell.swift; sourceTree = "<group>"; };
 		15904B8B2E9A4D9400CDF358 /* PopularGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameService.swift; sourceTree = "<group>"; };
 		15904B8D2E9A4D9400CDF358 /* PopularGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewModel.swift; sourceTree = "<group>"; };
+		15904B932E9AADCD00CDF358 /* SearchTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabViewController.swift; sourceTree = "<group>"; };
 		15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreService.swift; sourceTree = "<group>"; };
 		15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreViewModel.swift; sourceTree = "<group>"; };
 		15992E002E88393700AB3BE3 /* NewGameViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewCell.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 			isa = PBXGroup;
 			children = (
 				159F8E352E478D990021339B /* MainTabBarController.swift */,
+				15904B932E9AADCD00CDF358 /* SearchTabViewController.swift */,
 			);
 			path = TabBarController;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */,
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
+				15904B942E9AADCD00CDF358 /* SearchTabViewController.swift in Sources */,
 				15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */,
 				15904B8F2E9A4D9400CDF358 /* PopularGameService.swift in Sources */,
 				15904B902E9A4D9400CDF358 /* PopularGameViewModel.swift in Sources */,
@@ -674,7 +678,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -732,7 +736,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
