@@ -13,7 +13,7 @@ import SDWebImage
 
 class PopularGameViewController: UIViewController {
     
-    private let viewModel = GameGenreViewModel()
+    private let viewModel = PopularGameViewModel()
     private var cancellables = Set<AnyCancellable>()
     
     private lazy var tableView: UITableView = {
@@ -42,7 +42,7 @@ class PopularGameViewController: UIViewController {
         }
         
         tableView.register(PopularGenreListCell.self, forCellReuseIdentifier: "PopularGenreListCell")
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(PGGameListCell.self, forCellReuseIdentifier: "PGGameListCell")
     }
     
     private func bindingViewModel() {
@@ -74,8 +74,9 @@ extension PopularGameViewController: UITableViewDelegate, UITableViewDataSource 
             cell.delegate = self
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            cell.backgroundColor = UIColor.systemGray6
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PGGameListCell", for: indexPath) as! PGGameListCell
+            cell.configure(with: viewModel.games)
+            cell.delegate = self
             return cell
         }
     }
@@ -84,7 +85,17 @@ extension PopularGameViewController: UITableViewDelegate, UITableViewDataSource 
         if indexPath.row == 0 {
             return 48
         } else {
-            return UITableView.automaticDimension
+            guard !viewModel.games.isEmpty else {
+                return 100
+            }
+            
+            let rows = (viewModel.games.count + 2) / 3
+            let cellHeight: CGFloat = 200
+            let spacing: CGFloat = 16
+            let topInset: CGFloat = 16
+            let bottomInset: CGFloat = 16
+            
+            return CGFloat(rows) * cellHeight + CGFloat(max(rows - 1, 0)) * spacing + topInset + bottomInset
         }
     }
 }
@@ -92,5 +103,12 @@ extension PopularGameViewController: UITableViewDelegate, UITableViewDataSource 
 extension PopularGameViewController: PopularGenreListCellDelegate {
     func didSelectGenreType(_ genreType: GenreType) {
         viewModel.selectGenreType(genreType)
+    }
+}
+
+extension PopularGameViewController: PGGameListCellDelegate {
+    func didSelectGame(_ game: GameListItemModel) {
+        let gameDetailVC = GameDetailViewController(gameId: game.id)
+        navigationController?.pushViewController(gameDetailVC, animated: true)
     }
 }

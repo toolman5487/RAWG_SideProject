@@ -116,3 +116,97 @@ extension PopularGenreListCell: UICollectionViewDataSource, UICollectionViewDele
         }
     }
 }
+
+// MARK: - Popular Game Collection
+
+protocol PGGameListCellDelegate: AnyObject {
+    func didSelectGame(_ game: GameListItemModel)
+}
+
+class PGGameListCell: UITableViewCell {
+    
+    weak var delegate: PGGameListCellDelegate?
+    private var games: [GameListItemModel] = []
+    private var heightConstraint: Constraint?
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.isScrollEnabled = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(NewGameDetailCell.self, forCellWithReuseIdentifier: "NewGameDetailCell")
+        return collectionView
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            heightConstraint = make.height.equalTo(100).constraint
+        }
+    }
+    
+    func configure(with games: [GameListItemModel]) {
+        self.games = games
+        
+        guard !games.isEmpty else {
+            heightConstraint?.update(offset: 100)
+            collectionView.reloadData()
+            return
+        }
+        
+        let rows = (games.count + 2) / 3
+        let cellHeight: CGFloat = 200
+        let spacing: CGFloat = 16
+        let topInset: CGFloat = 16
+        let bottomInset: CGFloat = 16
+        let totalHeight = CGFloat(rows) * cellHeight + CGFloat(max(rows - 1, 0)) * spacing + topInset + bottomInset
+        
+        heightConstraint?.update(offset: totalHeight)
+        collectionView.reloadData()
+    }
+}
+
+extension PGGameListCell: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return games.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameDetailCell", for: indexPath) as! NewGameDetailCell
+        cell.configure(with: games[indexPath.item])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let selectedGame = games[indexPath.item]
+        delegate?.didSelectGame(selectedGame)
+    }
+}
+
+extension PGGameListCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (collectionView.frame.width - 56) / 3
+        return CGSize(width: width, height: 200)
+    }
+}

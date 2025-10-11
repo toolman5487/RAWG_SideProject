@@ -23,6 +23,8 @@
 		157C16A52E88373D008A2873 /* GameGenreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157C16A42E88373D008A2873 /* GameGenreModel.swift */; };
 		15904B872E95583700CDF358 /* NewGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B862E95583700CDF358 /* NewGameViewModel.swift */; };
 		15904B8A2E95630400CDF358 /* PopularGameViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B892E95630400CDF358 /* PopularGameViewCell.swift */; };
+		15904B8F2E9A4D9400CDF358 /* PopularGameService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B8B2E9A4D9400CDF358 /* PopularGameService.swift */; };
+		15904B902E9A4D9400CDF358 /* PopularGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15904B8D2E9A4D9400CDF358 /* PopularGameViewModel.swift */; };
 		15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */; };
 		15992DFF2E8838EB00AB3BE3 /* GameGenreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */; };
 		15992E012E88393700AB3BE3 /* NewGameViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15992E002E88393700AB3BE3 /* NewGameViewCell.swift */; };
@@ -67,6 +69,8 @@
 		157C16A42E88373D008A2873 /* GameGenreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreModel.swift; sourceTree = "<group>"; };
 		15904B862E95583700CDF358 /* NewGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewModel.swift; sourceTree = "<group>"; };
 		15904B892E95630400CDF358 /* PopularGameViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewCell.swift; sourceTree = "<group>"; };
+		15904B8B2E9A4D9400CDF358 /* PopularGameService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameService.swift; sourceTree = "<group>"; };
+		15904B8D2E9A4D9400CDF358 /* PopularGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewModel.swift; sourceTree = "<group>"; };
 		15992DFC2E8837CA00AB3BE3 /* GameGenreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreService.swift; sourceTree = "<group>"; };
 		15992DFE2E8838EB00AB3BE3 /* GameGenreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreViewModel.swift; sourceTree = "<group>"; };
 		15992E002E88393700AB3BE3 /* NewGameViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGameViewCell.swift; sourceTree = "<group>"; };
@@ -215,6 +219,8 @@
 		157323172E7FF691007132B6 /* PopularGamePage */ = {
 			isa = PBXGroup;
 			children = (
+				15904B8C2E9A4D9400CDF358 /* Service */,
+				15904B8E2E9A4D9400CDF358 /* ViewModel */,
 				15904B882E9562EE00CDF358 /* View */,
 				157323182E7FF6A4007132B6 /* VC */,
 			);
@@ -253,6 +259,22 @@
 				15904B892E95630400CDF358 /* PopularGameViewCell.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		15904B8C2E9A4D9400CDF358 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				15904B8B2E9A4D9400CDF358 /* PopularGameService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		15904B8E2E9A4D9400CDF358 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				15904B8D2E9A4D9400CDF358 /* PopularGameViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		15992E022E883CA400AB3BE3 /* SubCell */ = {
@@ -529,6 +551,8 @@
 				159F8E4A2E48693F0021339B /* GameDetailModel.swift in Sources */,
 				152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */,
 				15B06EA62E647E5B00477E5D /* SearchViewModel.swift in Sources */,
+				15904B8F2E9A4D9400CDF358 /* PopularGameService.swift in Sources */,
+				15904B902E9A4D9400CDF358 /* PopularGameViewModel.swift in Sources */,
 				1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */,
 				15B06EAA2E6D922C00477E5D /* HomeViewCell.swift in Sources */,
 				150A727B2E76F88B00E5925F /* NewGameViewController.swift in Sources */,
