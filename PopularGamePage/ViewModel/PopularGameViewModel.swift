@@ -52,6 +52,7 @@ class PopularGameViewModel: ObservableObject {
     
     func selectGenreType(_ genreType: GenreType) {
         selectedGenreType = genreType
+        isLoading = true
         fetchGamesForSelectedGenre()
     }
     
@@ -69,6 +70,7 @@ class PopularGameViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
                     if case .failure(let error) = completion {
                         self?.errorMessage = error.localizedDescription
                     }
@@ -85,6 +87,7 @@ class PopularGameViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
                     if case .failure(let error) = completion {
                         self?.errorMessage = error.localizedDescription
                     }

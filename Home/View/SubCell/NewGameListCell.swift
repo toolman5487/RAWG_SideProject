@@ -14,6 +14,15 @@ import Combine
 
 class NewGameListCell: UICollectionViewCell {
     
+    private var cancellables = Set<AnyCancellable>()
+    
+    private enum ImageLoadingState {
+        case loading
+        case loaded(UIImage)
+        case failed
+        case placeholder
+    }
+    
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -38,15 +47,6 @@ class NewGameListCell: UICollectionViewCell {
         label.textColor = .secondaryLabel
         return label
     }()
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    private enum ImageLoadingState {
-        case loading
-        case loaded(UIImage)
-        case failed
-        case placeholder
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

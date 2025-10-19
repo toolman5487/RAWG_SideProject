@@ -26,6 +26,13 @@ class PopularGameViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .secondaryLabel
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Popular"
@@ -37,8 +44,14 @@ class PopularGameViewController: UIViewController {
     
     private func setupUI(){
         view.addSubview(tableView)
+        view.addSubview(loadingIndicator)
+        
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        loadingIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
         
         tableView.register(PopularGenreListCell.self, forCellReuseIdentifier: "PopularGenreListCell")
@@ -56,6 +69,18 @@ class PopularGameViewController: UIViewController {
         viewModel.$games
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loading in
+                if loading {
+                    self?.loadingIndicator.startAnimating()
+                } else {
+                    self?.loadingIndicator.stopAnimating()
+                }
                 self?.tableView.reloadData()
             }
             .store(in: &cancellables)
@@ -77,6 +102,7 @@ extension PopularGameViewController: UITableViewDelegate, UITableViewDataSource 
             let cell = tableView.dequeueReusableCell(withIdentifier: "PGGameListCell", for: indexPath) as! PGGameListCell
             cell.configure(with: viewModel.games)
             cell.delegate = self
+            cell.isHidden = viewModel.isLoading
             return cell
         }
     }

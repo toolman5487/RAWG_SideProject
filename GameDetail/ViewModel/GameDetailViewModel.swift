@@ -126,7 +126,11 @@ extension GameDetailViewModel {
     var visibleCells: [CellType] {
         guard let gameDetail = gameDetail else { return [] }
         
-        var cells: [CellType] = [.imageCarousel, .rating, .gameInfo, .description, .screenshots]
+        var cells: [CellType] = [.imageCarousel, .rating, .gameInfo, .description]
+        
+        if !screenshots.isEmpty {
+            cells.append(.screenshots)
+        }
         
         if !gameDetail.metacriticPlatforms!.isEmpty {
             cells.append(.metacritic)

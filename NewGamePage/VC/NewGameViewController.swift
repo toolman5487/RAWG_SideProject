@@ -32,6 +32,13 @@ class NewGameViewController: UIViewController {
         return control
     }()
     
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .secondaryLabel
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "New and Trending"
@@ -43,8 +50,14 @@ class NewGameViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(tableView)
+        view.addSubview(loadingIndicator)
+        
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        loadingIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
         
         tableView.register(NGgenreListCell.self, forCellReuseIdentifier: "NGgenreListCell")
@@ -70,9 +83,15 @@ class NewGameViewController: UIViewController {
         gameGenreViewModel.$isLoading
             .receive(on: DispatchQueue.main)
             .sink { [weak self] loading in
+                if loading {
+                    self?.loadingIndicator.startAnimating()
+                } else {
+                    self?.loadingIndicator.stopAnimating()
+                }
                 if !loading {
                     self?.refreshControl.endRefreshing()
                 }
+                self?.tableView.reloadData()
             }
             .store(in: &cancellables)
     }
@@ -101,6 +120,7 @@ extension NewGameViewController: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NGgameListCell", for: indexPath) as! NGgameListCell
             cell.configure(with: gameGenreViewModel.games)
             cell.delegate = self
+            cell.isHidden = gameGenreViewModel.isLoading
             return cell
         }
     }
