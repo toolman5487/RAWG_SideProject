@@ -141,7 +141,7 @@ class PGGameListCell: UITableViewCell {
         collectionView.isScrollEnabled = false
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(NewGameDetailCell.self, forCellWithReuseIdentifier: "NewGameDetailCell")
+        collectionView.register(PopularGameDetailCell.self, forCellWithReuseIdentifier: "PopularGameDetailCell")
         return collectionView
     }()
     
@@ -192,7 +192,7 @@ extension PGGameListCell: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewGameDetailCell", for: indexPath) as! NewGameDetailCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularGameDetailCell", for: indexPath) as! PopularGameDetailCell
         cell.configure(with: games[indexPath.item])
         return cell
     }
