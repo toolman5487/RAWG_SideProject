@@ -23,9 +23,9 @@ final class MainTabBarController: UITabBarController {
             return homeNav
         }
         
-        let otherVC = ViewController()
-        otherVC.title = "Game"
-        let gameTab = UITab(title: "Game", image: UIImage(systemName: "gamecontroller"), identifier: "game") { _ in
+        let otherVC = PlatformsViewController()
+        otherVC.title = "Platform"
+        let gameTab = UITab(title: "Platform", image: UIImage(systemName: "gamecontroller.fill"), identifier: "game") { _ in
             let gameNav = UINavigationController(rootViewController: otherVC)
             return gameNav
         }
