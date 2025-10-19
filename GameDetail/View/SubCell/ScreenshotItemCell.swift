@@ -62,7 +62,7 @@ class ScreenshotItemCell: UICollectionViewCell {
             
             imageView.sd_setImage(
                 with: URL(string: imageUrl),
-                placeholderImage: UIImage(systemName: "gamecontroller.circle.fill"),
+                placeholderImage: UIImage(systemName: "gamecontroller.circle.fill")?.withTintColor(.label, renderingMode: .alwaysOriginal),
                 options: options,
                 completed: { [weak self] image, error, cacheType, url in
                     DispatchQueue.main.async {

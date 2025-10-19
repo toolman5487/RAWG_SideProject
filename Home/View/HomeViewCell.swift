@@ -64,10 +64,6 @@ class BannerCell: UITableViewCell {
         }
     }
     
-    private func getScreenWidth() -> CGFloat {
-        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
-    }
-    
     func configure(with games: [GameListItemModel]) {
         self.games = games
         setupBannerViews()
@@ -182,10 +178,6 @@ protocol NewGameCellDelegate: AnyObject {
 class NewGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
-    
-    private func getScreenWidth() -> CGFloat {
-        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
-    }
     private var cancellables = Set<AnyCancellable>()
     weak var delegate: NewGameCellDelegate?
     
@@ -309,10 +301,6 @@ protocol PopularGameCellDelegate: AnyObject {
 class PopularGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
-    
-    private func getScreenWidth() -> CGFloat {
-        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
-    }
     private var cancellables = Set<AnyCancellable>()
     weak var delegate: PopularGameCellDelegate?
     
