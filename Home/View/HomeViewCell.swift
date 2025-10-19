@@ -64,6 +64,10 @@ class BannerCell: UITableViewCell {
         }
     }
     
+    private func getScreenWidth() -> CGFloat {
+        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
+    }
+    
     func configure(with games: [GameListItemModel]) {
         self.games = games
         setupBannerViews()
@@ -74,7 +78,7 @@ class BannerCell: UITableViewCell {
     private func setupBannerViews() {
         scrollView.subviews.forEach { $0.removeFromSuperview() }
         
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = getScreenWidth()
         
         for (index, game) in games.enumerated() {
             let bannerView = createBannerView(for: game)
@@ -145,7 +149,7 @@ class BannerCell: UITableViewCell {
         guard !games.isEmpty else { return }
         
         currentIndex = (currentIndex + 1) % games.count
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = getScreenWidth()
         let offsetX = CGFloat(currentIndex) * screenWidth
         
         UIView.animate(withDuration: 0.5) {
@@ -162,7 +166,7 @@ class BannerCell: UITableViewCell {
 
 extension BannerCell: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = getScreenWidth()
         currentIndex = Int(scrollView.contentOffset.x / screenWidth)
         pageControl.currentPage = currentIndex
     }
@@ -178,6 +182,10 @@ protocol NewGameCellDelegate: AnyObject {
 class NewGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
+    
+    private func getScreenWidth() -> CGFloat {
+        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
+    }
     private var cancellables = Set<AnyCancellable>()
     weak var delegate: NewGameCellDelegate?
     
@@ -277,7 +285,7 @@ extension NewGameCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = getScreenWidth()
         let padding: CGFloat = 32
         let spacing: CGFloat = 16
         let itemWidth = (screenWidth - padding - spacing) / 2.5
@@ -301,6 +309,10 @@ protocol PopularGameCellDelegate: AnyObject {
 class PopularGameCell: UITableViewCell {
     
     private var games: [GameListItemModel] = []
+    
+    private func getScreenWidth() -> CGFloat {
+        return window?.windowScene?.screen.bounds.width ?? UIScreen.main.bounds.width
+    }
     private var cancellables = Set<AnyCancellable>()
     weak var delegate: PopularGameCellDelegate?
     
@@ -400,7 +412,7 @@ extension PopularGameCell: UICollectionViewDataSource, UICollectionViewDelegateF
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = getScreenWidth()
         let padding: CGFloat = 32
         let spacing: CGFloat = 16
         let itemWidth = (screenWidth - padding - spacing) / 2.5

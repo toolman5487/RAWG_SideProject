@@ -41,6 +41,7 @@ class GameDetailTableView: UITableView {
         register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
         register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
         register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
+        register(GameVideoCell.self, forCellReuseIdentifier: "GameVideoCell")
         register(DescriptionCell.self, forCellReuseIdentifier: "DescriptionCell")
         register(MetacriticCell.self, forCellReuseIdentifier: "MetacriticCell")
         register(ScreenshotsCell.self, forCellReuseIdentifier: "ScreenshotsCell")

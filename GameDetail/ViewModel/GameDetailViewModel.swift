@@ -13,6 +13,7 @@ class GameDetailViewModel: ObservableObject {
     
     @Published var gameDetail: GameDetailModel?
     @Published var screenshots: [Screenshot] = []
+    @Published var movies: [Movie] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
@@ -42,6 +43,7 @@ class GameDetailViewModel: ObservableObject {
                 receiveValue: { [weak self] gameDetail in
                     self?.gameDetail = gameDetail
                     self?.fetchScreenshots(gameId: gameId)
+                    self?.fetchMovies(gameId: gameId)
                 }
             )
             .store(in: &cancellables)
@@ -54,6 +56,18 @@ class GameDetailViewModel: ObservableObject {
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] screenshotResponse in
                     self?.screenshots = screenshotResponse.results ?? []
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+// MARK: - Fetch Movies
+    private func fetchMovies(gameId: Int) {
+        gameDetailService.fetchMovies(gameId: gameId)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] movieResponse in
+                    self?.movies = movieResponse.results ?? []
                 }
             )
             .store(in: &cancellables)
@@ -105,6 +119,7 @@ extension GameDetailViewModel {
         case imageCarousel
         case rating
         case gameInfo
+        case movies
         case description
         case screenshots
         case metacritic
@@ -115,6 +130,7 @@ extension GameDetailViewModel {
             case .imageCarousel: return "ImageCarouselCell"
             case .rating: return "RatingCell"
             case .gameInfo: return "GameInfoCell"
+            case .movies: return "GameVideoCell"
             case .description: return "DescriptionCell"
             case .screenshots: return "ScreenshotsCell"
             case .metacritic: return "MetacriticCell"
@@ -126,7 +142,13 @@ extension GameDetailViewModel {
     var visibleCells: [CellType] {
         guard let gameDetail = gameDetail else { return [] }
         
-        var cells: [CellType] = [.imageCarousel, .rating, .gameInfo, .description]
+        var cells: [CellType] = [.imageCarousel, .rating, .gameInfo]
+        
+        if !movies.isEmpty {
+            cells.append(.movies)
+        }
+        
+        cells.append(.description)
         
         if !screenshots.isEmpty {
             cells.append(.screenshots)

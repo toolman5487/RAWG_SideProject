@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Combine
+import AVKit
 
 class GameDetailViewController: UIViewController {
     
@@ -56,6 +57,7 @@ class GameDetailViewController: UIViewController {
         tableView.register(ImageCarouselCell.self, forCellReuseIdentifier: "ImageCarouselCell")
         tableView.register(RatingCell.self, forCellReuseIdentifier: "RatingCell")
         tableView.register(GameInfoCell.self, forCellReuseIdentifier: "GameInfoCell")
+        tableView.register(GameVideoCell.self, forCellReuseIdentifier: "GameVideoCell")
         tableView.register(DescriptionCell.self, forCellReuseIdentifier: "DescriptionCell")
         tableView.register(MetacriticCell.self, forCellReuseIdentifier: "MetacriticCell")
         tableView.register(ScreenshotsCell.self, forCellReuseIdentifier: "ScreenshotsCell")
@@ -72,6 +74,13 @@ class GameDetailViewController: UIViewController {
             .store(in: &cancellables)
         
         gameDetailVM.$screenshots
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+        
+        gameDetailVM.$movies
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -105,6 +114,19 @@ class GameDetailViewController: UIViewController {
         }
         present(navController, animated: true)
     }
+    
+    private func playMovie(_ movie: Movie) {
+        guard let videoUrl = movie.data?.max ?? movie.data?.four80 ?? movie.data?.one20,
+              let url = URL(string: videoUrl) else { return }
+        
+        let player = AVPlayer(url: url)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        
+        present(playerViewController, animated: true) {
+            player.play()
+        }
+    }
 }
 
 extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
@@ -127,6 +149,11 @@ extension GameDetailViewController: UITableViewDelegate, UITableViewDataSource {
             (cell as! RatingCell).configure(with: gameDetailVM.gameDetail)
         case .gameInfo:
             (cell as! GameInfoCell).configure(with: gameDetailVM.gameDetail)
+        case .movies:
+            let gameVideoCell = cell as! GameVideoCell
+            gameVideoCell.configure(with: gameDetailVM.movies) { [weak self] movie in
+                self?.playMovie(movie)
+            }
         case .description:
             let descriptionCell = cell as! DescriptionCell
             let raw = gameDetailVM.gameDetail?.description ?? "No Description Available."

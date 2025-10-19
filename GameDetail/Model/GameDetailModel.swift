@@ -280,4 +280,31 @@ struct Screenshot: Codable {
     let hidden: Bool?
 }
 
+// MARK: - Movie Response
+struct MovieResponse: Codable {
+    let count: Int?
+    let next: String?
+    let previous: String?
+    let results: [Movie]?
+}
+
+struct Movie: Codable {
+    let id: Int?
+    let name: String?
+    let preview: String?
+    let data: MovieData?
+}
+
+struct MovieData: Codable {
+    let max: String?
+    let four80: String?
+    let one20: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case max
+        case four80 = "480"
+        case one20 = "120"
+    }
+}
+
 

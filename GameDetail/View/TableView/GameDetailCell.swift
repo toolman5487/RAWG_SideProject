@@ -351,7 +351,7 @@ class DescriptionCell: UITableViewCell {
         let readMore = "... Read More"
         
         let limitedText = String(text.prefix(240))
-        let displayText = limitedText + readMore
+        let _ = limitedText + readMore
         
         var config = button.configuration ?? .plain()
         
@@ -704,7 +704,7 @@ class DevelopersCell: UITableViewCell {
 }
 
 private struct AssociatedKeys {
-    static var data = "data"
+    static var data: UInt8 = 0
 }
 
 extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -741,5 +741,164 @@ extension DevelopersCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         let finalHeight = max(textHeight + 16, 32)
         
         return CGSize(width: finalWidth, height: finalHeight)
+    }
+}
+
+// MARK: - Game Video
+class GameVideoCell: UITableViewCell {
+    
+    private var movies: [Movie] = []
+    private var onMovieTap: ((Movie) -> Void)?
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Game Trailer"
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .label
+        return label
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 12
+        layout.minimumLineSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(MovieItemCell.self, forCellWithReuseIdentifier: "MovieItemCell")
+        return collectionView
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        backgroundColor = .clear
+        selectionStyle = .none
+        
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(collectionView)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(120)
+            make.bottom.equalToSuperview().offset(-16)
+        }
+    }
+    
+    func configure(with movies: [Movie], onMovieTap: @escaping (Movie) -> Void) {
+        self.movies = movies
+        self.onMovieTap = onMovieTap
+        collectionView.reloadData()
+    }
+}
+
+extension GameVideoCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieItemCell", for: indexPath) as! MovieItemCell
+        let movie = movies[indexPath.item]
+        cell.configure(with: movie)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 200, height: 120)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = movies[indexPath.item]
+        onMovieTap?(movie)
+    }
+}
+
+// MARK: - Movie Item Cell
+class MovieItemCell: UICollectionViewCell {
+    
+    private let thumbnailImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
+        imageView.backgroundColor = .systemGray5
+        return imageView
+    }()
+    
+    private let playButton: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "play.circle.fill")
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .label
+        label.numberOfLines = 2
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        contentView.addSubview(thumbnailImageView)
+        contentView.addSubview(playButton)
+        contentView.addSubview(titleLabel)
+        
+        thumbnailImageView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(80)
+        }
+        
+        playButton.snp.makeConstraints { make in
+            make.center.equalTo(thumbnailImageView)
+            make.size.equalTo(40)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailImageView.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+        }
+    }
+    
+    func configure(with movie: Movie) {
+        titleLabel.text = movie.name
+        
+        if let previewUrl = movie.preview {
+            thumbnailImageView.sd_setImage(with: URL(string: previewUrl))
+        } else {
+            thumbnailImageView.image = UIImage(systemName: "video.fill")
+            thumbnailImageView.tintColor = .systemGray3
+        }
     }
 }
