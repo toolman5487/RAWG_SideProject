@@ -13,29 +13,63 @@ import SDWebImage
 class PlatformsListViewCell: UICollectionViewCell {
     
     private var platformGames: [PlatformGame] = []
+    private var currentPlatformBackgroundImage: String?
+    
+    private lazy var backgroundImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 12
+        return imageView
+    }()
+    
+    private lazy var overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        view.layer.cornerRadius = 12
+        return view
+    }()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .label
+        label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
+    private lazy var yearLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .white.withAlphaComponent(0.8)
+        label.textAlignment = .center
+        return label
+    }()
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 0
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(PlatformGameCell.self, forCellWithReuseIdentifier: "PlatformGameCell")
-        return collectionView
+    private lazy var followButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Follow", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        button.layer.cornerRadius = 20
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return button
+    }()
+    
+    private lazy var popularItemsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Popular items"
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .white.withAlphaComponent(0.8)
+        return label
+    }()
+    
+    private lazy var gamesStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.alignment = .leading
+        return stackView
     }()
     
     override init(frame: CGRect) {
@@ -49,77 +83,93 @@ class PlatformsListViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        backgroundColor = .systemBackground
+        backgroundColor = .clear
         
+        contentView.addSubview(backgroundImageView)
+        contentView.addSubview(overlayView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(collectionView)
+        contentView.addSubview(yearLabel)
+        contentView.addSubview(followButton)
+        contentView.addSubview(popularItemsLabel)
+        contentView.addSubview(gamesStackView)
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        overlayView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview().offset(20)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(12)
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(120)
+        yearLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        followButton.snp.makeConstraints { make in
+            make.top.equalTo(yearLabel.snp.bottom).offset(16)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(80)
+            make.height.equalTo(40)
+        }
+        
+        popularItemsLabel.snp.makeConstraints { make in
+            make.top.equalTo(followButton.snp.bottom).offset(20)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        gamesStackView.snp.makeConstraints { make in
+            make.top.equalTo(popularItemsLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.lessThanOrEqualToSuperview().offset(-16)
         }
     }
     
     func configure(with platform: PlatformModel) {
-        let attributedString = NSMutableAttributedString()
-
-        let nameAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .semibold),
-            .foregroundColor: UIColor.label
-        ]
-        let nameString = NSAttributedString(string: "\(platform.name) ", attributes: nameAttributes)
-        attributedString.append(nameString)
-
-        let countAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20, weight: .regular),
-            .foregroundColor: UIColor.secondaryLabel
-        ]
-        let countString = NSAttributedString(string: "(\(platform.gamesCount.formatted()))", attributes: countAttributes)
-        attributedString.append(countString)
-
-        let arrowAttachment = NSTextAttachment()
-        arrowAttachment.image = UIImage(systemName: "chevron.right")?.withTintColor(.tertiaryLabel, renderingMode: .alwaysOriginal)
-        arrowAttachment.bounds = CGRect(x: 0, y: -4, width: 20, height: 20)
-        let arrowString = NSAttributedString(attachment: arrowAttachment)
-        attributedString.append(arrowString)
+        titleLabel.text = platform.name
         
-        titleLabel.attributedText = attributedString
+        if let yearStart = platform.yearStart {
+            yearLabel.text = "\(yearStart)"
+            yearLabel.isHidden = false
+        } else {
+            yearLabel.isHidden = true
+        }
         
-        platformGames = platform.games ?? []
-        collectionView.reloadData()
+        if let imageURL = platform.imageBackground {
+            backgroundImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: UIImage(systemName: "gamecontroller.fill"))
+        } else {
+            backgroundImageView.image = UIImage(systemName: "gamecontroller.fill")
+            backgroundImageView.tintColor = .systemGray
+        }
+        
+        setupGamesList(platform.games ?? [])
+    }
+    
+    private func setupGamesList(_ games: [PlatformGame]) {
+        gamesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        let displayGames = Array(games.prefix(6))
+        
+        for game in displayGames {
+            let gameLabel = UILabel()
+            gameLabel.text = "\(game.name) \(game.added.formatted())"
+            gameLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+            gameLabel.textColor = .white.withAlphaComponent(0.9)
+            gameLabel.numberOfLines = 1
+            
+            gamesStackView.addArrangedSubview(gameLabel)
+        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        titleLabel.attributedText = nil
-        platformGames.removeAll()
+        titleLabel.text = nil
+        yearLabel.text = nil
+        backgroundImageView.image = nil
+        gamesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
 }
-
-extension PlatformsListViewCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return platformGames.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlatformGameCell", for: indexPath) as! PlatformGameCell
-        cell.configure(with: platformGames[indexPath.item])
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenWidth = getScreenWidth()
-        let padding: CGFloat = 32
-        let spacing: CGFloat = 16
-        let itemWidth = (screenWidth - padding - spacing) / 2.5
-        return CGSize(width: itemWidth, height: 200)
-    }
-}
-

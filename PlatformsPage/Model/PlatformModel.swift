@@ -44,10 +44,4 @@ struct PlatformGame: Codable {
     let slug: String
     let name: String
     let added: Int
-    let backgroundImage: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, slug, name, added
-        case backgroundImage = "background_image"
-    }
 }
