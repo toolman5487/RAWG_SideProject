@@ -84,8 +84,7 @@ extension PlatformsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let screenWidth = collectionView.frame.width
         let padding: CGFloat = 32
-        let spacing: CGFloat = 16  
-        let itemWidth = (screenWidth - padding - spacing) / 2
+        let itemWidth = screenWidth - padding
         return CGSize(width: itemWidth, height: 200)
     }
     

@@ -38,37 +38,13 @@ class PlatformsListViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var yearLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textColor = .white.withAlphaComponent(0.8)
-        label.textAlignment = .center
-        return label
-    }()
     
-    private lazy var followButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Follow", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor.white.withAlphaComponent(0.2)
-        button.layer.cornerRadius = 20
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        return button
-    }()
-    
-    private lazy var popularItemsLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Popular items"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .white.withAlphaComponent(0.8)
-        return label
-    }()
     
     private lazy var gamesStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 4
-        stackView.alignment = .leading
+        stackView.alignment = .center
         return stackView
     }()
     
@@ -84,13 +60,9 @@ class PlatformsListViewCell: UICollectionViewCell {
     
     private func setupUI() {
         backgroundColor = .clear
-        
         contentView.addSubview(backgroundImageView)
         contentView.addSubview(overlayView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(yearLabel)
-        contentView.addSubview(followButton)
-        contentView.addSubview(popularItemsLabel)
         contentView.addSubview(gamesStackView)
         
         backgroundImageView.snp.makeConstraints { make in
@@ -106,25 +78,8 @@ class PlatformsListViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
-        yearLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        followButton.snp.makeConstraints { make in
-            make.top.equalTo(yearLabel.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(80)
-            make.height.equalTo(40)
-        }
-        
-        popularItemsLabel.snp.makeConstraints { make in
-            make.top.equalTo(followButton.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
-        
         gamesStackView.snp.makeConstraints { make in
-            make.top.equalTo(popularItemsLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.lessThanOrEqualToSuperview().offset(-16)
         }
@@ -132,13 +87,6 @@ class PlatformsListViewCell: UICollectionViewCell {
     
     func configure(with platform: PlatformModel) {
         titleLabel.text = platform.name
-        
-        if let yearStart = platform.yearStart {
-            yearLabel.text = "\(yearStart)"
-            yearLabel.isHidden = false
-        } else {
-            yearLabel.isHidden = true
-        }
         
         if let imageURL = platform.imageBackground {
             backgroundImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: UIImage(systemName: "gamecontroller.fill"))
@@ -152,23 +100,58 @@ class PlatformsListViewCell: UICollectionViewCell {
     
     private func setupGamesList(_ games: [PlatformGame]) {
         gamesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        let displayGames = Array(games.prefix(6))
+        let displayGames = Array(games.prefix(3))
         
         for game in displayGames {
-            let gameLabel = UILabel()
-            gameLabel.text = "\(game.name) \(game.added.formatted())"
-            gameLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
-            gameLabel.textColor = .white.withAlphaComponent(0.9)
-            gameLabel.numberOfLines = 1
+            let containerView = UIView()
             
-            gamesStackView.addArrangedSubview(gameLabel)
+            let gameNameLabel = UILabel()
+            gameNameLabel.text = game.name
+            gameNameLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+            gameNameLabel.textColor = UIColor.label
+            
+            let addedLabel = UILabel()
+            addedLabel.text = game.added.formatted()
+            addedLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+            addedLabel.textColor = UIColor.secondaryLabel
+            
+            let bookmarkImageView = UIImageView()
+            bookmarkImageView.image = UIImage(systemName: "bookmark.fill")
+            bookmarkImageView.tintColor = .secondaryLabel
+            bookmarkImageView.contentMode = .scaleAspectFit
+            
+            containerView.addSubview(gameNameLabel)
+            containerView.addSubview(addedLabel)
+            containerView.addSubview(bookmarkImageView)
+            
+            gameNameLabel.snp.makeConstraints { make in
+                make.leading.equalToSuperview()
+                make.centerY.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+            }
+            
+            addedLabel.snp.makeConstraints { make in
+                make.trailing.equalTo(bookmarkImageView.snp.leading).offset(-8)
+                make.centerY.equalToSuperview()
+            }
+            
+            bookmarkImageView.snp.makeConstraints { make in
+                make.trailing.equalToSuperview()
+                make.centerY.equalToSuperview()
+                make.width.height.equalTo(16)
+            }
+            
+            containerView.snp.makeConstraints { make in
+                make.height.equalTo(20)
+            }
+            
+            gamesStackView.addArrangedSubview(containerView)
         }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
-        yearLabel.text = nil
         backgroundImageView.image = nil
         gamesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
