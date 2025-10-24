@@ -46,7 +46,7 @@ class PlatformsViewController: UIViewController {
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
         
         collectionView.delegate = self

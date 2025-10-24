@@ -17,6 +17,7 @@
 		152DEB052E54B8ED003DC29E /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB042E54B8ED003DC29E /* DescriptionViewController.swift */; };
 		152DEB212E5617EA003DC29E /* ImageCarouselItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */; };
 		152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */; };
+		153D6B3F2EABC63700E4A7E7 /* GameItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B3E2EABC63700E4A7E7 /* GameItemCell.swift */; };
 		156056032E82E56900A51EE4 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 156056022E82E56900A51EE4 /* SkeletonView */; };
 		1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157323192E7FF6BD007132B6 /* PopularGameViewController.swift */; };
 		1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1573231B2E80366B007132B6 /* PopularGameListCell.swift */; };
@@ -73,6 +74,7 @@
 		152DEB042E54B8ED003DC29E /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
 		152DEB202E5617EA003DC29E /* ImageCarouselItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCarouselItemCell.swift; sourceTree = "<group>"; };
 		152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetacriticPlatformCell.swift; sourceTree = "<group>"; };
+		153D6B3E2EABC63700E4A7E7 /* GameItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItemCell.swift; sourceTree = "<group>"; };
 		157323192E7FF6BD007132B6 /* PopularGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewController.swift; sourceTree = "<group>"; };
 		1573231B2E80366B007132B6 /* PopularGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameListCell.swift; sourceTree = "<group>"; };
 		157C16A42E88373D008A2873 /* GameGenreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreModel.swift; sourceTree = "<group>"; };
@@ -531,6 +533,7 @@
 		15A641F22EA51F6D00C296A6 /* SubView */ = {
 			isa = PBXGroup;
 			children = (
+				153D6B3E2EABC63700E4A7E7 /* GameItemCell.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */,
 				15A641C72EA4C78500C296A6 /* PopularGameDetailCell.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
+				153D6B3F2EABC63700E4A7E7 /* GameItemCell.swift in Sources */,
 				159F8E4D2E486D5D0021339B /* FlexibleTypes.swift in Sources */,
 				15B06EAE2E7318C300477E5D /* HomeListService.swift in Sources */,
 				15A641EC2EA51AE000C296A6 /* PlatformViewModel.swift in Sources */,
