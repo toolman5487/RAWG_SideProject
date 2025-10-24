@@ -81,7 +81,7 @@ class PlatformsListViewCell: UICollectionViewCell {
         }
         
         gamesTableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview().offset(-8)
             make.height.equalTo(120)
@@ -95,10 +95,11 @@ class PlatformsListViewCell: UICollectionViewCell {
         titleLabel.text = platform.name
         
         if let imageURL = platform.imageBackground {
-            backgroundImageView.sd_setImage(with: URL(string: imageURL), placeholderImage: UIImage(systemName: "gamecontroller.fill"))
+            backgroundImageView.sd_setImage(with: URL(string: imageURL))
         } else {
             backgroundImageView.image = UIImage(systemName: "gamecontroller.fill")
-            backgroundImageView.tintColor = .systemGray
+            backgroundImageView.tintColor = .secondaryLabel
+            backgroundImageView.contentMode = .scaleAspectFit
         }
         
         setupGamesList(platform.games ?? [])

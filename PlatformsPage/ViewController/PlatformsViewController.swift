@@ -54,6 +54,7 @@ class PlatformsViewController: UIViewController {
         collectionView.register(PlatformsListViewCell.self, forCellWithReuseIdentifier: "PlatformsListViewCell")
     }
     
+    
     private func setupBindings() {
         viewModel.$platforms
             .receive(on: DispatchQueue.main)
@@ -77,6 +78,17 @@ extension PlatformsViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.configure(with: platform)
         }
         return cell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+        if offsetY > contentHeight - frameHeight - 100 {
+            if viewModel.hasMoreData && !viewModel.isLoadingMore && !viewModel.isLoading {
+                viewModel.loadMorePlatforms()
+            }
+        }
     }
 }
 
