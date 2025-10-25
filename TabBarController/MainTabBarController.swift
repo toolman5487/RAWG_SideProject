@@ -23,7 +23,7 @@ final class MainTabBarController: UITabBarController {
             return homeNav
         }
         
-        let otherVC = PlatformsViewController()
+        let otherVC = PlatformsHomeViewController()
         otherVC.title = "Platform"
         let gameTab = UITab(title: "Platform", image: UIImage(systemName: "gamecontroller.fill"), identifier: "game") { _ in
             let gameNav = UINavigationController(rootViewController: otherVC)
