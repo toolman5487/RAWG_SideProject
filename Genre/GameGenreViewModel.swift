@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-enum GenreType {
+enum GenreType: Equatable {
     case all
     case genre(GameGenreModel)
     

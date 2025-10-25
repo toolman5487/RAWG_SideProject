@@ -19,6 +19,12 @@
 		152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */; };
 		153D6B3F2EABC63700E4A7E7 /* GameItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B3E2EABC63700E4A7E7 /* GameItemCell.swift */; };
 		153D6B412EAC8DFF00E4A7E7 /* PlatformsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B402EAC8DFF00E4A7E7 /* PlatformsViewController.swift */; };
+		153D6B452EAD07A600E4A7E7 /* PlatformGameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B442EAD07A600E4A7E7 /* PlatformGameModel.swift */; };
+		153D6B472EAD0DAA00E4A7E7 /* PlatformGamesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B462EAD0DAA00E4A7E7 /* PlatformGamesService.swift */; };
+		153D6B492EAD0DB200E4A7E7 /* PlatformGamesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B482EAD0DB200E4A7E7 /* PlatformGamesViewModel.swift */; };
+		153D6B4E2EAD144B00E4A7E7 /* PlatformGenreListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B4D2EAD144B00E4A7E7 /* PlatformGenreListCell.swift */; };
+		153D6B4F2EAD144B00E4A7E7 /* PlatformGameDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B4A2EAD144B00E4A7E7 /* PlatformGameDetailCell.swift */; };
+		153D6B502EAD144B00E4A7E7 /* PlatformGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 153D6B4B2EAD144B00E4A7E7 /* PlatformGameListCell.swift */; };
 		156056032E82E56900A51EE4 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = 156056022E82E56900A51EE4 /* SkeletonView */; };
 		1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157323192E7FF6BD007132B6 /* PopularGameViewController.swift */; };
 		1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1573231B2E80366B007132B6 /* PopularGameListCell.swift */; };
@@ -77,6 +83,12 @@
 		152DEB492E5752DE003DC29E /* MetacriticPlatformCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetacriticPlatformCell.swift; sourceTree = "<group>"; };
 		153D6B3E2EABC63700E4A7E7 /* GameItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItemCell.swift; sourceTree = "<group>"; };
 		153D6B402EAC8DFF00E4A7E7 /* PlatformsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformsViewController.swift; sourceTree = "<group>"; };
+		153D6B442EAD07A600E4A7E7 /* PlatformGameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGameModel.swift; sourceTree = "<group>"; };
+		153D6B462EAD0DAA00E4A7E7 /* PlatformGamesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGamesService.swift; sourceTree = "<group>"; };
+		153D6B482EAD0DB200E4A7E7 /* PlatformGamesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGamesViewModel.swift; sourceTree = "<group>"; };
+		153D6B4A2EAD144B00E4A7E7 /* PlatformGameDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGameDetailCell.swift; sourceTree = "<group>"; };
+		153D6B4B2EAD144B00E4A7E7 /* PlatformGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGameListCell.swift; sourceTree = "<group>"; };
+		153D6B4D2EAD144B00E4A7E7 /* PlatformGenreListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformGenreListCell.swift; sourceTree = "<group>"; };
 		157323192E7FF6BD007132B6 /* PopularGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameViewController.swift; sourceTree = "<group>"; };
 		1573231B2E80366B007132B6 /* PopularGameListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularGameListCell.swift; sourceTree = "<group>"; };
 		157C16A42E88373D008A2873 /* GameGenreModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameGenreModel.swift; sourceTree = "<group>"; };
@@ -503,6 +515,7 @@
 		15A641E12EA516A600C296A6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				153D6B442EAD07A600E4A7E7 /* PlatformGameModel.swift */,
 				15A641E02EA516A600C296A6 /* PlatformModel.swift */,
 			);
 			path = Model;
@@ -511,6 +524,9 @@
 		15A641E72EA51AE000C296A6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				153D6B4A2EAD144B00E4A7E7 /* PlatformGameDetailCell.swift */,
+				153D6B4B2EAD144B00E4A7E7 /* PlatformGameListCell.swift */,
+				153D6B4D2EAD144B00E4A7E7 /* PlatformGenreListCell.swift */,
 				15A642082EA7D0A000C296A6 /* PlatformsListViewCell.swift */,
 				15A641F22EA51F6D00C296A6 /* SubView */,
 			);
@@ -520,6 +536,7 @@
 		15A641E92EA51AE000C296A6 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				153D6B482EAD0DB200E4A7E7 /* PlatformGamesViewModel.swift */,
 				15A641E82EA51AE000C296A6 /* PlatformViewModel.swift */,
 			);
 			path = ViewModel;
@@ -528,6 +545,7 @@
 		15A641ED2EA51C7100C296A6 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				153D6B462EAD0DAA00E4A7E7 /* PlatformGamesService.swift */,
 				15A641EE2EA51C8400C296A6 /* PlatformsService.swift */,
 			);
 			path = Service;
@@ -638,6 +656,7 @@
 				150BA9E42E48A35D008A4BA3 /* AlertHelper.swift in Sources */,
 				152DEB4A2E5752DE003DC29E /* MetacriticPlatformCell.swift in Sources */,
 				159F8E452E4862A30021339B /* GameDetailViewController.swift in Sources */,
+				153D6B452EAD07A600E4A7E7 /* PlatformGameModel.swift in Sources */,
 				15B06EA22E5F531700477E5D /* SearchResultsViewController.swift in Sources */,
 				15992E042E883CB700AB3BE3 /* GenreButtonCell.swift in Sources */,
 				15B06EAC2E73176700477E5D /* GameListItemModel.swift in Sources */,
@@ -657,6 +676,9 @@
 				15A641DA2EA5063C00C296A6 /* MovieItemCell.swift in Sources */,
 				15904B8A2E95630400CDF358 /* PopularGameViewCell.swift in Sources */,
 				15992DFD2E8837CA00AB3BE3 /* GameGenreService.swift in Sources */,
+				153D6B4E2EAD144B00E4A7E7 /* PlatformGenreListCell.swift in Sources */,
+				153D6B4F2EAD144B00E4A7E7 /* PlatformGameDetailCell.swift in Sources */,
+				153D6B502EAD144B00E4A7E7 /* PlatformGameListCell.swift in Sources */,
 				15A641C72EA4C78500C296A6 /* PopularGameDetailCell.swift in Sources */,
 				159F8E362E478D990021339B /* MainTabBarController.swift in Sources */,
 				153D6B3F2EABC63700E4A7E7 /* GameItemCell.swift in Sources */,
@@ -666,6 +688,7 @@
 				150A72742E754C0800E5925F /* NewGameListCell.swift in Sources */,
 				15A641E22EA516A600C296A6 /* PlatformModel.swift in Sources */,
 				15A1331A2E58FA0C0035A0E2 /* ScreenshotItemCell.swift in Sources */,
+				153D6B492EAD0DB200E4A7E7 /* PlatformGamesViewModel.swift in Sources */,
 				153D6B412EAC8DFF00E4A7E7 /* PlatformsViewController.swift in Sources */,
 				15A133452E5B0BCD0035A0E2 /* DeveloperItemCell.swift in Sources */,
 				1573231C2E80366B007132B6 /* PopularGameListCell.swift in Sources */,
@@ -678,6 +701,7 @@
 				15A641D72EA5033500C296A6 /* UIView+ScreenSize.swift in Sources */,
 				1573231A2E7FF6BD007132B6 /* PopularGameViewController.swift in Sources */,
 				15B06EAA2E6D922C00477E5D /* HomeViewCell.swift in Sources */,
+				153D6B472EAD0DAA00E4A7E7 /* PlatformGamesService.swift in Sources */,
 				150A727B2E76F88B00E5925F /* NewGameViewController.swift in Sources */,
 				152DEAE52E50BC8F003DC29E /* GameDetailCell.swift in Sources */,
 				15B06E9A2E5B61EC00477E5D /* GameSearchModel.swift in Sources */,
