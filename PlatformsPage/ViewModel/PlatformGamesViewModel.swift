@@ -107,45 +107,57 @@ final class PlatformGamesViewModel: ObservableObject {
     }
     
     private func fetchGamesForSelectedGenre() {
-        guard let platformId = platformId else {return}
-    
+        guard let platformId = platformId else { return }
+        
         isLoading = true
         errorMessage = nil
         
-        let publisher: AnyPublisher<GameListResponse, Error>
-        
         switch selectedGenreType {
         case .all:
-            publisher = platformGamesService.fetchPlatformGames(platformId: platformId, page: currentPage, pageSize: pageSize)
+            platformGamesService.fetchPlatformGames(platformId: platformId, page: currentPage, pageSize: pageSize)
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    receiveCompletion: { [weak self] completion in
+                        self?.handleCompletion(completion)
+                    },
+                    receiveValue: { [weak self] response in
+                        self?.handleGamesResponse(response)
+                    }
+                )
+                .store(in: &cancellables)
+                
         case .genre(let genre):
-            publisher = platformGamesService.fetchPlatformGamesByGenre(platformId: platformId, genreId: genre.id, page: currentPage, pageSize: pageSize)
+            platformGamesService.fetchPlatformGamesByGenre(platformId: platformId, genreId: genre.id, page: currentPage, pageSize: pageSize)
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    receiveCompletion: { [weak self] completion in
+                        self?.handleCompletion(completion)
+                    },
+                    receiveValue: { [weak self] response in
+                        self?.handleGamesResponse(response)
+                    }
+                )
+                .store(in: &cancellables)
         }
-        
-        publisher
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    self?.isLoading = false
-                    self?.isLoadingMore = false
-                    switch completion {
-                    case .finished:
-                        break
-                    case .failure(let error):
-                        self?.errorMessage = error.localizedDescription
-                    }
-                },
-                receiveValue: { [weak self] response in
-                    let gameModels = response.results.map { GameListItemModel(from: $0) }
-                    if self?.currentPage == 1 {
-                        self?.games = gameModels
-                    } else {
-                        self?.games.append(contentsOf: gameModels)
-                    }
-                    self?.nextURL = response.next
-                    self?.hasMoreData = response.next != nil
-                }
-            )
-            .store(in: &cancellables)
+    }
+    
+    private func handleCompletion(_ completion: Subscribers.Completion<Error>) {
+        isLoading = false
+        isLoadingMore = false
+        if case .failure(let error) = completion {
+            errorMessage = error.localizedDescription
+        }
+    }
+    
+    private func handleGamesResponse(_ response: GameListResponse) {
+        let gameModels = response.results.map { GameListItemModel(from: $0) }
+        if currentPage == 1 {
+            games = gameModels
+        } else {
+            games.append(contentsOf: gameModels)
+        }
+        nextURL = response.next
+        hasMoreData = response.next != nil
     }
     
     func getGamesCount() -> Int {
